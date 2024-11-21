@@ -14,6 +14,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(AssetPath.backgroundApp),
+                  fit: BoxFit.cover)),
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -25,7 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 fit: BoxFit.cover,
               )),
               const SizedBox(height: 20),
-              const Text("Login", style: TextStyle(),),
+              const Text(
+                "Login",
+                style: TextStyle(),
+              ),
             ],
           ),
         ),
