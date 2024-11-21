@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
       onDispose: onDispose,
       title: 'Safana Bekam Management App',
       theme: ThemeData(
-        useMaterial3: false,
+        useMaterial3: true,
         primarySwatch: Colors.grey,
       ),
       initialRoute: '/login',
