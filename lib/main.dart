@@ -20,7 +20,7 @@ class MainApp extends StatelessWidget {
       title: 'Safana Bekam Management App',
       theme: ThemeData(
         useMaterial3: true,
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.blue,
       ),
       initialRoute: '/login',
       getPages: routes,
