@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
+import 'package:safana_bekam_management_app/constant/color.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,9 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 fit: BoxFit.cover,
               )),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 "Login",
-                style: TextStyle(),
+                style: TextStyle(fontSize: 25, color: ConstantColor.primaryColor),
               ),
             ],
           ),
