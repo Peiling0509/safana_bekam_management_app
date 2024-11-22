@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/constant/routes.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 
@@ -18,9 +19,9 @@ class MainApp extends StatelessWidget {
       onReady: onReady,
       onDispose: onDispose,
       title: 'Safana Bekam Management App',
+      color: ConstantColor.primaryColor,
       theme: ThemeData(
         useMaterial3: true,
-        primarySwatch: Colors.blue,
       ),
       initialRoute: '/login',
       getPages: routes,
