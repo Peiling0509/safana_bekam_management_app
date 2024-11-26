@@ -21,14 +21,21 @@ class MainApp extends StatelessWidget {
       title: 'Safana Bekam Management App',
       color: ConstantColor.primaryColor,
       theme: ThemeData(
-        useMaterial3: true,
-      ),
-      initialRoute: '/login',
+          primaryColor: ConstantColor.primaryColor,
+          useMaterial3: false,
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedItemColor: ConstantColor.primaryColor,
+            selectedIconTheme: const IconThemeData(size: 35),
+            unselectedIconTheme: const IconThemeData(size: 30),
+          )),
+      initialRoute: '/',
       getPages: routes,
     );
   }
 
-   void onInit() {
+  void onInit() {
     Get.put(AuthController());
   }
 

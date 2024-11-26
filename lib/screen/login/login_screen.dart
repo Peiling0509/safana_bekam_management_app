@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                   child: Image.asset(
                 AssetPath.logo,
-                height: 130,
+                height: 100,
                 fit: BoxFit.cover,
               )),
               const SizedBox(height: 20),
