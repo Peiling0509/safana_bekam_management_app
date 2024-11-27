@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
+import 'package:safana_bekam_management_app/constant/color.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _topBar() {
     return Container(
-      color: Colors.blue[900],
+      color: ConstantColor.primaryColor,
       width: double.infinity,
       height: 175,
       child: Column(
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15)),
-              backgroundColor: Colors.blue[900],
+              backgroundColor: ConstantColor.primaryColor,
               minimumSize: const Size(80, 40),
               //padding: EdgeInsets.only(top: 5, bottom: 5),
             ),
@@ -213,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.blue[900],
+          backgroundColor: ConstantColor.primaryColor,
           child: Icon(Icons.person, color: Colors.white),
         ),
         title: Text(name),
