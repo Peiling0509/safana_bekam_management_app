@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safana_bekam_management_app/components/custom_loading_dialog.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/login/login_controller.dart';
@@ -34,15 +35,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 fit: BoxFit.cover,
               )),
               const SizedBox(height: 20),
-              Text(
-                "Login",
-                style:
-                    TextStyle(fontSize: 25, color: ConstantColor.primaryColor),
-              ),
+              // Text(
+              //   "Login",
+              //   style:
+              //       TextStyle(fontSize: 25, color: ConstantColor.primaryColor),
+              // ),
               //text field for username
               _textfieldUserName(),
-              _textfieldPassword()
+
+              _textfieldPassword(),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () => CustomLoadingDialog.hide(context),
+                      child: Text('Forgot password ?'))
+                ],
+              ),
+
+              _buildButton(
+                  'LOGIN',
+                  () => CustomLoadingDialog.show(context,
+                      message: 'Please wait...'))
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton(String text, Function() onPressed) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: SizedBox(
+        width: Get.width,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: ConstantColor.primaryColor, // Button color
+            foregroundColor: Colors.white, // Text color
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40, // Horizontal padding
+              vertical: 15, // Vertical padding
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20), // Rounded corners
+            ),
+          ),
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
       ),
