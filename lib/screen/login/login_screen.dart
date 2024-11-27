@@ -4,6 +4,8 @@ import 'package:safana_bekam_management_app/components/custom_loading_dialog.dar
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/login/login_controller.dart';
+import 'package:safana_bekam_management_app/screen/home/home_screen.dart';
+import 'package:safana_bekam_management_app/screen/home/root_home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -57,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _buildButton(
                   'LOGIN',
                   () => CustomLoadingDialog.show(context,
-                      message: 'Please wait...'))
+                      message: 'Please wait...')),
             ],
           ),
         ),
