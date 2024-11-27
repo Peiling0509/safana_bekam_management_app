@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safana_bekam_management_app/components/custom_loading_dialog.dart';
+import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/login/login_controller.dart';
-import 'package:safana_bekam_management_app/screen/home/home_screen.dart';
-import 'package:safana_bekam_management_app/screen/home/root_home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -51,15 +49,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                      onPressed: () => CustomLoadingDialog.hide(context),
-                      child: Text('Forgot password ?'))
+                      onPressed: null,
+                      child: const Text('Forgot password ?'))
                 ],
               ),
 
-              _buildButton(
-                  'LOGIN',
-                  () => CustomLoadingDialog.show(context,
-                      message: 'Please wait...')),
+              _buildButton('LOGIN',
+                  () => controller.submit()),
             ],
           ),
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 //import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
+import 'package:safana_bekam_management_app/constant/color.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,40 +16,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AssetPath.backgroundApp),
-                fit: BoxFit.cover,
-              ),
+    return CustomScaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            _topBar(),
+            _middlePartTitle(),
+            _middlePartSearchBar(),
+            _TotalCustomer_AddButton(),
+            Expanded(
+              child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: _customerList()),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                _topBar(),
-                _middlePartTitle(),
-                _middlePartSearchBar(),
-                _TotalCustomer_AddButton(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: _customerList()),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _topBar() {
     return Container(
-      color: Colors.blue[900],
+      color: ConstantColor.primaryColor,
       width: double.infinity,
       height: 175,
       child: Column(
@@ -157,11 +147,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Icon(
               Icons.person_add,
               color: Colors.white,
-              ),
+            ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15)),
-              backgroundColor: Colors.blue[900],
+                  borderRadius: BorderRadius.circular(15)),
+              backgroundColor: ConstantColor.primaryColor,
               minimumSize: const Size(80, 40),
               //padding: EdgeInsets.only(top: 5, bottom: 5),
             ),
@@ -207,14 +197,14 @@ class _HomeScreenState extends State<HomeScreen> {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 5,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Colors.blue[900],
-          child: Icon(Icons.person, color: Colors.white),
+          backgroundColor: ConstantColor.primaryColor,
+          child: const Icon(Icons.person, color: Colors.white),
         ),
         title: Text(name),
         subtitle: Text('XXXXXX-XX-XXXX'),

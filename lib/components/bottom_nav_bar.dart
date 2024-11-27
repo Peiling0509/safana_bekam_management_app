@@ -31,7 +31,7 @@ class CustomBottomNavigationBar extends GetView<RootHomeController> {
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(30), topLeft: Radius.circular(30)),
         boxShadow: [
-          BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+          BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 20),
         ],
       ),
       child: ClipRRect(

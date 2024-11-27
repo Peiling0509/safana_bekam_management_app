@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safana_bekam_management_app/components/custom_loading_dialog.dart';
+import 'package:safana_bekam_management_app/components/loading_dialog.dart';
+import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/data/model/form/login_form._model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 
@@ -20,14 +21,26 @@ class LoginController extends GetxController{
       switch (v) {
         case LoaderState.initial:
         case LoaderState.loading:
-         // CustomLoadingDialog.show(context, message: 'Please wait...');
+         LoadingDialog.show();
           break;
         case LoaderState.loaded:
         case LoaderState.failure:
-          //CustomLoadingDialog.hide(context);
+          LoadingDialog.hide();
           break;
       }
     });
+  }
+
+  submit(){
+    try {
+      state.value = LoaderState.loading;
+      Get.offAllNamed("/home");
+      state.value = LoaderState.loaded;
+      
+    } catch (e) {
+      toast("Failed login");
+      debugPrint(e.toString());
+    }
 
   }
 }
