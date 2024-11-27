@@ -30,7 +30,7 @@ class MainApp extends StatelessWidget {
             selectedIconTheme: const IconThemeData(size: 35),
             unselectedIconTheme: const IconThemeData(size: 30),
           )),
-      initialRoute: '/home',
+      initialRoute: '/',
       getPages: routes,
     );
   }
