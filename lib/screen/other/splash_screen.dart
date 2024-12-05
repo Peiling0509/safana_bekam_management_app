@@ -12,28 +12,26 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: AnimatedBuilder(
-              animation: controller.animationController,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(
-                    0,
-                    controller.animation.value, // Move logo vertically
+      body: AnimatedBuilder(
+        animation: controller.animationController,
+        builder: (context, child) {
+          return Stack(
+            children: [
+              Positioned(
+                top: controller.positionAnimation.value, // Position animation
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Image.asset(
+                    AssetPath.logo,
+                    height: Get.height * 0.2,
+                    width: Get.width * 0.6,
                   ),
-                  child: child,
-                );
-              },
-              child: Image.asset(
-                AssetPath.logo,
-                height: Get.height * 0.6,
-                width: Get.width * 0.6,
+                ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

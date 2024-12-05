@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 //import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
@@ -15,89 +16,98 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AssetPath.backgroundApp),
-                fit: BoxFit.cover,
-              ),
+    return CustomScaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            _topBar(),
+            _middlePartTitle(),
+            _middlePartSearchBar(),
+            _TotalCustomer_AddButton(),
+            Expanded(
+              child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: _customerList()),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                _topBar(),
-                _middlePartTitle(),
-                _middlePartSearchBar(),
-                _TotalCustomer_AddButton(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: _customerList()),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _topBar() {
-    return Container(
-      color: ConstantColor.primaryColor,
-      width: double.infinity,
-      height: 175,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: GestureDetector(
-              onTap: () {
-                // Handle notification icon click
-                print('Notification icon clicked');
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 15, right: 15),
-                child: Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                  size: 28,
+  return Container(
+    color: ConstantColor.primaryColor,
+    width: double.infinity,
+    height: 175,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Add the action for notification icon here
+                  print("Notification clicked");
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 1),
+                  child: Icon(
+                    Icons.notifications_outlined,
+                    color: Colors.white,
+                    size: 28,
+                  ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, left: 30),
-            child: Text(
-              "Hai, Ali",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
+              
+              GestureDetector(
+                onTap: () {
+                  // Add the action for logout icon here
+                  print("Logout clicked");
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 1),
+                  child: Icon(
+                    Icons.logout_outlined,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 30, left: 30),
+          child: Text(
+            "Hai, Ali",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 30),
-            child: Text(
-              "Log Masuk Terakhir: XX-XX-XXXX 00:00:00",
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
-                fontSize: 14,
-                letterSpacing: 1,
-              ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10, left: 30),
+          child: Text(
+            "Log Masuk Terakhir: XX-XX-XXXX 00:00:00",
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.7),
+              fontSize: 14,
+              letterSpacing: 1,
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _middlePartTitle() {
     return Padding(
@@ -158,10 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Icon(
               Icons.person_add,
               color: Colors.white,
-              ),
+            ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15)),
+                  borderRadius: BorderRadius.circular(15)),
               backgroundColor: ConstantColor.primaryColor,
               minimumSize: const Size(80, 40),
               //padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -208,14 +218,14 @@ class _HomeScreenState extends State<HomeScreen> {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 5,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: ConstantColor.primaryColor,
-          child: Icon(Icons.person, color: Colors.white),
+          child: const Icon(Icons.person, color: Colors.white),
         ),
         title: Text(name),
         subtitle: Text('XXXXXX-XX-XXXX'),
