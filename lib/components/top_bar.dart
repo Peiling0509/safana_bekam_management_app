@@ -8,12 +8,12 @@ class TopBar extends StatelessWidget {
   final VoidCallback onLogoutTap;
 
   const TopBar({
-    Key? key,
+    super.key,
     required this.userName,
     required this.lastLoginTime,
     required this.onNotificationTap,
     required this.onLogoutTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +25,14 @@ class TopBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
+            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: onNotificationTap,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 1),
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 1),
                     child: Icon(
                       Icons.notifications_outlined,
                       color: Colors.white,
@@ -42,8 +42,8 @@ class TopBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: onLogoutTap,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 1),
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 1),
                     child: Icon(
                       Icons.logout_outlined,
                       color: Colors.white,
@@ -58,7 +58,7 @@ class TopBar extends StatelessWidget {
             padding: const EdgeInsets.only(top: 30, left: 30),
             child: Text(
               "Hai, $userName",
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
