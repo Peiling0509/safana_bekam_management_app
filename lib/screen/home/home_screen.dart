@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
-//import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
-import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/components/top_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +19,17 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _topBar(),
+            TopBar(
+              userName: "Ali",
+              lastLoginTime: "XX-XX-XXXX 00:00:00",
+              onNotificationTap: (){
+                print("Notification clicked");
+              },
+              onLogoutTap: (){
+                print("Logout clicked");
+              },
+            ),
+
             _middlePartTitle(),
             _middlePartSearchBar(),
             _TotalCustomer_AddButton(),
@@ -34,79 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  Widget _topBar() {
-  return Container(
-    color: ConstantColor.primaryColor,
-    width: double.infinity,
-    height: 175,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20, left: 10, right: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Add the action for notification icon here
-                  print("Notification clicked");
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 1),
-                  child: Icon(
-                    Icons.notifications_outlined,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-              ),
-              
-              GestureDetector(
-                onTap: () {
-                  // Add the action for logout icon here
-                  print("Logout clicked");
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 1),
-                  child: Icon(
-                    Icons.logout_outlined,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 30, left: 30),
-          child: Text(
-            "Hai, Ali",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 30),
-          child: Text(
-            "Log Masuk Terakhir: XX-XX-XXXX 00:00:00",
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.7),
-              fontSize: 14,
-              letterSpacing: 1,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
 
 
   Widget _middlePartTitle() {
