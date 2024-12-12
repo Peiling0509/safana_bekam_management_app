@@ -6,20 +6,25 @@ class CustomBottomNavigationBar extends GetView<RootHomeController> {
   const CustomBottomNavigationBar({super.key});
 
   List<BottomNavigationBarItem> _buildNavItem() => [
+    const BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home),
+          label: "Dashboard",
+        ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           activeIcon: Icon(Icons.home),
-          label: "Home",
+          label: "Utama",
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.person_search_outlined),
           activeIcon: Icon(Icons.person_search),
-          label: "Search",
+          label: "Carian",
         ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
           activeIcon: Icon(Icons.person),
-          label: "Profile",
+          label: "Profil",
         ),
       ];
 

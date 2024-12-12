@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/login/login_controller.dart';
@@ -45,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               _textfieldPassword(),
 
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(

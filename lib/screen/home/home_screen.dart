@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
-//import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
-import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.only(top: 30, left: 30),
             child: Text(
