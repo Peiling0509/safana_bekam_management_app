@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -44,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           )),
                       Spacer(),
                       IconButton(
-                          onPressed: null,
+                          onPressed:() => AuthController().logout(),
                           icon: Icon(
                             Icons.logout_outlined,
                             size: 30,

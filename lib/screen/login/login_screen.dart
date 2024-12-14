@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
@@ -24,38 +26,42 @@ class _LoginScreenState extends State<LoginScreen> {
                   image: AssetImage(AssetPath.backgroundApp),
                   fit: BoxFit.cover)),
           padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                  child: Image.asset(
-                AssetPath.logo,
-                height: 100,
-                fit: BoxFit.cover,
-              )),
-              const SizedBox(height: 20),
-              // Text(
-              //   "Login",
-              //   style:
-              //       TextStyle(fontSize: 25, color: ConstantColor.primaryColor),
-              // ),
-              //text field for username
-              _textfieldUserName(),
-
-              _textfieldPassword(),
-
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                      onPressed: null,
-                      child: const Text('Forgot password ?'))
-                ],
-              ),
-
-              _buildButton('LOGIN',
-                  () => controller.submit()),
-            ],
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                    child: Image.asset(
+                  AssetPath.logo,
+                  height: 100,
+                  fit: BoxFit.cover,
+                )),
+                const SizedBox(height: 20),
+                _textfieldUserName(),
+                _textfieldPassword(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Checkbox(
+                      isError: true,
+                      tristate: true,
+                      value: controller.isRememberMe(),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          controller.setRememberMe(value ?? false);
+                        });
+                      },
+                    ),
+                    Text(
+                      'Ingat Saya',
+                      style: TextStyle(color: ConstantColor.primaryColor),
+                    )
+                  ],
+                ),
+                _buildButton('LOGIN', () => controller.submit()),
+              ],
+            ),
           ),
         ),
       ),
@@ -91,81 +97,136 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _textfieldUserName() {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1), // Light shadow
-              blurRadius: 10, // Softness of the shadow
-              offset: const Offset(0, 4), // Position of the shadow
-            ),
-          ],
-        ),
-        child: TextField(
-          decoration: InputDecoration(
-            hintText: 'Username',
-            hintStyle: const TextStyle(color: Colors.grey),
-            suffixIcon: const Icon(Icons.person_outline),
-            suffixIconColor: Colors.grey,
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Colors.white,
+        padding: const EdgeInsets.only(top: 20),
+        child: Obx(
+          () => Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: TextFormField(
+                  controller:
+                      TextEditingController(text: controller.getUsername ?? ""),
+                  onChanged: (text) {
+                    controller.setUsername = text;
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Username',
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    suffixIcon: const Icon(Icons.person_outline),
+                    suffixIconColor: Colors.grey,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      borderSide: controller.usernameError.isNotEmpty
+                          ? const BorderSide(width: 1, color: Colors.red)
+                          : BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                            color: ConstantColor.primaryColor, width: 2)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.red)),
+                  ),
+                ),
+              ),
+              if (controller.usernameError.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5),
+                  child: Text(
+                    controller.usernameError.value,
+                    style: const TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
+            ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _textfieldPassword() {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1), // Light shadow
-                blurRadius: 10, // Softness of the shadow
-                offset: const Offset(0, 4), // Position of the shadow
-              ),
+        padding: const EdgeInsets.only(top: 20),
+        child: Obx(
+          () => Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1), // Light shadow
+                        blurRadius: 5, // Softness of the shadow
+                        offset: const Offset(0, 4), // Position of the shadow
+                      ),
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: TextEditingController(
+                        text: controller.getPassword ?? ""),
+                    onChanged: (text) => controller.setPassword = text,
+                    obscureText: controller.isObscuredPass.value,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          controller.isObscuredPass.value
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                        ),
+                        color: Colors.grey,
+                        onPressed: () {
+                          setState(() {
+                            controller.isObscuredPass.value =
+                                !controller.isObscuredPass.value;
+                          });
+                        },
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
+                        borderSide: controller.passwordError.isNotEmpty
+                            ? const BorderSide(width: 1, color: Colors.red)
+                            : BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: ConstantColor.primaryColor, width: 2)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.red)),
+                    ),
+                  )),
+              if (controller.passwordError.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 5),
+                  child: Text(
+                    controller.passwordError.value,
+                    style: const TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                ),
             ],
           ),
-          child: Obx(
-            () => TextField(
-              obscureText: controller.isObscuredPass.value,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                hintStyle: const TextStyle(color: Colors.grey),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    controller.isObscuredPass.value
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined, // Toggles the icon
-                  ),
-                  color: Colors.grey,
-                  onPressed: () {
-                    setState(() {
-                      controller.isObscuredPass.value =
-                          !controller.isObscuredPass.value; // Toggle state
-                    });
-                  },
-                ),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-          )),
-    );
+        ));
   }
 }

@@ -1,6 +1,6 @@
 class LoginFormModel {
-  String? userId;
-  String? password;
+  String username;
+  String password;
 
-  LoginFormModel({this.userId, this.password});
+  LoginFormModel({this.username = "", this.password = ""});
 }

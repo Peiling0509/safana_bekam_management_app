@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/constant/routes.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
+import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
-void main() {
+void main() async{
+  await GetStorage.init();
+  await GetStorage.init("Login");
+  await GetStorage.init("Auth");
   runApp(const MainApp());
 }
 
@@ -16,7 +21,6 @@ class MainApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       onInit: onInit,
-      onReady: onReady,
       onDispose: onDispose,
       title: 'Safana Bekam Management App',
       color: ConstantColor.primaryColor,
@@ -37,12 +41,13 @@ class MainApp extends StatelessWidget {
   }
 
   void onInit() {
+    Get.put(APIProvider());
     Get.put(AuthController());
   }
 
-  void onReady() {}
-
   void onDispose() {
+    Get.delete<APIProvider>();
     Get.delete<AuthController>();
+   
   }
 }

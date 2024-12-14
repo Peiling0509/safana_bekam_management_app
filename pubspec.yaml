@@ -7,10 +7,12 @@ environment:
   sdk: '>=3.3.4 <4.0.0'
 
 dependencies:
+  dio: ^5.7.0
   flutter:
     sdk: flutter
   fluttertoast: ^8.2.8
   get: ^4.6.6
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:
