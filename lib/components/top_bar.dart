@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:get/get.dart';
 
 class TopBar extends StatelessWidget {
   final String userName;
@@ -19,7 +20,7 @@ class TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: ConstantColor.primaryColor,
-      width: double.infinity,
+      width: Get.width,
       height: 175,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
