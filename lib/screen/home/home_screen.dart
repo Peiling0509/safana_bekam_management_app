@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/top_bar.dart';
+import 'package:safana_bekam_management_app/screen/home/notification_screen.dart';
+import 'package:safana_bekam_management_app/screen/other/splash_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,6 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
               lastLoginTime: "XX-XX-XXXX 00:00:00",
               onNotificationTap: (){
                 print("Notification clicked");
+                Get.to(
+                  NotificationScreen(),
+                  fullscreenDialog: true,
+                  transition: Transition.rightToLeft,
+                );
               },
               onLogoutTap: (){
                 print("Logout clicked");
@@ -43,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
+/*
+/
+/ MOVE TO COMPONENT
+/
   Widget _topBar() {
     return Container(
       color: ConstantColor.primaryColor,
@@ -97,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+*/
 
   Widget _middlePartTitle() {
     return const Padding(
