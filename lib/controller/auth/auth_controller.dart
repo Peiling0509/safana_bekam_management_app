@@ -10,8 +10,7 @@ class AuthController extends GetxController {
   final Rx<LoaderState> state = LoaderState.initial.obs;
   final box = GetStorage("Auth");
 
-  String? userInfo() => box.read("user_info");
-
+  String? role() => box.read("role");
 
   @override
   void onInit() {
@@ -30,6 +29,15 @@ class AuthController extends GetxController {
     });
   }
 
+  UserModel? getUserInfo() {
+    String? userInfoString = box.read("user_info");
+    if (userInfoString != null) {
+      Map<String, dynamic> userInfoJson = jsonDecode(userInfoString);
+      return UserModel.fromJson(userInfoJson);
+    }
+    return null;
+  }
+
   Future<void> login(AuthModel data) async {
     await box.write("user_info", jsonEncode(data.user!.toJson()));
     await box.write("role", data.user?.role);
@@ -43,6 +51,4 @@ class AuthController extends GetxController {
     Get.offAllNamed("/login");
     state.value = LoaderState.loaded;
   }
-
-  
 }

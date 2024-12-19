@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/login/login_controller.dart';
@@ -18,50 +18,44 @@ final controller = Get.find<LoginController>();
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(AssetPath.backgroundApp),
-                  fit: BoxFit.cover)),
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                    child: Image.asset(
-                  AssetPath.logo,
-                  height: 100,
-                  fit: BoxFit.cover,
-                )),
-                const SizedBox(height: 20),
-                _textfieldUserName(),
-                _textfieldPassword(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Checkbox(
-                      isError: true,
-                      tristate: true,
-                      value: controller.isRememberMe(),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          controller.setRememberMe(value ?? false);
-                        });
-                      },
-                    ),
-                    Text(
-                      'Ingat Saya',
-                      style: TextStyle(color: ConstantColor.primaryColor),
-                    )
-                  ],
-                ),
-                _buildButton('LOGIN', () => controller.submit()),
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                  child: Image.asset(
+                AssetPath.logo,
+                height: 100,
+                fit: BoxFit.cover,
+              )),
+              const SizedBox(height: 20),
+              _textfieldUserName(),
+              _textfieldPassword(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Checkbox(
+                    isError: true,
+                    tristate: true,
+                    activeColor: ConstantColor.primaryColor,
+                    value: controller.isRememberMe(),
+                    onChanged: (bool? value) {
+                      setState(() {
+                        controller.setRememberMe(value ?? false);
+                      });
+                    },
+                  ),
+                  Text(
+                    'Ingat Saya',
+                    style: TextStyle(color: ConstantColor.primaryColor),
+                  )
+                ],
+              ),
+              _buildButton('LOG MASUK', () => controller.submit()),
+            ],
           ),
         ),
       ),
@@ -72,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: SizedBox(
+        height: 50,
         width: Get.width,
         child: ElevatedButton(
           onPressed: onPressed,
@@ -120,8 +115,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller.setUsername = text;
                   },
                   decoration: InputDecoration(
-                    hintText: 'Username',
-                    hintStyle: const TextStyle(color: Colors.grey),
+                    labelText: "Username",
+                    floatingLabelStyle:
+                        TextStyle(color: ConstantColor.primaryColor),
                     suffixIcon: const Icon(Icons.person_outline),
                     suffixIconColor: Colors.grey,
                     enabledBorder: OutlineInputBorder(
@@ -183,8 +179,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: const TextStyle(color: Colors.grey),
+                      labelText: "Password",
+                      floatingLabelStyle:
+                          TextStyle(color: ConstantColor.primaryColor),
                       suffixIcon: IconButton(
                         icon: Icon(
                           controller.isObscuredPass.value

@@ -6,7 +6,7 @@ import 'package:safana_bekam_management_app/constant/routes.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
-void main() async{
+void main() async {
   await GetStorage.init();
   await GetStorage.init("Login");
   await GetStorage.init("Auth");
@@ -25,17 +25,23 @@ class MainApp extends StatelessWidget {
       title: 'Safana Bekam Management App',
       color: ConstantColor.primaryColor,
       theme: ThemeData(
-          primaryColor: ConstantColor.primaryColor,
-          useMaterial3: false,
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            selectedItemColor: ConstantColor.primaryColor,
-            unselectedItemColor: Colors.grey,
-            selectedIconTheme: const IconThemeData(size: 30),
-            unselectedIconTheme: const IconThemeData(size: 30),
-          )),
-      initialRoute: '/home',
+        primaryColor: ConstantColor.primaryColor,
+        useMaterial3: false,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: ConstantColor.primaryColor,
+          unselectedItemColor: Colors.grey,
+          selectedIconTheme: const IconThemeData(size: 30),
+          unselectedIconTheme: const IconThemeData(size: 30),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: ConstantColor.primaryColor,
+          ),
+        ),
+      ),
+      initialRoute: '/login',
       getPages: routes,
     );
   }
@@ -48,6 +54,5 @@ class MainApp extends StatelessWidget {
   void onDispose() {
     Get.delete<APIProvider>();
     Get.delete<AuthController>();
-   
   }
 }

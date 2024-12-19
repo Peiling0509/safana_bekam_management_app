@@ -11,20 +11,18 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-          child: Stack(
-                children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/image/background_app.png',
-              fit: BoxFit.cover,
-            ),
+        body: Stack(
+      children: [
+        // Background Image
+        Positioned.fill(
+          child: Image.asset(
+            'assets/image/background_app.png',
+            fit: BoxFit.cover,
           ),
-          // Screen Content
-          body,
-                ],
-              ),
-        ));
+        ),
+        // Screen Content
+        SafeArea(child: body),
+      ],
+    ));
   }
 }

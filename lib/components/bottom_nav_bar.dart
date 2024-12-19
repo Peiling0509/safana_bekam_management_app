@@ -6,14 +6,14 @@ class CustomBottomNavigationBar extends GetView<RootHomeController> {
   const CustomBottomNavigationBar({super.key});
 
   List<BottomNavigationBarItem> _buildNavItem() => [
-    const BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           activeIcon: Icon(Icons.home),
           label: "Dashboard",
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
+          icon: Icon(Icons.person_add_outlined),
+          activeIcon: Icon(Icons.person_add),
           label: "Utama",
         ),
         const BottomNavigationBarItem(
@@ -45,11 +45,12 @@ class CustomBottomNavigationBar extends GetView<RootHomeController> {
           topRight: Radius.circular(30), // Top-right rounded
         ),
         child: Obx(() => BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
               currentIndex: controller.currentIndex.value,
               onTap: (index) => controller.goTo(index),
               items: _buildNavItem(),
             )),
-      ),
+      ),  
     );
   }
 }

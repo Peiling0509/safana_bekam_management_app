@@ -2,9 +2,11 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:safana_bekam_management_app/binding/home/root_home_binding.dart';
 import 'package:safana_bekam_management_app/binding/login/login_binding.dart';
 import 'package:safana_bekam_management_app/binding/other/splash_binding.dart';
+import 'package:safana_bekam_management_app/binding/profile/profile_binding.dart';
 import 'package:safana_bekam_management_app/screen/home/root_home_screen.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 import 'package:safana_bekam_management_app/screen/other/splash_screen.dart';
+import 'package:safana_bekam_management_app/screen/profile/edit_profile_screen.dart';
 
 List<GetPage> routes = [
   GetPage(
@@ -20,6 +22,11 @@ List<GetPage> routes = [
   GetPage(
     name: '/home',
     page: () => RootHomeScreen(),
-    bindings: [RootHomeBinding()],
+    binding: RootHomeBinding(),
+  ),
+  GetPage(
+    name: '/edit_profile',
+    page: () => const EditProfileScreen(),
+    binding: ProfileBinding(),
   ),
 ];
