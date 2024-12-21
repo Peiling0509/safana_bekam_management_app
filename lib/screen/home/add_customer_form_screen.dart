@@ -78,7 +78,8 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
   }
 
 //This is used for the overlaying drop down list
-  OverlayEntry _createOverlayEntry(List<String> list, LayerLink layerlink, String type) {
+  OverlayEntry _createOverlayEntry(
+      List<String> list, LayerLink layerlink, String type) {
     return OverlayEntry(
       builder: (context) => Positioned(
         width: layerlink.leaderSize?.width,
@@ -87,8 +88,9 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           showWhenUnlinked: false,
           offset: const Offset(0, 48),
           child: Material(
+            borderRadius: BorderRadius.circular(15),
             elevation: 0,
-            color: Colors.transparent,
+            color: Colors.amber,
             child: Container(
               //height = size of an option * number of options displayed
               height: 48.0 * 4,
@@ -98,43 +100,47 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
                 color: ConstantColor.backgroundColor,
               ),
               //Scrollable within the drop down list
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: list.map((String item) {
-                    bool isSelected = type == 'race' 
-                        ? item == selectedRace 
-                        : item == selectedState;
-                    return InkWell(
-                      onTap: () => _handleSelection(item, type),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? ConstantColor.primaryColor
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 12,
-                        ),
-                        child: Center(
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : (item == '--Pilih--'
-                                      ? Colors.grey
-                                      : Colors.black),
-                              fontSize: 16,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: SingleChildScrollView(
+                  //clipBehavior: Clip.none,
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: list.map((String item) {
+                      bool isSelected = type == 'race'
+                          ? item == selectedRace
+                          : item == selectedState;
+                      return InkWell(
+                        onTap: () => _handleSelection(item, type),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? ConstantColor.primaryColor
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 12,
+                          ),
+                          child: Center(
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : (item == '--Pilih--'
+                                        ? Colors.grey
+                                        : Colors.black),
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
             ),
