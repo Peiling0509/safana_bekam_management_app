@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/screen/home/add_customer_form_B.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 
 class AddCustomerFormScreen extends StatefulWidget {
@@ -190,9 +191,9 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
   }
 
  Widget _content() {
-  return Padding(
-    padding: const EdgeInsets.all(20),
-    child: SingleChildScrollView(
+  return SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -289,6 +290,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           _buildTextField("Perkerjaan"),
           // No Tel
           _buildTextField("No Tel"),
+          _buildNextButton(),
         ],
       ),
     ),
@@ -414,6 +416,37 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildNextButton() {
+    return Padding(
+      padding: EdgeInsets.only(top: 28.0),
+      child: ElevatedButton(
+        onPressed: () {
+          Get.to(
+            //Go to B section
+            AddCustomerFormScreen_B(),
+            //AddCustomerFormScreen(),
+            fullscreenDialog: true,
+            transition: Transition.noTransition,
+          );
+        }, 
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30)),
+          backgroundColor: ConstantColor.primaryColor,
+          minimumSize: Size(Get.width, 48),
+        ),
+        child: const Text(
+          "Teruskan",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+          )
+        ),
     );
   }
 }
