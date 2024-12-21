@@ -22,22 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            TopBar(
-              userName: "Ali",
-              lastLoginTime: "XX-XX-XXXX 00:00:00",
-              onNotificationTap: (){
-                print("Notification clicked");
-                Get.to(
-                  NotificationScreen(),
-                  fullscreenDialog: true,
-                  transition: Transition.rightToLeft,
-                );
-              },
-              onLogoutTap: (){
-                print("Logout clicked");
-              },
-            ),
-
+            const TopBar(),
             _middlePartTitle(),
             _middlePartSearchBar(),
             _totalCustomer_AddButton(),

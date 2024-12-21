@@ -19,16 +19,7 @@ class _SearchPatientScreenState extends State<SearchPatientScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            TopBar(
-              userName: "Ali",
-              lastLoginTime: "XX-XX-XXXX 00:00:00",
-              onNotificationTap: () {
-                print("Notification clicked");
-              },
-              onLogoutTap: () {
-                print("Logout clicked");
-              },
-            ),
+            const TopBar(),
             _middlePartTitle(),
             _middlePartSearchBar(),
             _middlePartMinorTitle(),
