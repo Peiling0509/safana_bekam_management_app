@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/top_bar.dart';
+import 'package:safana_bekam_management_app/screen/home/add_customer_form_screen.dart';
 import 'package:safana_bekam_management_app/screen/home/notification_screen.dart';
 import 'package:safana_bekam_management_app/screen/other/splash_screen.dart';
 
@@ -177,6 +178,12 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               // Handle add button click
               print('Add button clicked');
+              Get.to(
+                  AddCustomerFormScreen(),
+                  //AddCustomerFormScreen(),
+                  fullscreenDialog: true,
+                  transition: Transition.rightToLeft,
+                );
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
