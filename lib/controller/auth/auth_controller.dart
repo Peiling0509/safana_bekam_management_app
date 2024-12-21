@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
@@ -11,6 +11,7 @@ class AuthController extends GetxController {
   final box = GetStorage("Auth");
 
   String? role() => box.read("role");
+  String? lastLoginDateTime() => box.read("last_login_date_time");
 
   @override
   void onInit() {
@@ -41,13 +42,14 @@ class AuthController extends GetxController {
   Future<void> login(AuthModel data) async {
     await box.write("user_info", jsonEncode(data.user!.toJson()));
     await box.write("role", data.user?.role);
+    await box.write("last_login_date_time", DateFormat('dd-MM-yyyy h:m:s a').format(DateTime.now()));
     await box.save();
   }
 
   Future<void> logout() async {
     state.value = LoaderState.loading;
-    //await box.erase();
-    //await box.save();
+    await box.erase();
+    await box.save();
     Get.offAllNamed("/login");
     state.value = LoaderState.loaded;
   }

@@ -115,7 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller.setUsername = text;
                   },
                   decoration: InputDecoration(
-                    labelText: "Username",
+                     hintText: "Username",
+                    //labelText: "Username",
                     floatingLabelStyle:
                         TextStyle(color: ConstantColor.primaryColor),
                     suffixIcon: const Icon(Icons.person_outline),
@@ -179,7 +180,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration: InputDecoration(
-                      labelText: "Password",
+                      hintText: "Password",
+                     // labelText: "Password",
                       floatingLabelStyle:
                           TextStyle(color: ConstantColor.primaryColor),
                       suffixIcon: IconButton(
