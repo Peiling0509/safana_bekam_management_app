@@ -5,6 +5,7 @@ import 'package:safana_bekam_management_app/components/custom_check_box.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/data/model/shared/checkbox_type.dart';
+import 'package:safana_bekam_management_app/screen/home/home_screen.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 
 class AddCustomerFormScreen_B extends StatefulWidget {
@@ -236,35 +237,44 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: Get.width * 0.32,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(15)),
-                        child: const Text(
-                          "Batal",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
+                      GestureDetector(
+                        onTap: () => {
+                          Navigator.pop(context),
+                        },
+                        child: Container(
+                          width: Get.width * 0.32,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: const Text(
+                            "Batal",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ),
-                      Container(
-                        width: Get.width * 0.32,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            //border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(15),
-                            color: ConstantColor.primaryColor),
-                        child: const Text(
-                          "Sahkan",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
+                      GestureDetector(
+                        onTap: () =>
+                            {Navigator.pop(context), openSuccessDialog()},
+                        child: Container(
+                          width: Get.width * 0.32,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              //border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(15),
+                              color: ConstantColor.primaryColor),
+                          child: const Text(
+                            "Sahkan",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ),
                     ],
@@ -273,4 +283,63 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
               ),
             ),
           ));
+
+  Future openSuccessDialog() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          content: Container(
+            width: Get.width,
+            height: 115,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.mark_chat_unread_outlined,
+                  size: 30,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Tambah Pelanggan Berjaya",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(
+                  height: 13,
+                ),
+                GestureDetector(
+                  onTap: () => {
+                    Navigator.pop(context),
+                    Get.off(
+                      HomeScreen(),
+                      fullscreenDialog: true,
+                      transition: Transition.noTransition
+                      ) 
+                  },
+                  child: Container(
+                    width: Get.width * 0.32,
+                    height: 45,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        //border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(15),
+                        color: ConstantColor.primaryColor),
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )));
 }
