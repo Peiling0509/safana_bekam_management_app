@@ -1,0 +1,1 @@
+enum MyCheckboxType {circle, square, custom, none}
