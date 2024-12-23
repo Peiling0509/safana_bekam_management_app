@@ -135,7 +135,8 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
                     },
                     size: 30,
                     type: MyCheckboxType.none, // Adjust based on your needs
-                    activeBgColor: ConstantColor.primaryColor, // Adjust colors as needed
+                    activeBgColor:
+                        ConstantColor.primaryColor, // Adjust colors as needed
                     inactiveBgColor: ConstantColor.backgroundColor,
                     activeBorderColor: ConstantColor.primaryColor,
                     inactiveBorderColor: Colors.grey,
@@ -156,17 +157,15 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
                   child: TextField(
                     controller: _controllers[key],
                     decoration: InputDecoration(
-                      hintText:'Pengambilan Ubat',
-                      hintStyle: TextStyle(
-                        color: Colors.black.withOpacity(0.3)
-                      ),
+                      hintText: 'Pengambilan Ubat',
+                      hintStyle:
+                          TextStyle(color: Colors.black.withOpacity(0.3)),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(color: Colors.grey)
-                      ),
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: Colors.grey)),
                       filled: true,
                       fillColor: ConstantColor.backgroundColor,
                     ),
@@ -183,25 +182,95 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
     return Padding(
       padding: EdgeInsets.only(top: 28.0),
       child: ElevatedButton(
-        onPressed: () {
-          //show pop out
-          print("submit button clicked");
-        }, 
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30)),
-          backgroundColor: ConstantColor.primaryColor,
-          minimumSize: Size(Get.width, 48),
-        ),
-        child: const Text(
-          "Simpan",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
+          onPressed: () {
+            //show pop up
+            openDialog();
+            print("submit button clicked");
+          },
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            backgroundColor: ConstantColor.primaryColor,
+            minimumSize: Size(Get.width, 48),
           ),
-          )
-        ),
+          child: const Text(
+            "Simpan",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          )),
     );
   }
+
+  Future openDialog() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            content: Container(
+              width: Get.width,
+              height: 115,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 30,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "Sahkan?",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 13,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: Get.width * 0.32,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text(
+                          "Batal",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Container(
+                        width: Get.width * 0.32,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            //border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(15),
+                            color: ConstantColor.primaryColor),
+                        child: const Text(
+                          "Sahkan",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ));
 }
