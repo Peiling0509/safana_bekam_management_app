@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
+import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
+import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/screen/home/add_customer_form_B.dart';
+import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 
 class AddCustomerFormScreen extends StatefulWidget {
   const AddCustomerFormScreen({super.key});
@@ -152,151 +157,120 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
             child: Container(
       color: ConstantColor.backgroundColor,
       child: Center(
-        child: Column(children: [_topAppBar(), Expanded(child: _content())]),
+        child: Column(children: [
+          const AddCustomerFormTopBar(),
+          Expanded(child: _content())
+        ]),
       ),
     )));
   }
 
-  Widget _topAppBar() {
-    return Container(
-      color: ConstantColor.primaryColor,
-      child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 28,
-                  )),
-              const Center(
-                child: Text(
-                  "Maklumat Pelanggan Baru",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 28),
-              )
-            ],
-          )),
-    );
-  }
-
   Widget _content() {
-    return Padding(
+    return SingleChildScrollView(
+        child: Padding(
       padding: const EdgeInsets.all(20),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "A. Maklumat Pelangan",
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w500,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "A. Maklumat Pelangan",
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 20),
+          _buildTextField("Nama Penuh"),
+          _buildTextField("No MyKad"),
+          const SizedBox(height: 8),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Jantina",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildGenderSelection(),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            _buildTextField("Nama Penuh"),
-            _buildTextField("No MyKad"),
-            const SizedBox(height: 8),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Jantina",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
+              const SizedBox(width: 16),
+
+              // Bangsa Drop Down List
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Bangsa",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(height: 8),
-                      _buildGenderSelection(),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDropdown(
+                        races, _layerLinkRaces, selectedRace, 'race'),
+                  ],
                 ),
-                const SizedBox(width: 16),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
 
-                // Bangsa Drop Down List
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Bangsa",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
+          // Emel
+          _buildTextField("Emel"),
+
+          // Alamat
+          _buildTextField("Alamat", maxLines: 3),
+
+          const SizedBox(height: 8),
+          // Poskod
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _buildTextField("Poskod", vertical: 0),
+              ),
+              const SizedBox(width: 16),
+
+              // Negeri
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Negeri",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(height: 8),
-                      _buildDropdown(
-                          races, _layerLinkRaces, selectedRace, 'race'),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDropdown(
+                        states, _layerlinkStates, selectedState, 'state'),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Emel
-            _buildTextField("Emel"),
-
-            // Alamat
-            _buildTextField("Alamat", maxLines: 3),
-
-            const SizedBox(height: 8),
-            // Poskod
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: _buildTextField("Poskod", vertical: 0),
-                ),
-                const SizedBox(width: 16),
-
-                // Negeri
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Negeri",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      _buildDropdown(
-                          states, _layerlinkStates, selectedState, 'state'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // Perkerjaan
-            _buildTextField("Perkerjaan"),
-            // No Tel
-            _buildTextField("No Tel"),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Perkerjaan
+          _buildTextField("Perkerjaan"),
+          // No Tel
+          _buildTextField("No Tel"),
+          _buildNextButton(),
+        ],
       ),
-    );
+    ));
   }
 
   Widget _buildDropdown(
@@ -419,6 +393,36 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildNextButton() {
+    return Padding(
+      padding: EdgeInsets.only(top: 28.0),
+      child: ElevatedButton(
+          onPressed: () {
+            Get.to(
+              //Go to B section
+              AddCustomerFormScreen_B(),
+              //AddCustomerFormScreen(),
+              fullscreenDialog: true,
+              transition: Transition.noTransition,
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            backgroundColor: ConstantColor.primaryColor,
+            minimumSize: Size(Get.width, 48),
+          ),
+          child: const Text(
+            "Teruskan",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          )),
     );
   }
 }
