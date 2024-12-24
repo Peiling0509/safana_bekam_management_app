@@ -18,6 +18,7 @@ class AuthController extends GetxController {
     super.onInit();
     state.listen((v) {
       switch (v) {
+        case LoaderState.empty:
         case LoaderState.initial:
         case LoaderState.loading:
           LoadingDialog.show();

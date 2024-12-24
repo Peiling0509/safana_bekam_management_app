@@ -1,1 +1,1 @@
-enum LoaderState {initial,loading,loaded,failure}
+enum LoaderState {empty,initial,loading,loaded,failure}

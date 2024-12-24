@@ -9,6 +9,7 @@ import 'package:safana_bekam_management_app/screen/home/root_home_screen.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 import 'package:safana_bekam_management_app/screen/other/splash_screen.dart';
 import 'package:safana_bekam_management_app/screen/profile/edit_profile_screen.dart';
+import 'package:safana_bekam_management_app/screen/record_treatment/record_treatment_screen.dart';
 
 List<GetPage> routes = [
   GetPage(
@@ -35,5 +36,10 @@ List<GetPage> routes = [
     name: '/edit_profile',
     page: () => const EditProfileScreen(),
     binding: ProfileBinding(),
+  ),
+  GetPage(
+    name: '/record_treatment',
+    page: () => const RecordTreatmentScreen(),
+    //binding: ProfileBinding(),
   ),
 ];

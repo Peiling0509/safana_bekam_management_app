@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/top_bar.dart';
-import 'package:safana_bekam_management_app/screen/home/add_customer_form_screen.dart';
+import 'package:safana_bekam_management_app/screen/form/add_customer_form_screen.dart';
 import 'package:safana_bekam_management_app/screen/home/notification_screen.dart';
 import 'package:safana_bekam_management_app/screen/other/splash_screen.dart';
 
@@ -37,64 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-/*
-/
-/ MOVE TO COMPONENT
-/
-  Widget _topBar() {
-    return Container(
-      color: ConstantColor.primaryColor,
-      width: double.infinity,
-      height: 175,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: GestureDetector(
-              onTap: () {
-                // Handle notification icon click
-                print('Notification icon clicked');
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 15, right: 15),
-                child: Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(top: 30, left: 30),
-            child: Text(
-              "Hai, Ali",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 30),
-            child: Text(
-              "Log Masuk Terakhir: XX-XX-XXXX 00:00:00",
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.7),
-                fontSize: 14,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-*/
 
   Widget _middlePartTitle() {
     return const Padding(
@@ -164,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // Handle add button click
               print('Add button clicked');
               Get.to(
-                  AddCustomerFormScreen(),
+                  const AddCustomerFormScreen(),
                   //AddCustomerFormScreen(),
                   fullscreenDialog: true,
                   transition: Transition.rightToLeft,

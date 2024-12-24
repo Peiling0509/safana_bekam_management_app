@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
 import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
-import 'package:safana_bekam_management_app/data/model/form/login_form._model.dart';
+import 'package:safana_bekam_management_app/data/model/form/login_form_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 import 'package:safana_bekam_management_app/data/respository/login_respository.dart';
 
@@ -31,6 +31,7 @@ class LoginController extends GetxController {
     form = LoginFormModel().obs;
     state.listen((v) {
       switch (v) {
+        case LoaderState.empty:
         case LoaderState.initial:
         case LoaderState.loading:
           LoadingDialog.show();

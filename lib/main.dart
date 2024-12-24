@@ -27,6 +27,11 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: ConstantColor.primaryColor,
         useMaterial3: false,
+        appBarTheme: AppBarTheme(
+          backgroundColor: ConstantColor.primaryColor,
+          centerTitle: true,
+          elevation: 0.0,
+        ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           showSelectedLabels: false,
           showUnselectedLabels: false,

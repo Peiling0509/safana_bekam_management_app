@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/screen/Home/home_screen.dart';
 import 'package:safana_bekam_management_app/screen/home/dashboard_screen.dart';
 import 'package:safana_bekam_management_app/screen/profile/profile_screen.dart';
-import 'package:safana_bekam_management_app/screen/home/search_patient_screen.dart';
+import 'package:safana_bekam_management_app/screen/home/record_patient_screen.dart';
 
 class RootHomeController extends GetxController {
   var currentIndex = 0.obs;
@@ -16,7 +16,7 @@ class RootHomeController extends GetxController {
      screens = [
       const DashboardScreen(),
       const HomeScreen(),
-      const SearchPatientScreen(),
+      const RecordPatientScreen(),
       const ProfileScreen(),
     ];
   }

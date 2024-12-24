@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/api.dart';
 import 'package:safana_bekam_management_app/data/model/auth/auth_model.dart';
-import 'package:safana_bekam_management_app/data/model/form/login_form._model.dart';
+import 'package:safana_bekam_management_app/data/model/form/login_form_model.dart';
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
 class LoginRepository {
