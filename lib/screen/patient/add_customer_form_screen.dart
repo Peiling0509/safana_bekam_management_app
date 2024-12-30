@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
-import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
-import 'package:safana_bekam_management_app/constant/color.dart';
-import 'package:safana_bekam_management_app/screen/home/add_customer_form_B.dart';
-import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
+import 'package:safana_bekam_management_app/screen/patient/add_customer_form_B.dart';
+import 'package:safana_bekam_management_app/widget/custome_textfield.dart';
 
 class AddCustomerFormScreen extends StatefulWidget {
   const AddCustomerFormScreen({super.key});
@@ -51,6 +49,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
 
   void _showDropdown(List<String> list, LayerLink layerlink, String type) {
     final overlay = Overlay.of(context);
+  
     _overlayEntry = _createOverlayEntry(list, layerlink, type);
     overlay.insert(_overlayEntry!);
     setState(() {
@@ -86,7 +85,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
         child: CompositedTransformFollower(
           link: layerlink,
           showWhenUnlinked: false,
-          offset: const Offset(0, 48),
+          offset: Offset(0, 48),
           child: Material(
             borderRadius: BorderRadius.circular(15),
             elevation: 0,
@@ -180,8 +179,8 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildTextField("Nama Penuh"),
-          _buildTextField("No MyKad"),
+          const CustomTextField(label: "Nama Penuh", getter: "", setter: null),
+          const CustomTextField(label: "No MyKad", getter: "", setter: null),
           const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,10 +226,11 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           const SizedBox(height: 16),
 
           // Emel
-          _buildTextField("Emel"),
+          const CustomTextField(label: "Emel", getter: "", setter: null),
 
           // Alamat
-          _buildTextField("Alamat", maxLines: 3),
+          const CustomTextField(
+              label: "Alamat", maxLines: 3, getter: "", setter: null),
 
           const SizedBox(height: 8),
           // Poskod
@@ -238,7 +238,8 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: _buildTextField("Poskod", vertical: 0),
+                child: const CustomTextField(
+                    label: "Poskod", vertical: 0, getter: "", setter: null),
               ),
               const SizedBox(width: 16),
 
@@ -264,9 +265,9 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           ),
           const SizedBox(height: 8),
           // Perkerjaan
-          _buildTextField("Perkerjaan"),
+          const CustomTextField(label: "Perkerjaan", getter: "", setter: null),
           // No Tel
-          _buildTextField("No Tel"),
+          const CustomTextField(label: "No Tel", getter: "", setter: null),
           _buildNextButton(),
         ],
       ),
@@ -363,35 +364,6 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
             textAlign: TextAlign.center,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(String label,
-      {int maxLines = 1, double vertical = 8.0}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: vertical),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 8),
-          TextFormField(
-            maxLines: maxLines,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            ),
-          ),
-        ],
       ),
     );
   }

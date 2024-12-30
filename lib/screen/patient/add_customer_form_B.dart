@@ -316,11 +316,8 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
                 GestureDetector(
                   onTap: () => {
                     Navigator.pop(context),
-                    Get.off(
-                      HomeScreen(),
-                      fullscreenDialog: true,
-                      transition: Transition.noTransition
-                      ) 
+                    Get.back(),
+                    Get.back()
                   },
                   child: Container(
                     width: Get.width * 0.32,

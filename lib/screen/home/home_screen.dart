@@ -3,9 +3,7 @@ import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/top_bar.dart';
-import 'package:safana_bekam_management_app/screen/form/add_customer_form_screen.dart';
-import 'package:safana_bekam_management_app/screen/home/notification_screen.dart';
-import 'package:safana_bekam_management_app/screen/other/splash_screen.dart';
+import 'package:safana_bekam_management_app/screen/patient/add_customer_form_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
