@@ -167,7 +167,7 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedSkinReactionIndex = index;
+                            _selectedSkinReactionIndex = index + 1;
                           });
                         },
                         child: Container(
@@ -175,7 +175,7 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.blue.shade50,
-                            border: _selectedSkinReactionIndex == index
+                            border: _selectedSkinReactionIndex == index + 1
                                 ? Border.all(
                                     color: ConstantColor.primaryColor, width: 2)
                                 : null,
@@ -183,7 +183,7 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                           child: Text(
                             "${index + 1}",
                             style: TextStyle(
-                                color: _selectedSkinReactionIndex == index
+                                color: _selectedSkinReactionIndex == index + 1
                                     ? ConstantColor.primaryColor
                                     : Colors.grey),
                           ),
@@ -208,7 +208,7 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            _selectedBloodQuantityIndex = index;
+                            _selectedBloodQuantityIndex = index + 1;
                           });
                         },
                         child: Container(
@@ -216,7 +216,7 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.blue.shade50,
-                              border: _selectedBloodQuantityIndex == index
+                              border: _selectedBloodQuantityIndex == index + 1
                                   ? Border.all(
                                       color: ConstantColor.primaryColor,
                                       width: 2)
@@ -225,7 +225,7 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                             child: Text(
                               "${index + 1}",
                               style: TextStyle(
-                                  color: _selectedBloodQuantityIndex == index
+                                  color: _selectedBloodQuantityIndex == index + 1
                                       ? ConstantColor.primaryColor
                                       : Colors.grey),
                             )),

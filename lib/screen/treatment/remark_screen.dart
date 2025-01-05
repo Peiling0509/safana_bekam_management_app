@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/controller/treatment/acupoint_controller.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/acupoint_model.dart';
 import 'package:safana_bekam_management_app/widget/acupoint_details_dialog.dart';
@@ -23,7 +24,7 @@ class _RemarkScreenState extends State<RemarkScreen> {
   @override
   void initState() {
     super.initState();
-    _photoController = PhotoViewController(initialScale: 0.9);
+    _photoController = PhotoViewController(initialScale: 1.0);
     _pageController = PageController(initialPage: _currentPageIndex);
   }
 
@@ -51,6 +52,8 @@ class _RemarkScreenState extends State<RemarkScreen> {
 
     final markerPosition = Offset(relativeX, relativeY);
 
+    print(markerPosition.toString());
+
     if (relativeX.abs() < size.width && relativeY.abs() < size.height) {
       // Show dialog to input acupoint details
       showDialog(
@@ -73,29 +76,6 @@ class _RemarkScreenState extends State<RemarkScreen> {
       });
     }
   }
-
-  // void _handleLongPress(
-  //     {required GlobalKey photoViewKey,
-  //     required LongPressStartDetails details,
-  //     required List<Offset> markers}) {
-  //   final RenderBox renderBox =
-  //       photoViewKey.currentContext!.findRenderObject() as RenderBox;
-  //   final size = renderBox.size;
-  //   final position = _photoController.position;
-  //   final localPosition = renderBox.globalToLocal(details.globalPosition);
-
-  //   final scale = _photoController.scale ?? 1.0;
-
-  //   final relativeX = (localPosition.dx - size.width / 2 - position.dx) / scale;
-  //   final relativeY =
-  //       (localPosition.dy - size.height / 2 - position.dy) / scale;
-
-  //   if (relativeX.abs() < size.width && relativeY.abs() < size.height) {
-  //     setState(() {
-  //       markers.add(Offset(relativeX, relativeY));
-  //     });
-  //   }
-  // }
 
   void _handleNextButton(bool toNext) {
     if (toNext) {
@@ -161,20 +141,20 @@ class _RemarkScreenState extends State<RemarkScreen> {
                                     photoViewKey:
                                         controller.bodyFrontPhotoViewKey.value,
                                     imageProvider:
-                                        controller.bodyFrontPhoto.value,
+                                        AssetImage(AssetPath.bodyFront),
                                     acupoints:
                                         controller.getbodyFrontAcupoints)),
                                 Obx(() => _buildBodyView(
                                     photoViewKey:
                                         controller.bodyBackPhotoViewKey.value,
                                     imageProvider:
-                                        controller.bodyBackPhoto.value,
+                                        AssetImage(AssetPath.bodyBack),
                                     acupoints:
                                         controller.getbodyBackAcupoints)),
                                 Obx(() => _buildBodyView(
                                     photoViewKey:
                                         controller.facePhotoViewKey.value,
-                                    imageProvider: controller.facePhoto.value,
+                                    imageProvider: AssetImage(AssetPath.face),
                                     acupoints: controller.getfaceAcupoints))
                               ],
                             ),
@@ -276,6 +256,7 @@ class _RemarkScreenState extends State<RemarkScreen> {
                           final position = _photoController.position;
                           return Stack(
                             children: acupoints.map((acupoint) {
+                              print("Scale : $scale" );
                               final dx = (acupoint.point!.dx * scale) +
                                   position.dx +
                                   constraints.maxWidth / 2;
@@ -298,19 +279,11 @@ class _RemarkScreenState extends State<RemarkScreen> {
                                     },
                                   ),
                                   child: Container(
-                                    width: 18,
-                                    height: 18,
+                                    width: 20,
+                                    height: 20,
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.red,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.red,
-                                          spreadRadius: 4,
-                                          blurRadius: 5,
-                                          offset: Offset(0, 0),
-                                        ),
-                                      ],
                                     ),
                                   ),
                                 ),

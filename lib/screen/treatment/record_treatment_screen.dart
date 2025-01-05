@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
 import 'package:safana_bekam_management_app/screen/treatment/treatment_form.dart';
 
 class RecordTreatmentScreen extends StatefulWidget {
@@ -12,6 +13,9 @@ class RecordTreatmentScreen extends StatefulWidget {
 }
 
 class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
+
+  final controller = Get.find<TreatmentController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +98,7 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
                               ConstantColor.primaryColor, // Button color
                           minimumSize: const Size(80, 50),
                         ),
-                        onPressed: () {},
+                        onPressed: () => controller.generateReport(),
                         child: const Icon(
                           Icons.print, // Use desired icon
                           color: Colors.white, // Icon color

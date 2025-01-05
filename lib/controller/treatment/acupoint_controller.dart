@@ -17,10 +17,6 @@ class AcupointController extends GetxController {
   var bodyBackPhotoViewKey = GlobalKey().obs;
   var facePhotoViewKey = GlobalKey().obs;
 
-  final bodyFrontPhoto =
-      const AssetImage('assets/image/body/body_front.png').obs;
-  final bodyBackPhoto = const AssetImage('assets/image/body/body_back.png').obs;
-  final facePhoto = const AssetImage('assets/image/body/face.png').obs;
 
   @override
   void onInit() {
@@ -28,6 +24,60 @@ class AcupointController extends GetxController {
     bodyFront = AcupointModel(bodyPart: bodyPart[0], acupoint: []).obs;
     bodyBack = AcupointModel(bodyPart: bodyPart[1], acupoint: []).obs;
     face = AcupointModel(bodyPart: bodyPart[2], acupoint: []).obs;
+
+    bodyFront.value.acupoint = [
+        Acupoint(
+          point: Offset(-43.0, -184.9),
+          skinRection: 1,
+          bloodQuantity: 5,
+        ),
+        Acupoint(
+          point:  Offset(40.8, -188.2),
+          skinRection: 2,
+          bloodQuantity: 4,
+        ),
+        Acupoint(
+          point: Offset(-0.2, -90.2),
+          skinRection: 2,
+          bloodQuantity: 4,
+        ),
+      ];
+
+    bodyBack.value.acupoint = [
+        Acupoint(
+          point: Offset(-34.4, 1.8),
+          skinRection: 1,
+          bloodQuantity: 5,
+        ),
+        Acupoint(
+          point: Offset(-2.4, -364.9),
+          skinRection: 2,
+          bloodQuantity: 4,
+        ),
+        Acupoint(
+          point:Offset(31.1, 229.7),
+          skinRection: 2,
+          bloodQuantity: 4,
+        ),
+      ];
+
+    face.value.acupoint = [
+        Acupoint(
+          point:  Offset(-4.4, -234.7),
+          skinRection: 1,
+          bloodQuantity: 5,
+        ),
+        Acupoint(
+          point:Offset(-85.9, 26.5),
+          skinRection: 2,
+          bloodQuantity: 4,
+        ),
+        Acupoint(
+          point:Offset(99.2, 30.0),
+          skinRection: 2,
+          bloodQuantity: 4,
+        ),
+      ];
   }
 
   void addAcupoint({
