@@ -9,7 +9,21 @@ class PatientController extends GetxController{
   
   final repository = PatientsRepository();
   Rx<List<PatientsModel>> patients = Rx<List<PatientsModel>>([]);
-  
+
+   Rx<PatientsModel> currentPatient = PatientsModel(
+    name: '',
+    myKad: '',
+    gender: '',
+    ethnicity: '',
+    mobileNo: '',
+    email: '',
+    postcode: '',
+    state: '',
+    address: '',
+    occupation: '',
+    medicalHistory: [],
+  ).obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -40,5 +54,55 @@ class PatientController extends GetxController{
       print(e.toString());
       state.value = LoaderState.failure;
     }
+  }
+
+  void updatePatientInfo({
+    String? name,
+    String? myKad,
+    String? gender,
+    String? ethnicity,
+    String? mobileNo,
+    String? email,
+    String? postcode,
+    String? state,
+    String? address,
+    String? occupation,
+  }) {
+    currentPatient.update((patient) {
+      if (patient != null) {
+        if (name != null) patient.name = name;
+        if (myKad != null) patient.myKad = myKad;
+        if (gender != null) patient.gender = gender;
+        if (ethnicity != null) patient.ethnicity = ethnicity;
+        if (mobileNo != null) patient.mobileNo = mobileNo;
+        if (email != null) patient.email = email;
+        if (postcode != null) patient.postcode = postcode;
+        if (state != null) patient.state = state;
+        if (address != null) patient.address = address;
+        if (occupation != null) patient.occupation = occupation;
+      }
+    });
+  }
+
+  Future<void> submitPatient() async {
+    try {
+      await repository.submitPatient(currentPatient.value);
+      Get.snackbar("Success", "Patient added successfully");
+    } catch (e) {
+      Get.snackbar("Error", "Failed to add patient");
+    }
+  }
+
+  void addMedicalHistory(String condition, String medicine) {
+    currentPatient.value.medicalHistory.add(MedicalHistoryModel(
+      condition: condition,
+      medicine: medicine,
+    ));
+    currentPatient.refresh();
+  }
+
+  void removeMedicalHistory(int index) {
+    currentPatient.value.medicalHistory.removeAt(index);
+    currentPatient.refresh();
   }
 }

@@ -7,6 +7,7 @@ import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/data/model/shared/checkbox_type.dart';
 import 'package:safana_bekam_management_app/screen/home/home_screen.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
+import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 
 class AddCustomerFormScreen_B extends StatefulWidget {
   const AddCustomerFormScreen_B({super.key});
@@ -17,6 +18,8 @@ class AddCustomerFormScreen_B extends StatefulWidget {
 }
 
 class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
+  final PatientController patientController = Get.find<PatientController>();
+
   final Map<String, bool> _checkboxStates = {
     'Kencing Manis': false,
     'Darah Tinggi': false,
@@ -258,8 +261,23 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () =>
-                            {Navigator.pop(context), openSuccessDialog()},
+                        onTap: () => {
+                          //collect health background data
+                          _checkboxStates.forEach((condition, isChecked) {
+                            if (isChecked) {
+                              patientController.addMedicalHistory(
+                                condition,
+                                _controllers[condition]?.text ?? "",
+                              );
+                            }
+                          }),
+
+                          //submit patient data
+                          patientController.submitPatient(),
+
+                          Navigator.pop(context), 
+                          openSuccessDialog()
+                          },
                         child: Container(
                           width: Get.width * 0.32,
                           height: 45,
@@ -316,11 +334,8 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
                 GestureDetector(
                   onTap: () => {
                     Navigator.pop(context),
-                    Get.off(
-                      HomeScreen(),
-                      fullscreenDialog: true,
-                      transition: Transition.noTransition
-                      ) 
+                    Get.back(),
+                    Get.back()
                   },
                   child: Container(
                     width: Get.width * 0.32,

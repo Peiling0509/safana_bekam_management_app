@@ -6,4 +6,6 @@ class API {
   static String LOGIN = "$DOMAIN_URL/login";
 
   static String EXPORT_PATIENTS = "$DOMAIN_URL/export-patients";
+  
+  static String REGISTER_PATIENT = "$DOMAIN_URL/register-patient";
 }

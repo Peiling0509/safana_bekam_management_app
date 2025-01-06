@@ -6,6 +6,7 @@ import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/screen/home/add_customer_form_B.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
+import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 
 class AddCustomerFormScreen extends StatefulWidget {
   const AddCustomerFormScreen({super.key});
@@ -15,6 +16,16 @@ class AddCustomerFormScreen extends StatefulWidget {
 }
 
 class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
+  final PatientController patientController = Get.put(PatientController());
+
+  final fullNameController = TextEditingController();
+  final myKadController = TextEditingController();
+  final mobileNoController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final postcodeController = TextEditingController();
+  final occupationController = TextEditingController();
+  
   // Move the state variable inside the State class
   bool isMale = true;
   String selectedRace = '--Pilih--';
@@ -180,8 +191,8 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildTextField("Nama Penuh"),
-          _buildTextField("No MyKad"),
+          _buildTextField("Nama Penuh", controller: fullNameController),
+          _buildTextField("No MyKad", controller: myKadController),
           const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,10 +238,10 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           const SizedBox(height: 16),
 
           // Emel
-          _buildTextField("Emel"),
+          _buildTextField("Emel", controller: emailController),
 
           // Alamat
-          _buildTextField("Alamat", maxLines: 3),
+          _buildTextField("Alamat", controller: addressController, maxLines: 3),
 
           const SizedBox(height: 8),
           // Poskod
@@ -238,7 +249,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: _buildTextField("Poskod", vertical: 0),
+                child: _buildTextField("Poskod", controller: postcodeController),
               ),
               const SizedBox(width: 16),
 
@@ -264,9 +275,9 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           ),
           const SizedBox(height: 8),
           // Perkerjaan
-          _buildTextField("Perkerjaan"),
+          _buildTextField("Perkerjaan", controller: occupationController),
           // No Tel
-          _buildTextField("No Tel"),
+          _buildTextField("No Tel", controller: mobileNoController),
           _buildNextButton(),
         ],
       ),
@@ -368,9 +379,9 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
   }
 
   Widget _buildTextField(String label,
-      {int maxLines = 1, double vertical = 8.0}) {
+      {required TextEditingController controller, int maxLines = 1}) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: vertical),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -383,6 +394,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           ),
           const SizedBox(height: 8),
           TextFormField(
+            controller: controller,
             maxLines: maxLines,
             decoration: InputDecoration(
               border:
@@ -401,6 +413,21 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
       padding: EdgeInsets.only(top: 28.0),
       child: ElevatedButton(
           onPressed: () {
+             // Update Patient Info
+            patientController.updatePatientInfo(
+              name: fullNameController.text,
+              myKad: myKadController.text,
+              gender: isMale ? "Male" : "Female",
+              ethnicity: selectedRace == '--Pilih--' ? '' : selectedRace,
+              mobileNo: mobileNoController.text,
+              email: emailController.text,
+              postcode: postcodeController.text,
+              state: selectedState == '--Pilih--' ? '' : selectedState,
+              address: addressController.text,
+              occupation: occupationController.text,
+            );
+
+
             Get.to(
               //Go to B section
               AddCustomerFormScreen_B(),

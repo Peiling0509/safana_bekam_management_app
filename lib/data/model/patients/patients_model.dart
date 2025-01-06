@@ -10,7 +10,7 @@ class PatientsModel {
   String? state;
   String? address;
   String? occupation;
-  List<dynamic>? medicalHistory;
+  List<MedicalHistoryModel> medicalHistory;
 
   PatientsModel({
     this.id,
@@ -24,7 +24,7 @@ class PatientsModel {
     this.state,
     this.address,
     this.occupation,
-    this.medicalHistory
+    required this.medicalHistory
   });
 
   factory PatientsModel.fromJson(Map<String, dynamic> json) {
@@ -40,7 +40,50 @@ class PatientsModel {
       state: json['state'] ?? "",
       address: json['address'] ?? "",
       occupation: json['occupation'] ?? "",
-      medicalHistory:json["medical_history"] ?? []
+      medicalHistory: (json['medical_history'] as List<dynamic>?)
+              ?.map((e) => MedicalHistoryModel.fromJson(e))
+              .toList() ?? [],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "myKad": myKad,
+      "gender": gender,
+      "ethnicity": ethnicity,
+      "p_mobile_no": mobileNo,
+      "p_email": email,
+      "postcode": postcode,
+      "state": state,
+      "address": address,
+      "occupation": occupation,
+      "medical_history": medicalHistory.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+class MedicalHistoryModel {
+  String condition;
+  String medicine;
+
+  MedicalHistoryModel({
+    required this.condition,
+    required this.medicine,
+  });
+
+  factory MedicalHistoryModel.fromJson(Map<String, dynamic> json) {
+    return MedicalHistoryModel(
+      condition: json['condition'] ?? "",
+      medicine: json['medicine'] ?? "",
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "condition": condition,
+      "medicine": medicine,
+    };
   }
 }
