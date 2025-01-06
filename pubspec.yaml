@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   dio: ^5.7.0
+  fl_chart: ^0.69.2
   flutter:
     sdk: flutter
   fluttertoast: ^8.2.8
