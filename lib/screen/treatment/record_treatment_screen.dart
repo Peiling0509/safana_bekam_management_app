@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
+import 'package:safana_bekam_management_app/screen/treatment/treatment_form.dart';
 
 class RecordTreatmentScreen extends StatefulWidget {
   const RecordTreatmentScreen({super.key});
@@ -11,6 +13,8 @@ class RecordTreatmentScreen extends StatefulWidget {
 }
 
 class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
+
+  final controller = Get.find<TreatmentController>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,7 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
             ),
             backgroundColor: Colors.white, // Button color
           ),
-          onPressed: () {},
+          onPressed: () => _openAddTreatmentBottomSheet(context),
           child: Text(
             "Rawatan Baru",
             style: TextStyle(color: ConstantColor.primaryColor, fontSize: 18),
@@ -94,7 +98,7 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
                               ConstantColor.primaryColor, // Button color
                           minimumSize: const Size(80, 50),
                         ),
-                        onPressed: () {},
+                        onPressed: () => controller.generateReport(),
                         child: const Icon(
                           Icons.print, // Use desired icon
                           color: Colors.white, // Icon color
@@ -124,11 +128,15 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
                 width: 120,
                 child: CircleAvatar(
                   backgroundColor: ConstantColor.primaryColor,
-                  child: const Icon(Icons.person_2_outlined, color: Colors.white, size:50,),
+                  child: const Icon(
+                    Icons.person_2_outlined,
+                    color: Colors.white,
+                    size: 50,
+                  ),
                   //backgroundImage: NetworkImage(userInfo.profilePicture ?? ""),
                   //foregroundImage: AssetImage(AssetPath.imageNoFound),
-                //   onBackgroundImageError: (exception, stackTrace) =>
-                //       throw NetworkImageLoadException,
+                  //   onBackgroundImageError: (exception, stackTrace) =>
+                  //       throw NetworkImageLoadException,
                 ),
               ),
               const SizedBox(width: 10),
@@ -162,6 +170,23 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  void _openAddTreatmentBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return const TreatmentForm();
+      },
     );
   }
 }

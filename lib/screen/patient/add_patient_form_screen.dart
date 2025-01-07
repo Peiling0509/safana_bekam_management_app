@@ -4,18 +4,19 @@ import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
-import 'package:safana_bekam_management_app/screen/home/add_customer_form_B.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
+import 'package:safana_bekam_management_app/screen/patient/add_patient_form_B.dart';
+import 'package:safana_bekam_management_app/widget/custome_textfield.dart';
 
-class AddCustomerFormScreen extends StatefulWidget {
-  const AddCustomerFormScreen({super.key});
+class AddPatientFormScreen extends StatefulWidget {
+  const AddPatientFormScreen({super.key});
 
   @override
-  State<AddCustomerFormScreen> createState() => _AddCustomerFormScreenState();
+  State<AddPatientFormScreen> createState() => _AddPatientFormScreenState();
 }
 
-class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
+class _AddPatientFormScreenState extends State<AddPatientFormScreen> {
   final PatientController patientController = Get.put(PatientController());
 
   final fullNameController = TextEditingController();
@@ -62,6 +63,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
 
   void _showDropdown(List<String> list, LayerLink layerlink, String type) {
     final overlay = Overlay.of(context);
+  
     _overlayEntry = _createOverlayEntry(list, layerlink, type);
     overlay.insert(_overlayEntry!);
     setState(() {
@@ -97,7 +99,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
         child: CompositedTransformFollower(
           link: layerlink,
           showWhenUnlinked: false,
-          offset: const Offset(0, 48),
+          offset: Offset(0, 48),
           child: Material(
             borderRadius: BorderRadius.circular(15),
             elevation: 0,
@@ -169,7 +171,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
       color: ConstantColor.backgroundColor,
       child: Center(
         child: Column(children: [
-          const AddCustomerFormTopBar(),
+          const AddPatientFormTopBar(title: "Maklumat Pelangan Baharu",),
           Expanded(child: _content())
         ]),
       ),
@@ -246,7 +248,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           const SizedBox(height: 8),
           // Poskod
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: _buildTextField("Poskod", controller: postcodeController),
@@ -430,7 +432,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
 
             Get.to(
               //Go to B section
-              AddCustomerFormScreen_B(),
+              AddPatientFormScreen_B(),
               //AddCustomerFormScreen(),
               fullscreenDialog: true,
               transition: Transition.noTransition,

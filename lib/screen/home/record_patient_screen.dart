@@ -20,7 +20,6 @@ class _RecordPatientScreenState extends State<RecordPatientScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.loadPatients();
     });

@@ -12,8 +12,8 @@ class CustomBottomNavigationBar extends GetView<RootHomeController> {
           label: "Dashboard",
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.person_add_outlined),
-          activeIcon: Icon(Icons.person_add),
+          icon: Icon(Icons.person_add_alt_outlined),
+          activeIcon: Icon(Icons.person_add_alt_1_rounded),
           label: "Utama",
         ),
         const BottomNavigationBarItem(

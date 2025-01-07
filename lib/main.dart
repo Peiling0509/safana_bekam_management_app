@@ -7,7 +7,7 @@ import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
 void main() async {
-  await GetStorage.init();
+  await GetStorage.init(); 
   await GetStorage.init("Login");
   await GetStorage.init("Auth");
   runApp(const MainApp());
@@ -30,7 +30,7 @@ class MainApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           backgroundColor: ConstantColor.primaryColor,
           centerTitle: true,
-          elevation: 0.0,
+            elevation: 0.0,
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           showSelectedLabels: false,

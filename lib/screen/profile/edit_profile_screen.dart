@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
-import 'package:safana_bekam_management_app/widget/button.dart';
+import 'package:safana_bekam_management_app/widget/custom_button.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -113,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     _buildTextField(
                         labelText: "Alamat", inputText: userInfo.address),
                     const SizedBox(height: 10),
-                    Button(title: "SIMPAN", onPressed:(){},)
+                    CustomButton(title: "SIMPAN", onPressed:(){},)
                   ],
                 ),
               )

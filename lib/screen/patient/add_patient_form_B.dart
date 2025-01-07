@@ -9,15 +9,15 @@ import 'package:safana_bekam_management_app/screen/home/home_screen.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 
-class AddCustomerFormScreen_B extends StatefulWidget {
-  const AddCustomerFormScreen_B({super.key});
+class AddPatientFormScreen_B extends StatefulWidget {
+  const AddPatientFormScreen_B({super.key});
 
   @override
-  State<AddCustomerFormScreen_B> createState() =>
-      _AddCustomerFormScreen_B_State();
+  State<AddPatientFormScreen_B> createState() =>
+      _AddPatientFormScreen_B_State();
 }
 
-class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
+class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
   final PatientController patientController = Get.find<PatientController>();
 
   final Map<String, bool> _checkboxStates = {
@@ -64,7 +64,7 @@ class _AddCustomerFormScreen_B_State extends State<AddCustomerFormScreen_B> {
           color: ConstantColor.backgroundColor,
           child: Column(
             children: [
-              const AddCustomerFormTopBar(),
+              const AddPatientFormTopBar(title: "Maklumat Pelangan Baharu",),
               Expanded(child: _content()),
             ],
           ),
