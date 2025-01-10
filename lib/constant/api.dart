@@ -12,4 +12,6 @@ class API {
   //TREATMENT
   static String EXPORT_TREATMENT = "$DOMAIN_URL/export-patient-record-visit";
   static String SUBMIT_TREATMENT = "$DOMAIN_URL/submit-treatment";
+  
+  static String REGISTER_PATIENT = "$DOMAIN_URL/register-patient";
 }

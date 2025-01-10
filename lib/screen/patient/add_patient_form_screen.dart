@@ -2,17 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
-import 'package:safana_bekam_management_app/screen/patient/add_customer_form_B.dart';
+import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
+import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
+import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
+import 'package:safana_bekam_management_app/screen/patient/add_patient_form_B.dart';
 import 'package:safana_bekam_management_app/widget/custome_textfield.dart';
 
-class AddCustomerFormScreen extends StatefulWidget {
-  const AddCustomerFormScreen({super.key});
+class AddPatientFormScreen extends StatefulWidget {
+  const AddPatientFormScreen({super.key});
 
   @override
-  State<AddCustomerFormScreen> createState() => _AddCustomerFormScreenState();
+  State<AddPatientFormScreen> createState() => _AddPatientFormScreenState();
 }
 
-class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
+class _AddPatientFormScreenState extends State<AddPatientFormScreen> {
+  final PatientController patientController = Get.put(PatientController());
+
+  final fullNameController = TextEditingController();
+  final myKadController = TextEditingController();
+  final mobileNoController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final postcodeController = TextEditingController();
+  final occupationController = TextEditingController();
+  
   // Move the state variable inside the State class
   bool isMale = true;
   String selectedRace = '--Pilih--';
@@ -157,7 +171,7 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
       color: ConstantColor.backgroundColor,
       child: Center(
         child: Column(children: [
-          const AddCustomerFormTopBar(),
+          const AddPatientFormTopBar(title: "Maklumat Pelangan Baharu",),
           Expanded(child: _content())
         ]),
       ),
@@ -179,8 +193,8 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          const CustomTextField(label: "Nama Penuh", getter: "", setter: null),
-          const CustomTextField(label: "No MyKad", getter: "", setter: null),
+          _buildTextField("Nama Penuh", controller: fullNameController),
+          _buildTextField("No MyKad", controller: myKadController),
           const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,20 +240,18 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           const SizedBox(height: 16),
 
           // Emel
-          const CustomTextField(label: "Emel", getter: "", setter: null),
+          _buildTextField("Emel", controller: emailController),
 
           // Alamat
-          const CustomTextField(
-              label: "Alamat", maxLines: 3, getter: "", setter: null),
+          _buildTextField("Alamat", controller: addressController, maxLines: 3),
 
           const SizedBox(height: 8),
           // Poskod
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: const CustomTextField(
-                    label: "Poskod", vertical: 0, getter: "", setter: null),
+                child: _buildTextField("Poskod", controller: postcodeController),
               ),
               const SizedBox(width: 16),
 
@@ -265,9 +277,9 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
           ),
           const SizedBox(height: 8),
           // Perkerjaan
-          const CustomTextField(label: "Perkerjaan", getter: "", setter: null),
+          _buildTextField("Perkerjaan", controller: occupationController),
           // No Tel
-          const CustomTextField(label: "No Tel", getter: "", setter: null),
+          _buildTextField("No Tel", controller: mobileNoController),
           _buildNextButton(),
         ],
       ),
@@ -368,14 +380,59 @@ class _AddCustomerFormScreenState extends State<AddCustomerFormScreen> {
     );
   }
 
+  Widget _buildTextField(String label,
+      {required TextEditingController controller, int maxLines = 1}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            controller: controller,
+            maxLines: maxLines,
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildNextButton() {
     return Padding(
       padding: EdgeInsets.only(top: 28.0),
       child: ElevatedButton(
           onPressed: () {
+             // Update Patient Info
+            patientController.updatePatientInfo(
+              name: fullNameController.text,
+              myKad: myKadController.text,
+              gender: isMale ? "Male" : "Female",
+              ethnicity: selectedRace == '--Pilih--' ? '' : selectedRace,
+              mobileNo: mobileNoController.text,
+              email: emailController.text,
+              postcode: postcodeController.text,
+              state: selectedState == '--Pilih--' ? '' : selectedState,
+              address: addressController.text,
+              occupation: occupationController.text,
+            );
+
+
             Get.to(
               //Go to B section
-              AddCustomerFormScreen_B(),
+              AddPatientFormScreen_B(),
               //AddCustomerFormScreen(),
               fullscreenDialog: true,
               transition: Transition.noTransition,

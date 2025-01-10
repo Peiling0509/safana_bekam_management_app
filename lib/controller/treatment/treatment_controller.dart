@@ -30,6 +30,21 @@ class TreatmentController extends GetxController {
   Rx<TreatmentModel> treatment = TreatmentModel().obs;
   Rx<PatientsModel> patient = Rx<PatientsModel>(Get.arguments["patient"]);
 
+  // Rx<PatientsModel> patient = PatientsModel(
+  //   id: 1,
+  //   name: "John Doe",
+  //   myKad: "900101-14-5678",
+  //   gender: "Male",
+  //   ethnicity: "Malay",
+  //   mobileNo: "0123456789",
+  //   email: "john.doe@example.com",
+  //   postcode: "12345",
+  //   state: "Selangor",
+  //   address: "123 Jalan Mawar, Shah Alam",
+  //   occupation: "Engineer",
+  //   medicalHistory: [/*"Hypertension"*/],
+  // ).obs;
+
   List<AcupointModel> acupointModels = [
     AcupointModel(
       bodyPart: "Depan",

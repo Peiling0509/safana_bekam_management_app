@@ -11,6 +11,20 @@ class PatientController extends GetxController {
   final repository = PatientsRepository();
   Rx<List<PatientsModel>> patients = Rx<List<PatientsModel>>([]);
 
+  Rx<PatientsModel> currentPatient = PatientsModel(
+    name: '',
+    myKad: '',
+    gender: '',
+    ethnicity: '',
+    mobileNo: '',
+    email: '',
+    postcode: '',
+    state: '',
+    address: '',
+    occupation: '',
+    medicalHistory: [],
+  ).obs;
+
   List<PatientsModel> dummyPatients = [
     PatientsModel(
       id: 1,
@@ -24,7 +38,7 @@ class PatientController extends GetxController {
       state: "Selangor",
       address: "123 Jalan Mawar, Shah Alam",
       occupation: "Engineer",
-      medicalHistory: ["Hypertension"],
+      medicalHistory: [/*"Hypertension"*/],
     ),
     PatientsModel(
       id: 2,
@@ -38,7 +52,7 @@ class PatientController extends GetxController {
       state: "Penang",
       address: "45 Jalan Teratai, George Town",
       occupation: "Teacher",
-      medicalHistory: ["Asthma"],
+      medicalHistory: [/*"Asthma"*/],
     ),
     PatientsModel(
       id: 3,
@@ -52,7 +66,7 @@ class PatientController extends GetxController {
       state: "Johor",
       address: "67 Jalan Cempaka, Johor Bahru",
       occupation: "Doctor",
-      medicalHistory: ["Diabetes"],
+      medicalHistory: [/*"Diabetes"*/],
     ),
     PatientsModel(
       id: 4,
@@ -66,7 +80,7 @@ class PatientController extends GetxController {
       state: "Kuala Lumpur",
       address: "12 Jalan Anggerik, KL",
       occupation: "Singer",
-      medicalHistory: ["None"],
+      medicalHistory: [/*"None"*/],
     ),
     PatientsModel(
       id: 5,
@@ -80,7 +94,7 @@ class PatientController extends GetxController {
       state: "Malacca",
       address: "88 Jalan Dahlia, Melaka",
       occupation: "Chef",
-      medicalHistory: ["Allergy to nuts"],
+      medicalHistory: [/*"Allergy to nuts"*/],
     ),
     PatientsModel(
       id: 6,
@@ -94,7 +108,7 @@ class PatientController extends GetxController {
       state: "Perak",
       address: "34 Jalan Melur, Ipoh",
       occupation: "IT Consultant",
-      medicalHistory: ["Migraine"],
+      medicalHistory: [/*"Migraine"*/],
     ),
     PatientsModel(
       id: 7,
@@ -108,7 +122,7 @@ class PatientController extends GetxController {
       state: "Sabah",
       address: "56 Jalan Kenanga, Kota Kinabalu",
       occupation: "Accountant",
-      medicalHistory: ["Anemia"],
+      medicalHistory: [/*"Anemia"*/],
     ),
     PatientsModel(
       id: 8,
@@ -122,7 +136,7 @@ class PatientController extends GetxController {
       state: "Sarawak",
       address: "78 Jalan Orchid, Kuching",
       occupation: "Lawyer",
-      medicalHistory: ["None"],
+      medicalHistory: [/*"None"*/],
     ),
     PatientsModel(
       id: 9,
@@ -136,7 +150,7 @@ class PatientController extends GetxController {
       state: "Kelantan",
       address: "90 Jalan Lavender, Kota Bharu",
       occupation: "Mechanic",
-      medicalHistory: ["High cholesterol"],
+      medicalHistory: [/*"High cholesterol"*/],
     ),
     PatientsModel(
       id: 10,
@@ -150,7 +164,7 @@ class PatientController extends GetxController {
       state: "Pahang",
       address: "101 Jalan Tulip, Kuantan",
       occupation: "Architect",
-      medicalHistory: ["None"],
+      medicalHistory: [/*"None"*/],
     ),
   ];
 
@@ -189,4 +203,71 @@ class PatientController extends GetxController {
     }
   }
 
+   // Method to fetch patient details from the database
+  Future<void> loadPatientDetails(String patientId) async {
+    try {
+      state.value = LoaderState.initial;
+      // Replace with your actual API call to fetch patient details
+      // final response = await repository.loadPatientbyId(patientId); //Assume this function exists
+      // if (data.isEmpty || data == []) {
+      //   return state.value = LoaderState.empty;
+      // }
+      patients.value = dummyPatients.sublist(0,0);
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      print(e.toString());
+      state.value = LoaderState.failure;
+    }
+  }
+
+
+  void updatePatientInfo({
+    String? name,
+    String? myKad,
+    String? gender,
+    String? ethnicity,
+    String? mobileNo,
+    String? email,
+    String? postcode,
+    String? state,
+    String? address,
+    String? occupation,
+  }) {
+    currentPatient.update((patient) {
+      if (patient != null) {
+        if (name != null) patient.name = name;
+        if (myKad != null) patient.myKad = myKad;
+        if (gender != null) patient.gender = gender;
+        if (ethnicity != null) patient.ethnicity = ethnicity;
+        if (mobileNo != null) patient.mobileNo = mobileNo;
+        if (email != null) patient.email = email;
+        if (postcode != null) patient.postcode = postcode;
+        if (state != null) patient.state = state;
+        if (address != null) patient.address = address;
+        if (occupation != null) patient.occupation = occupation;
+      }
+    });
+  }
+
+  Future<void> submitPatient() async {
+    try {
+      await repository.submitPatient(currentPatient.value);
+      Get.snackbar("Success", "Patient added successfully");
+    } catch (e) {
+      Get.snackbar("Error", "Failed to add patient");
+    }
+  }
+
+  void addMedicalHistory(String condition, String medicine) {
+    currentPatient.value.medicalHistory.add(MedicalHistoryModel(
+      condition: condition,
+      medicine: medicine,
+    ));
+    currentPatient.refresh();
+  }
+
+  void removeMedicalHistory(int index) {
+    currentPatient.value.medicalHistory.removeAt(index);
+    currentPatient.refresh();
+  }
 }

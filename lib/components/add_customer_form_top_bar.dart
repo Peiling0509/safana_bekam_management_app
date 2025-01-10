@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 
-class AddCustomerFormTopBar extends StatelessWidget{
+class AddPatientFormTopBar extends StatelessWidget{
+  final String title;
 
-  const AddCustomerFormTopBar({
+
+  const AddPatientFormTopBar({
     super.key,
+    required this.title,
   });
 
   @override 
@@ -26,10 +29,10 @@ class AddCustomerFormTopBar extends StatelessWidget{
                     color: Colors.white,
                     size: 28,
                   )),
-              const Center(
+              Center(
                 child: Text(
-                  "Maklumat Pelanggan Baru",
-                  style: TextStyle(
+                  title,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                   ),
