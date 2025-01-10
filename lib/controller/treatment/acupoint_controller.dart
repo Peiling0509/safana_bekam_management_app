@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/acupoint_model.dart';
 
 class AcupointController extends GetxController {
@@ -17,6 +18,7 @@ class AcupointController extends GetxController {
   var bodyBackPhotoViewKey = GlobalKey().obs;
   var facePhotoViewKey = GlobalKey().obs;
 
+  final treatmentController = Get.find<TreatmentController>();
 
   @override
   void onInit() {
@@ -25,59 +27,64 @@ class AcupointController extends GetxController {
     bodyBack = AcupointModel(bodyPart: bodyPart[1], acupoint: []).obs;
     face = AcupointModel(bodyPart: bodyPart[2], acupoint: []).obs;
 
-    bodyFront.value.acupoint = [
-        Acupoint(
-          point: Offset(-43.0, -184.9),
-          skinRection: 1,
-          bloodQuantity: 5,
-        ),
-        Acupoint(
-          point:  Offset(40.8, -188.2),
-          skinRection: 2,
-          bloodQuantity: 4,
-        ),
-        Acupoint(
-          point: Offset(-0.2, -90.2),
-          skinRection: 2,
-          bloodQuantity: 4,
-        ),
-      ];
+    // bodyFront.value.acupoint = [
+    //     Acupoint(
+    //       point: Offset(-43.0, -184.9),
+    //       skinReaction: 1,
+    //       bloodQuantity: 5,
+    //     ),
+    //     Acupoint(
+    //       point:  Offset(40.8, -188.2),
+    //       skinReaction: 2,
+    //       bloodQuantity: 4,
+    //     ),
+    //     Acupoint(
+    //       point: Offset(-0.2, -90.2),
+    //       skinReaction: 2,
+    //       bloodQuantity: 4,
+    //     ),
+    //   ];
 
-    bodyBack.value.acupoint = [
-        Acupoint(
-          point: Offset(-34.4, 1.8),
-          skinRection: 1,
-          bloodQuantity: 5,
-        ),
-        Acupoint(
-          point: Offset(-2.4, -364.9),
-          skinRection: 2,
-          bloodQuantity: 4,
-        ),
-        Acupoint(
-          point:Offset(31.1, 229.7),
-          skinRection: 2,
-          bloodQuantity: 4,
-        ),
-      ];
+    // bodyBack.value.acupoint = [
+    //     Acupoint(
+    //       point: Offset(-34.4, 1.8),
+    //       skinReaction: 1,
+    //       bloodQuantity: 5,
+    //     ),
+    //     Acupoint(
+    //       point: Offset(-2.4, -364.9),
+    //       skinReaction: 2,
+    //       bloodQuantity: 4,
+    //     ),
+    //     Acupoint(
+    //       point:Offset(31.1, 229.7),
+    //       skinReaction: 2,
+    //       bloodQuantity: 4,
+    //     ),
+    //   ];
 
-    face.value.acupoint = [
-        Acupoint(
-          point:  Offset(-4.4, -234.7),
-          skinRection: 1,
-          bloodQuantity: 5,
-        ),
-        Acupoint(
-          point:Offset(-85.9, 26.5),
-          skinRection: 2,
-          bloodQuantity: 4,
-        ),
-        Acupoint(
-          point:Offset(99.2, 30.0),
-          skinRection: 2,
-          bloodQuantity: 4,
-        ),
-      ];
+    // face.value.acupoint = [
+    //     Acupoint(
+    //       point:  Offset(-4.4, -234.7),
+    //       skinReaction: 1,
+    //       bloodQuantity: 5,
+    //     ),
+    //     Acupoint(
+    //       point:Offset(-85.9, 26.5),
+    //       skinReaction: 2,
+    //       bloodQuantity: 4,
+    //     ),
+    //     Acupoint(
+    //       point:Offset(99.2, 30.0),
+    //       skinReaction: 2,
+    //       bloodQuantity: 4,
+    //     ),
+    //   ];
+  }
+
+  void simpan(){
+    treatmentController.setRemarks = [bodyFront.value, bodyBack.value, face.value];
+    Navigator.pop(Get.context!);
   }
 
   void addAcupoint({
@@ -91,7 +98,7 @@ class AcupointController extends GetxController {
         bodyFront.value.acupoint ??= [];
         bodyFront.value.acupoint!.add(Acupoint(
           point: point,
-          skinRection: skinReaction,
+          skinReaction: skinReaction,
           bloodQuantity: bloodQuantity,
         ));
         bodyFront.refresh();
@@ -101,7 +108,7 @@ class AcupointController extends GetxController {
         bodyBack.value.acupoint ??= [];
         bodyBack.value.acupoint!.add(Acupoint(
           point: point,
-          skinRection: skinReaction,
+          skinReaction: skinReaction,
           bloodQuantity: bloodQuantity,
         ));
         bodyBack.refresh();
@@ -111,7 +118,7 @@ class AcupointController extends GetxController {
         face.value.acupoint ??= [];
         face.value.acupoint!.add(Acupoint(
           point: point,
-          skinRection: skinReaction,
+          skinReaction: skinReaction,
           bloodQuantity: bloodQuantity,
         ));
         face.refresh();
@@ -134,7 +141,7 @@ class AcupointController extends GetxController {
           (acupoint) => acupoint.point == point,
         );
         if (index != null && index != -1) {
-          bodyFront.value.acupoint?[index].skinRection = skinReaction;
+          bodyFront.value.acupoint?[index].skinReaction = skinReaction;
           bodyFront.value.acupoint?[index].bloodQuantity = bloodQuantity;
           bodyFront.refresh();
         }
@@ -145,7 +152,7 @@ class AcupointController extends GetxController {
           (acupoint) => acupoint.point == point,
         );
         if (index != null && index != -1) {
-          bodyBack.value.acupoint?[index].skinRection = skinReaction;
+          bodyBack.value.acupoint?[index].skinReaction = skinReaction;
           bodyBack.value.acupoint?[index].bloodQuantity = bloodQuantity;
           bodyBack.refresh();
         }
@@ -156,7 +163,7 @@ class AcupointController extends GetxController {
           (acupoint) => acupoint.point == point,
         );
         if (index != null && index != -1) {
-          face.value.acupoint?[index].skinRection = skinReaction;
+          face.value.acupoint?[index].skinReaction = skinReaction;
           face.value.acupoint?[index].bloodQuantity = bloodQuantity;
           face.refresh();
         }

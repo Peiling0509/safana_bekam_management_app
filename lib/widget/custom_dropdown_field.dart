@@ -25,12 +25,12 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
   final LayerLink layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
   bool isDropdownOpen = false;
-  late String selected;
+  late String _selected;
 
   @override
   void initState() {
     super.initState();
-    selected = widget.initialValue;
+    _selected = widget.initialValue;
   }
 
   @override
@@ -70,15 +70,17 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(color: Colors.grey),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      selected,
+                      _selected,
                       style: TextStyle(
-                        color:
-                            selected == '--Pilih--' ? Colors.grey : Colors.black,
+                        color: _selected == '--Pilih--'
+                            ? Colors.grey
+                            : Colors.black,
                         fontSize: 16,
                       ),
                     ),
@@ -104,9 +106,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
     final overlay = Overlay.of(context);
     _overlayEntry = _createOverlayEntry(size);
     overlay.insert(_overlayEntry!);
-    setState(() {
-      isDropdownOpen = true;
-    });
+    isDropdownOpen = true;
   }
 
   void _hideDropdown() {
@@ -118,9 +118,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
   }
 
   void _handleSelection(String item) {
-    setState(() {
-      selected = item;
-    });
+    _selected = item;
     widget.onChanged(item);
     _hideDropdown();
   }
@@ -132,7 +130,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
         child: CompositedTransformFollower(
           link: layerLink,
           showWhenUnlinked: false,
-          offset: Offset(0, size.height*0.85),
+          offset: Offset(0, size.height * 0.85),
           child: Material(
             elevation: 8,
             borderRadius: BorderRadius.circular(15),
@@ -151,7 +149,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: widget.items.map((String item) {
-                      final isSelected = selected == item;
+                      final isSelected = _selected == item;
                       return InkWell(
                         onTap: () => _handleSelection(item),
                         child: Container(

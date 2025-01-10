@@ -7,6 +7,7 @@ class TreatmentBinding implements Bindings{
     Get.lazyPut<TreatmentController>(
       () => TreatmentController(),
     );
+  
   }
 
 }

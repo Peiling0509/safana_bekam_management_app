@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
@@ -27,6 +29,10 @@ class APIProvider extends GetxController {
           print("FORM DATA: ${data.fields}");
         }
 
+        if (data.runtimeType == Map) {
+          print("JSON: ${data.fields}");
+        }
+
         if (cookies != null) {
           options.headers['Cookie'] = cookies;
           print("Attached Cookies: $cookies");
@@ -50,6 +56,20 @@ class APIProvider extends GetxController {
     ));
 
     super.onInit();
+  }
+
+  Future<Response> jsonPost(String url,
+      {Map<String, dynamic> body = const {}}) async {
+    final response = await _dio.post(
+      url,
+      data: body,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+    return response;
   }
 
   Future<Response> post(String url,

@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
           TextFormField(
             readOnly: readOnly,
             onTap: onTap,
-            onChanged: (value) => setter,
+            onChanged: setter,
             controller: TextEditingController(text: getter),
             maxLines: maxLines,
             decoration: InputDecoration(

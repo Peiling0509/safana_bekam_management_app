@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:pdf/pdf.dart';
@@ -10,28 +11,24 @@ import 'package:path_provider/path_provider.dart';
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
 import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
+import 'package:safana_bekam_management_app/controller/treatment/acupoint_controller.dart';
+import 'package:safana_bekam_management_app/data/model/patients/patient_records_model.dart';
 
 import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/acupoint_model.dart';
+import 'package:safana_bekam_management_app/data/model/treatment/treatment_model.dart';
+import 'package:safana_bekam_management_app/data/respository/patient_respository.dart';
+import 'package:safana_bekam_management_app/data/respository/treatment_repository.dart';
+import 'package:safana_bekam_management_app/screen/treatment/record_treatment_screen.dart';
 
 class TreatmentController extends GetxController {
   final Rx<LoaderState> state = LoaderState.initial.obs;
-
-  Rx<PatientsModel> patient = PatientsModel(
-    id: 1,
-    name: "John Doe",
-    myKad: "900101-14-5678",
-    gender: "Male",
-    ethnicity: "Malay",
-    mobileNo: "0123456789",
-    email: "john.doe@example.com",
-    postcode: "12345",
-    state: "Selangor",
-    address: "123 Jalan Mawar, Shah Alam",
-    occupation: "Engineer",
-    medicalHistory: ["Hypertension"],
-  ).obs;
+  final treatmentRepository = TreatmentRepository();
+  final patientsRepository = PatientsRepository();
+  Rx<PatientRecordModel> patientRecord = PatientRecordModel().obs;
+  Rx<TreatmentModel> treatment = TreatmentModel().obs;
+  Rx<PatientsModel> patient = Rx<PatientsModel>(Get.arguments["patient"]);
 
   List<AcupointModel> acupointModels = [
     AcupointModel(
@@ -39,17 +36,17 @@ class TreatmentController extends GetxController {
       acupoint: [
         Acupoint(
           point: Offset(-43.0, -184.9),
-          skinRection: 1,
+          skinReaction: 1,
           bloodQuantity: 5,
         ),
         Acupoint(
           point: Offset(40.8, -188.2),
-          skinRection: 2,
+          skinReaction: 2,
           bloodQuantity: 4,
         ),
         Acupoint(
           point: Offset(-0.2, -90.2),
-          skinRection: 2,
+          skinReaction: 2,
           bloodQuantity: 4,
         ),
       ],
@@ -59,17 +56,17 @@ class TreatmentController extends GetxController {
       acupoint: [
         Acupoint(
           point: Offset(-34.4, 1.8),
-          skinRection: 1,
+          skinReaction: 1,
           bloodQuantity: 5,
         ),
         Acupoint(
           point: Offset(-2.4, -364.9),
-          skinRection: 2,
+          skinReaction: 2,
           bloodQuantity: 4,
         ),
         Acupoint(
           point: Offset(31.1, 229.7),
-          skinRection: 2,
+          skinReaction: 2,
           bloodQuantity: 4,
         ),
       ],
@@ -79,17 +76,17 @@ class TreatmentController extends GetxController {
       acupoint: [
         Acupoint(
           point: Offset(-4.4, -234.7),
-          skinRection: 1,
+          skinReaction: 1,
           bloodQuantity: 5,
         ),
         Acupoint(
           point: Offset(-85.9, 26.5),
-          skinRection: 2,
+          skinReaction: 2,
           bloodQuantity: 4,
         ),
         Acupoint(
           point: Offset(99.2, 30.0),
-          skinRection: 2,
+          skinReaction: 2,
           bloodQuantity: 4,
         ),
       ],
@@ -112,11 +109,61 @@ class TreatmentController extends GetxController {
           break;
       }
     });
+
+    setPatientId = patient.value.id.toString();
+
   }
 
-  Future<void> generateReport() async {
+  loadPatientRecords() async {
     try {
       state.value = LoaderState.loading;
+      final data = await patientsRepository.loadPatientRecords(getPatientId);
+      if (data.records!.isEmpty) {
+       return state.value = LoaderState.empty;
+      }
+      patientRecord.value = data;
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      state.value = LoaderState.failure;
+      toast("Failed to load patient records");
+      print(e.toString());
+    }
+  }
+
+  loadTreatment() async {
+    try {
+      state.value = LoaderState.loading;
+      
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      state.value = LoaderState.failure;
+      toast("Failed to load treatment");
+      print(e.toString());
+    }
+  }
+
+  void submit() async {
+    try {
+      state.value = LoaderState.loading;
+      final res = await treatmentRepository.submitTreatment(treatment.value);
+      toast(res.data["message"]);
+
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      state.value = LoaderState.failure;
+      toast("Failed submission");
+      print(e.toString());
+    }
+  }
+
+  Future<void> generateReport({required String recordId}) async {
+    try {
+      state.value = LoaderState.loading;
+
+      //load the treatment details
+      final data = await treatmentRepository.loadTreatment(getPatientId, recordId);
+      treatment.value = data.data!;
+
       // Save the PDF
       String currentMilliseconds =
           DateTime.now().millisecondsSinceEpoch.toString();
@@ -210,7 +257,7 @@ class TreatmentController extends GetxController {
                     'Bangsa',
                     getEthnicity,
                     'Alamat',
-                    "HSIODHASNNFDSDJKFNSDJKHFJASKFKJSDJFKSDJFKDSFKLSDJFLKSDJFLKJSDN VVSDMN KJJFIOWEJRIOWEJ",
+                    getAddress,
                   ),
                 ],
               ),
@@ -236,10 +283,10 @@ class TreatmentController extends GetxController {
               pw.Table(
                 children: [
                   _buildTableRow(
-                      'Rawatan', "Rawatan 1", 'Tarikh', 'DD-MM-YYYY'),
-                  _buildTableRow('Pakej', "1", 'Juruterapi', "Mr.Saffa"),
-                  _buildTableRow('BP Before', '/', 'BP After', '/'),
-                  _buildTableRow('Masalah', '', '', ''),
+                      'Rawatan', "Rawatan $getFrequency", 'Tarikh', getCreatedData),
+                  _buildTableRow('Pakej', getPackage, 'Juruterapi', getTherapistId),
+                  _buildTableRow('BP Before', getBloodPressureBefore, 'BP After', getBloodPressureAfter),
+                  _buildTableRow('Masalah', getHealthComplications, 'Komen', getComments),
                 ],
               ),
 
@@ -259,7 +306,7 @@ class TreatmentController extends GetxController {
     const bodyViewWidth = 300.0;
     const bodyViewHeight = 600.0;
 
-    for (var acupointModel in acupointModels) {
+    for (var acupointModel in treatment.value.remarks!) {
       final bodyImageBytes = await getBodyImageForPart(acupointModel.bodyPart!);
       final bodyImage = pw.MemoryImage(bodyImageBytes);
 
@@ -393,7 +440,7 @@ class TreatmentController extends GetxController {
                     //Acupoint table
                     pw.Expanded(
                       child: pw.Table(
-                       border: pw.TableBorder.all(color: PdfColors.white),
+                        border: pw.TableBorder.all(color: PdfColors.white),
                         columnWidths: {
                           0: const pw.FlexColumnWidth(1),
                           1: const pw.FlexColumnWidth(1),
@@ -456,7 +503,7 @@ class TreatmentController extends GetxController {
                                           ),
                                           padding: const pw.EdgeInsets.all(8),
                                           child: pw.Text(
-                                            '${entry.value.skinRection}',
+                                            '${entry.value.skinReaction}',
                                             style: pw.TextStyle(
                                                 fontWeight: pw.FontWeight.bold),
                                           ),
@@ -583,13 +630,13 @@ class TreatmentController extends GetxController {
 
   Future<dynamic> getBodyImageForPart(String bodyPart) async {
     switch (bodyPart.toLowerCase()) {
-      case "depan":
+      case "depan" || "front":
         final bytes = await rootBundle.load(AssetPath.bodyFront);
         return bytes.buffer.asUint8List();
-      case "belakang":
+      case "belakang" || "back":
         final bytes = await rootBundle.load(AssetPath.bodyBack);
         return bytes.buffer.asUint8List();
-      case "muka":
+      case "muka" || "face":
         final bytes = await rootBundle.load(AssetPath.face);
         return bytes.buffer.asUint8List();
       default:
@@ -597,6 +644,19 @@ class TreatmentController extends GetxController {
     }
   }
 
+  void navigateToRemark() {
+    //close bottom sheet first to refresh widget
+    Navigator.pop(Get.context!);
+    if (!Get.isRegistered<AcupointController>()) {
+      Get.put(AcupointController());
+    }
+    Get.toNamed("/remark")?.then((_) {
+      // Reopen bottom sheet after returning
+      RecordTreatmentScreen.openAddTreatmentBottomSheet(Get.context!);
+    });
+  }
+
+  //FOR REPORT FIELDS
   String get getName => patient.value.name ?? "No Name Provided";
   String get getMyKad => patient.value.myKad ?? "No MyKad Provided";
   String get getGender => patient.value.gender ?? "No Gender Specified";
@@ -611,47 +671,33 @@ class TreatmentController extends GetxController {
   String get getOccupation =>
       patient.value.occupation ?? "No Occupation Specified";
   List<dynamic> get getMedicalHistory => patient.value.medicalHistory ?? [];
-}
 
-class PdfCoordinateTransformer {
-  final double bodyViewWidth;
-  final double bodyViewHeight;
-  final double imageScaleFactor;
+  // Getters for treatment
+  String get getPatientId => treatment.value.patientId ?? "";
+  String get getTherapistId => treatment.value.therapistId ?? "";
+  String get getFrequency => treatment.value.frequency ?? "";
+  String get getCreatedData => treatment.value.createdData ?? "";
+  String get getBloodPressureBefore =>
+      treatment.value.bloodPressureBefore ?? "";
+  String get getBloodPressureAfter => treatment.value.bloodPressureAfter ?? "";
+  String get getPackage => treatment.value.package ?? "";
+  String get getHealthComplications =>
+      treatment.value.healthComplications ?? "";
+  String get getComments => treatment.value.comments ?? "";
+  List<AcupointModel> get getRemarks => treatment.value.remarks ?? [];
 
-  PdfCoordinateTransformer({
-    required this.bodyViewWidth,
-    required this.bodyViewHeight,
-    this.imageScaleFactor = 0.6,
-  });
-
-  pw.Positioned transformAcupoint(Acupoint acupoint) {
-    // Calculate the actual image dimensions in the PDF
-    final imageWidth = bodyViewWidth * imageScaleFactor;
-    final imageHeight = bodyViewHeight * imageScaleFactor;
-
-    // Calculate the scaling factors
-    final scaleX = imageWidth / bodyViewWidth;
-    final scaleY = imageHeight / bodyViewHeight;
-
-    // Calculate margins to center the image
-    final marginX = (bodyViewWidth - imageWidth) / 2;
-    final marginY = (bodyViewHeight - imageHeight) / 2;
-
-    // Transform the coordinates
-    final dx = marginX + (bodyViewWidth / 2 + acupoint.point!.dx) * scaleX;
-    final dy = marginY + (bodyViewHeight / 2 + acupoint.point!.dy) * scaleY;
-
-    return pw.Positioned(
-      left: dx - 12.5,
-      top: dy - 12.5,
-      child: pw.Container(
-        width: 20,
-        height: 20,
-        decoration: const pw.BoxDecoration(
-          shape: pw.BoxShape.circle,
-          color: PdfColors.red,
-        ),
-      ),
-    );
-  }
+  // Setters for treatment
+  set setPatientId(String value) => treatment.value.patientId = value;
+  set setTherapistId(String value) => treatment.value.therapistId = value;
+  set setFrequency(String value) => treatment.value.frequency = value;
+  set setCreatedData(String value) => treatment.value.createdData = value;
+  set setBloodPressureBefore(String value) =>
+      treatment.value.bloodPressureBefore = value;
+  set setBloodPressureAfter(String value) =>
+      treatment.value.bloodPressureAfter = value;
+  set setPackage(String value) => treatment.value.package = value;
+  set setHealthComplications(String value) =>
+      treatment.value.healthComplications = value;
+  set setComments(String value) => treatment.value.comments = value;
+  set setRemarks(List<AcupointModel> value) => treatment.value.remarks = value;
 }

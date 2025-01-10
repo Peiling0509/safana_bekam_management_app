@@ -196,7 +196,8 @@ class _RemarkScreenState extends State<RemarkScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: CustomButton(title: "Simpan", onPressed: null),
+              child: CustomButton(
+                  title: "Simpan", onPressed: () => controller.simpan()),
             ),
           ],
         ),
@@ -256,7 +257,7 @@ class _RemarkScreenState extends State<RemarkScreen> {
                           final position = _photoController.position;
                           return Stack(
                             children: acupoints.map((acupoint) {
-                              print("Scale : $scale" );
+                              print("Scale : $scale");
                               final dx = (acupoint.point!.dx * scale) +
                                   position.dx +
                                   constraints.maxWidth / 2;

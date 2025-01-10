@@ -176,11 +176,11 @@ class PatientController extends GetxController {
   loadPatients() async {
     try {
       state.value = LoaderState.loading;
-      // final data = await repository.loadPatients();
+      //final data = await repository.loadPatients();
       // if (data.isEmpty || data == []) {
       //   return state.value = LoaderState.empty;
       // }
-      //patients.value = data;
+      // patients.value = data;
       patients.value = dummyPatients;
       state.value = LoaderState.loaded;
     } catch (e) {

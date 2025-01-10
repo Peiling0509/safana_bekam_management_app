@@ -5,5 +5,11 @@ class API {
 
   static String LOGIN = "$DOMAIN_URL/login";
 
+  //PATIENTS
   static String EXPORT_PATIENTS = "$DOMAIN_URL/export-patients";
+  static String EXPORT_PATIENT_RECORDS = "$DOMAIN_URL/export-patient-simplify";
+
+  //TREATMENT
+  static String EXPORT_TREATMENT = "$DOMAIN_URL/export-patient-record-visit";
+  static String SUBMIT_TREATMENT = "$DOMAIN_URL/submit-treatment";
 }

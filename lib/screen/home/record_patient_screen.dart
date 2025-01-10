@@ -38,7 +38,8 @@ class _RecordPatientScreenState extends State<RecordPatientScreen> {
             Expanded(
               child: SingleChildScrollView(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Obx(() {
+                  child: 
+                  Obx(() {
                     switch (controller.state.value) {
                       case LoaderState.failure:
                       case LoaderState.empty:
@@ -71,7 +72,10 @@ class _RecordPatientScreenState extends State<RecordPatientScreen> {
                                     ],
                                   ),
                                   child: ListTile(
-                                    onTap: () =>Get.toNamed("/record_treatment"),
+                                    onTap: () =>
+                                        Get.toNamed("/record_treatment", arguments: {
+                                          "patient": patient,
+                                        }),
                                     leading: CircleAvatar(
                                       backgroundColor:
                                           ConstantColor.primaryColor,
@@ -79,8 +83,10 @@ class _RecordPatientScreenState extends State<RecordPatientScreen> {
                                           color: Colors.white),
                                     ),
                                     title: Text(patient.name ?? "null"),
-                                    subtitle: Text(patient.mobileNo ?? "null"),
-                                    trailing: const Icon(Icons.keyboard_arrow_right),
+                                    subtitle:
+                                        Text(patient.mobileNo ?? "null"),
+                                    trailing: const Icon(
+                                        Icons.keyboard_arrow_right),
                                   ),
                                 ));
                           },

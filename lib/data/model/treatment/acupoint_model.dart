@@ -6,15 +6,32 @@ class AcupointModel {
   List<Acupoint>? acupoint;
 
   AcupointModel({this.bodyPart, this.acupoint});
+
+  factory AcupointModel.fromJson(Map<String, dynamic> json) {
+    return AcupointModel(
+      bodyPart: json['body_part'],
+      acupoint: (json['acupoint'] as List)
+          .map((e) => Acupoint.fromJson(e))
+          .toList(),
+    );
+  }
 }
 
 class Acupoint {
   Offset? point;
-  int? skinRection;
+  int? skinReaction;
   int? bloodQuantity;
 
   Acupoint(
-      {required this.point,
-      required this.skinRection,
-      required this.bloodQuantity});
+      { this.point,
+       this.skinReaction,
+       this.bloodQuantity});
+
+  factory Acupoint.fromJson(Map<String, dynamic> json) {
+    return Acupoint(
+      point: Offset(json['coordinate_x'].toDouble(), json['coordinate_y'].toDouble()) ,
+      skinReaction: json['skin_reaction'],
+      bloodQuantity: json['blood_quantity'],
+    );
+  }
 }

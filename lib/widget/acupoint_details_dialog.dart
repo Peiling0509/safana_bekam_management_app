@@ -24,33 +24,16 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
   @override
   void initState() {
     super.initState();
-    _selectedSkinReactionIndex = widget.acupoint?.skinRection ?? -1;
+    _selectedSkinReactionIndex = widget.acupoint?.skinReaction ?? -1;
     _selectedBloodQuantityIndex = widget.acupoint?.bloodQuantity ?? -1;
   }
 
   Future<void> _simpan() async {
     if (_selectedSkinReactionIndex != -1 && _selectedBloodQuantityIndex != -1) {
-      // Close any existing snackbars
-      Get.closeAllSnackbars();
-
-      // Add a small delay before showing the new snackbar
-      await Future.delayed(const Duration(milliseconds: 100));
-
       Navigator.pop(context, {
         'skinReaction': _selectedSkinReactionIndex,
         'bloodQuantity': _selectedBloodQuantityIndex,
       });
-
-      // Use duration parameter to ensure snackbar stays visible long enough
-      Get.snackbar(
-        "Berjaya !",
-        "Berjaya tambah acupoint penanda.",
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 2),
-        snackPosition: SnackPosition.TOP,
-        isDismissible: true,
-      );
     } else {
       Get.closeAllSnackbars();
       await Future.delayed(const Duration(milliseconds: 100));

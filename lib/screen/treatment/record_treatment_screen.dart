@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
+import 'package:safana_bekam_management_app/data/model/patients/patient_records_model.dart';
+import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 import 'package:safana_bekam_management_app/screen/treatment/treatment_form.dart';
 
 class RecordTreatmentScreen extends StatefulWidget {
@@ -10,9 +12,36 @@ class RecordTreatmentScreen extends StatefulWidget {
 
   @override
   State<RecordTreatmentScreen> createState() => _RecordTreatmentScreenState();
+
+  static void openAddTreatmentBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return const TreatmentForm();
+      },
+    );
+  }
 }
 
+
+
 class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.loadPatientRecords();
+    });
+  }
 
   final controller = Get.find<TreatmentController>();
 
@@ -27,7 +56,17 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
           child: Column(
         children: [
           _buildProfile(),
-          _buildRecord(),
+          Obx(() {
+            switch (controller.state.value) {
+              case LoaderState.failure:
+              case LoaderState.empty:
+                return _emptyWidget();
+              case LoaderState.initial:
+              case LoaderState.loading:
+              case LoaderState.loaded:
+                return _buildRecord();
+            }
+          }),
           _buildAddButton(),
         ],
       )),
@@ -45,7 +84,8 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
             ),
             backgroundColor: Colors.white, // Button color
           ),
-          onPressed: () => _openAddTreatmentBottomSheet(context),
+          onPressed: () =>
+              RecordTreatmentScreen.openAddTreatmentBottomSheet(context),
           child: Text(
             "Rawatan Baru",
             style: TextStyle(color: ConstantColor.primaryColor, fontSize: 18),
@@ -57,61 +97,63 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(30.0),
-        child: ListView.builder(
-          //padding: const EdgeInsets.all(30.0),
-          shrinkWrap: true,
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Rawatan ${index + 1}",
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          Text("Tarikh: 10-10-2024",
-                              style: const TextStyle(color: Colors.blueGrey)),
-                          const SizedBox(height: 5),
-                          Text("Pakej: March",
-                              style: const TextStyle(color: Colors.blueGrey)),
-                        ],
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          backgroundColor:
-                              ConstantColor.primaryColor, // Button color
-                          minimumSize: const Size(80, 50),
+        child: Obx(() {
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: controller.patientRecord.value.records?.length ?? 0,
+            itemBuilder: (context, index) {
+              final record = controller.patientRecord.value.records![index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Rawatan ${record.frequency}",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 8),
+                            Text("Tarikh: ${record.createdDate}",
+                                style: const TextStyle(color: Colors.blueGrey)),
+                            const SizedBox(height: 5),
+                            Text("Pakej: ${record.package}",
+                                style: const TextStyle(color: Colors.blueGrey)),
+                          ],
                         ),
-                        onPressed: () => controller.generateReport(),
-                        child: const Icon(
-                          Icons.print, // Use desired icon
-                          color: Colors.white, // Icon color
-                          size: 24.0, // Icon size
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            backgroundColor:
+                                ConstantColor.primaryColor, // Button color
+                            minimumSize: const Size(80, 50),
+                          ),
+                          onPressed: () => controller.generateReport(recordId: record.recordId.toString()),
+                          child: const Icon(
+                            Icons.print, // Use desired icon
+                            color: Colors.white, // Icon color
+                            size: 24.0, // Icon size
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          );
+        }),
       ),
     );
   }
@@ -144,12 +186,12 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "XXX XXX XXX",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    controller.patient.value.name ?? "-",
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   Text(
-                    "xxxxxx-xx-xxxx",
-                    style: TextStyle(color: Colors.blueGrey),
+                    controller.patient.value.mobileNo ?? "-",
+                    style: const TextStyle(color: Colors.blueGrey),
                   )
                 ],
               )
@@ -173,20 +215,14 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
     );
   }
 
-  void _openAddTreatmentBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0),
-        ),
+  Widget _emptyWidget() {
+    return const Expanded(
+      child: Center(
+        child: Text(
+        "Tiada rekod rawatan",
+        style: TextStyle(color: Colors.white, fontSize: 20),
       ),
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return const TreatmentForm();
-      },
+      ),
     );
   }
 }

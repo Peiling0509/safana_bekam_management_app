@@ -113,6 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         )
                       ],
                     ),
+                    const SizedBox(height: 10),
                     _lineChartBar(),
                   ],
                 ),
@@ -203,15 +204,15 @@ Widget _pelangganHariIni() {
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        child: const Padding(
+          padding:  EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Icon(Icons.person_search_outlined, size: 30),
-                  const SizedBox(width: 20),
+                  SizedBox(width: 20),
                   Expanded(
                       child: Text(
                     "12",
