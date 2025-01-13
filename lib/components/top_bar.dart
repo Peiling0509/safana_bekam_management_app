@@ -3,6 +3,7 @@ import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
+import 'package:safana_bekam_management_app/widget/confirm_dialog.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({
@@ -11,7 +12,8 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Get.find<AuthController>();
+    final controller = Get.find<AuthController>();
+    controller.setUserForm();
     return Stack(
       children: [
         Container(
@@ -38,7 +40,11 @@ class TopBar extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => auth.logout(),
+                      onTap: () => Get.dialog(ConfirmDialog(
+                        title: "Log keluar",
+                        content: "Adakah anda pasti mahu log keluar ?",
+                        onConfirm: () => controller.logout(),
+                      )),
                       child: const Padding(
                         padding: EdgeInsets.only(top: 1),
                         child: Icon(
@@ -54,7 +60,7 @@ class TopBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 30, left: 30),
                 child: Text(
-                  "Hai, ${auth.getUserInfo()!.username}",
+                  "Hai, ${controller.getUsername}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -66,7 +72,7 @@ class TopBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 30),
                 child: Text(
-                  "Log Masuk Terakhir: ${auth.lastLoginDateTime()}",
+                  "Log Masuk Terakhir: ${controller.lastLoginDateTime()}",
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.7),
                     fontSize: 14,

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as getx;
 import 'package:get_storage/get_storage.dart';
-import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 
 class AuthInterceptor extends Interceptor {

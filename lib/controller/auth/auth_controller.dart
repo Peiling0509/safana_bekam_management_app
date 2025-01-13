@@ -8,8 +8,8 @@ import 'package:safana_bekam_management_app/data/model/shared/loader_state_model
 
 class AuthController extends GetxController {
   final Rx<LoaderState> state = LoaderState.initial.obs;
+  final userForm = UserModel().obs;
   final box = GetStorage("Auth");
-
   String? role() => box.read("role");
   String? lastLoginDateTime() => box.read("last_login_date_time");
 
@@ -31,13 +31,12 @@ class AuthController extends GetxController {
     });
   }
 
-  UserModel? getUserInfo() {
+  setUserForm(){
     String? userInfoString = box.read("user_info");
     if (userInfoString != null) {
       Map<String, dynamic> userInfoJson = jsonDecode(userInfoString);
-      return UserModel.fromJson(userInfoJson);
+      userForm.value = UserModel.fromJson(userInfoJson);
     }
-    return null;
   }
 
   Future<void> login(AuthModel data) async {
@@ -73,4 +72,21 @@ class AuthController extends GetxController {
       Get.offAllNamed('/login');
     }
   }
+
+
+  // Getters  
+  get getId => userForm.value.id?? 0 ;  
+  get getProfilePicture => userForm.value.profilePicture ?? "null";
+  get getUsername => userForm.value.username ?? "null";  
+  get getEmail => userForm.value.email?? "null";  
+  get getMobileNo => userForm.value.mobileNo?? "null";  
+  get getAddress => userForm.value.address?? "null";  
+  get getRoleUser => userForm.value.role;
+
+  // Setters
+  set setProfilePicture(String? value) => userForm.value.profilePicture = value;
+  set setUsername(String? value) => userForm.value.username = value;
+  set setEmail(String? value) => userForm.value.email = value;
+  set setMobileNo(String? value) => userForm.value.mobileNo = value;  
+  set setAddress(String? value) => userForm.value.address = value;
 }

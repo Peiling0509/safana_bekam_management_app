@@ -64,7 +64,9 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
           color: ConstantColor.backgroundColor,
           child: Column(
             children: [
-              const AddPatientFormTopBar(title: "Maklumat Pelangan Baharu",),
+              const AddPatientFormTopBar(
+                title: "Maklumat Pelangan Baharu",
+              ),
               Expanded(child: _content()),
             ],
           ),
@@ -209,98 +211,99 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
   }
 
   Future openDialog() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            content: Container(
-              width: Get.width,
-              height: 115,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 30,
+        context: context,
+        builder: (context) => AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          content: Container(
+            width: Get.width,
+            height: 115,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 30,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Sahkan?",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Sahkan?",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400,
+                ),
+                const SizedBox(
+                  height: 13,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () => {
+                        Navigator.pop(context),
+                      },
+                      child: Container(
+                        width: Get.width * 0.32,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Text(
+                          "Batal",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 13,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () => {
-                          Navigator.pop(context),
-                        },
-                        child: Container(
-                          width: Get.width * 0.32,
-                          height: 45,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: const Text(
-                            "Batal",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                          ),
+                    GestureDetector(
+                      onTap: () => {
+                        //collect health background data
+                        _checkboxStates.forEach((condition, isChecked) {
+                          if (isChecked) {
+                            patientController.addMedicalHistory(
+                              condition,
+                              _controllers[condition]?.text ?? "",
+                            );
+                          }
+                        }),
+
+                        //submit patient data
+                        patientController.submitPatient(),
+
+                        Navigator.pop(context),
+                        openSuccessDialog()
+                      },
+                      child: Container(
+                        width: Get.width * 0.32,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            //border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(15),
+                            color: ConstantColor.primaryColor),
+                        child: const Text(
+                          "Sahkan",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () => {
-                          //collect health background data
-                          _checkboxStates.forEach((condition, isChecked) {
-                            if (isChecked) {
-                              patientController.addMedicalHistory(
-                                condition,
-                                _controllers[condition]?.text ?? "",
-                              );
-                            }
-                          }),
-
-                          //submit patient data
-                          patientController.submitPatient(),
-
-                          Navigator.pop(context), 
-                          openSuccessDialog()
-                          },
-                        child: Container(
-                          width: Get.width * 0.32,
-                          height: 45,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              //border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(15),
-                              color: ConstantColor.primaryColor),
-                          child: const Text(
-                            "Sahkan",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
 
   Future openSuccessDialog() => showDialog(
       context: context,
@@ -332,11 +335,7 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
                   height: 13,
                 ),
                 GestureDetector(
-                  onTap: () => {
-                    Navigator.pop(context),
-                    Get.back(),
-                    Get.back()
-                  },
+                  onTap: () => {Navigator.pop(context), Get.back(), Get.back()},
                   child: Container(
                     width: Get.width * 0.32,
                     height: 45,

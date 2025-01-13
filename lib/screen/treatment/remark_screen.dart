@@ -4,7 +4,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/controller/treatment/acupoint_controller.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/acupoint_model.dart';
-import 'package:safana_bekam_management_app/widget/acupoint_details_dialog.dart';
+import 'package:safana_bekam_management_app/screen/treatment/acupoint_details_dialog.dart';
 import 'package:safana_bekam_management_app/widget/custom_button.dart';
 
 class RemarkScreen extends StatefulWidget {

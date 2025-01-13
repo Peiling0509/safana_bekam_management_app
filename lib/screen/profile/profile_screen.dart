@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
+import 'package:safana_bekam_management_app/widget/confirm_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,10 +14,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final auth = Get.find<AuthController>();
+  final controller = Get.find<AuthController>();
+
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.setUserForm();
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final userInfo = auth.getUserInfo()!;
     return CustomScaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -50,7 +59,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                         const Spacer(),
                         IconButton(
-                            onPressed: () => auth.logout(),
+                            onPressed: () => Get.dialog(ConfirmDialog(
+                                  title: "Log keluar",
+                                  content: "Adakah anda pasti mahu log keluar ?",
+                                  onConfirm: () => controller.logout(),
+                                )),
                             icon: const Icon(
                               Icons.logout_outlined,
                               size: 30,
@@ -72,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       width: 120,
                       child: CircleAvatar(
                         backgroundImage:
-                            NetworkImage(userInfo.profilePicture ?? ""),
+                            NetworkImage(controller.getProfilePicture ?? ""),
                         foregroundImage: AssetImage(AssetPath.imageNoFound),
                         onBackgroundImageError: (exception, stackTrace) =>
                             throw NetworkImageLoadException,
@@ -80,12 +93,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      userInfo.username ?? "null",
+                      controller.getUsername,
                       style: const TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      userInfo.email ?? "null",
+                      controller.getEmail,
                       style: const TextStyle(
                         decoration: TextDecoration.underline,
                         color: Colors.white,
@@ -127,17 +140,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         _buildUserInfoTitle(
                             title: "Perana",
-                            info: userInfo.role != null
-                                ? userInfo.role!.join(", ")
+                            info: controller.getRoleUser != null
+                                ? controller.getRoleUser.join(", ")
                                 : "null"),
                         _buildUserInfoTitle(
-                            title: "Name", info: userInfo.username ?? "null"),
+                            title: "Name", info: controller.getUsername),
                         _buildUserInfoTitle(
-                            title: "Email", info: userInfo.email ?? "null"),
+                            title: "Email", info: controller.getEmail),
                         _buildUserInfoTitle(
-                            title: "No Tel", info: userInfo.mobileNo ?? "null"),
+                            title: "No Tel", info: controller.getMobileNo),
                         _buildUserInfoTitle(
-                            title: "Alamat", info: userInfo.address ?? "null"),
+                            title: "Alamat", info: controller.getAddress),
                       ],
                     ),
                   ),
