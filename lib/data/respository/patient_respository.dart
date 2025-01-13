@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:http/http.dart' as http;
-
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/api.dart';
 import 'package:safana_bekam_management_app/data/model/patients/patient_records_model.dart';
@@ -27,16 +24,14 @@ class PatientsRepository {
       "patient_id": patientId,
     };
 
-    final res =
-        await provider.post(API.EXPORT_PATIENT_RECORDS, formData: formData);
+    final res = await provider.post(API.EXPORT_PATIENT_RECORDS, formData: formData);
 
     if (res.statusCode != 200 && res.statusCode != 201) throw res;
 
     return PatientRecordModel.fromJson(res.data);  
   }
 
-  
-  Future<PatientsModel> loadPatientbyId(String patientId) async {
+  Future<PatientsModel> loadPatientById(String patientId) async {
     final res = await provider.get('${API.EXPORT_PATIENTS}/$patientId');
 
     if (res.statusCode != 200) throw res;
@@ -45,33 +40,22 @@ class PatientsRepository {
   }
 
   Future<void> submitPatient(PatientsModel patient) async {
-    List<String> serializedMedicalHistory = patient.medicalHistory
-        .map((history) => "\${history.condition}, \${history.medicine}")
-        .toList();
+    Map<String, dynamic> formData = _createPatientFormData(patient);
 
-    Map<String, dynamic> formData = {
-      'name': patient.name,
-      'mykad': patient.myKad,
-      'gender': patient.gender,
-      'ethnicity': patient.ethnicity,
-      'p_mobile_no': patient.mobileNo,
-      'p_email': patient.email,
-      'postcode': patient.postcode,
-      'state': patient.state,
-      'address': patient.address,
-      'occupation': patient.occupation,
-      'medical_history': ["Testing"],
-    };
-    
     final res = await provider.post(
       API.REGISTER_PATIENT,
       formData: formData,
     );
 
-    if (res.statusCode != 200) throw res;
-  }
+    // Check for non-200 status codes and only throw if necessary
+    if (res.statusCode != 200 && res.statusCode != 201) {
+      throw Exception('Failed to submit patient: ${res}');
+    }
 
-  // Update existing patient
+    // Optional: Log response for debugging
+    print("Response received: ${res}");
+}
+
   Future<void> updatePatient(PatientsModel patient) async {
     try {
       if (patient.id == null) {
@@ -79,7 +63,7 @@ class PatientsRepository {
       }
 
       Map<String, dynamic> formData = _createPatientFormData(patient);
-      formData['id'] = patient.id; // Include ID for update
+      formData['id'] = patient.id;
 
       final res = await http.put(
         Uri.parse('${API.REGISTER_PATIENT}/${patient.id}'),
@@ -96,11 +80,36 @@ class PatientsRepository {
     }
   }
 
-  // Helper method to create form data
+  Future<void> deletePatientById(String patientId) async {
+    try {
+      final Map<String, dynamic> formData = {
+        'patient_id': patientId,
+      };
+
+      final res = await provider.post(
+        //'${API.DELETE_PATIENT}/$patientId',
+          API.DELETE_PATIENT,
+        formData: formData,
+      );
+
+      if (res.statusCode != 200 && res.statusCode != 204) {
+        throw Exception('Failed to delete patient: ${res.statusMessage}');
+      }
+
+      print('Successfully deleted patient with ID: $patientId');
+    } catch (e) {
+      print('Error deleting patient: $e');
+      throw e;
+    }
+  } 
+
   Map<String, dynamic> _createPatientFormData(PatientsModel patient) {
-    // Convert medical history to the format expected by the API
-    List<Map<String, dynamic>> serializedMedicalHistory = patient.medicalHistory
-        .map((history) => history.toJson())
+    List<String> serializedMedicalHistory = patient.medicalHistory
+        .map((history) => history.condition)
+        .toList();
+
+    List<String> serializedTreatmentHistory = patient.medicalHistory
+        .map((history) => history.medicine)
         .toList();
 
     return {
@@ -115,8 +124,7 @@ class PatientsRepository {
       'address': patient.address,
       'occupation': patient.occupation,
       'medical_history': serializedMedicalHistory,
-      // If you need to keep the test data, uncomment below
-      // 'medical_history': ["This is a bug testing list", "Second test"],
+      'treatment_history': serializedTreatmentHistory,
     };
   }
 }

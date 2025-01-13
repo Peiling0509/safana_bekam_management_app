@@ -14,4 +14,5 @@ class API {
   static String SUBMIT_TREATMENT = "$DOMAIN_URL/submit-treatment";
   
   static String REGISTER_PATIENT = "$DOMAIN_URL/register-patient";
+  static String DELETE_PATIENT = "$DOMAIN_URL/delete-patient";
 }

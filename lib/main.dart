@@ -46,7 +46,7 @@ class MainApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/home',
+      initialRoute: '/login',
       getPages: routes,
     );
   }

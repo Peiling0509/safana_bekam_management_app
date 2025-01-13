@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/routes/default_transitions.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
+import 'package:safana_bekam_management_app/screen/home/notification_screen.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({
@@ -27,7 +29,14 @@ class TopBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () => Get.toNamed("/notifications"),
+                      //onTap: () => Get.toNamed("/notifications"),
+                      onTap: () => {
+                        Get.to(
+                          NotificationScreen(),
+                          fullscreenDialog: true,
+                          transition: Transition.leftToRight,
+                        )
+                      },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 1),
                         child: Icon(

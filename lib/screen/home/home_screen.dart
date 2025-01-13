@@ -106,19 +106,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Jumlah Pelanggan: 200',
-            style: TextStyle(
-              color: Colors.grey[600],
-            ),
-          ),
+          Obx(() => Text(
+                'Jumlah Pelanggan: ${controller.patients.value.length}',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                ),
+              )),
           ElevatedButton(
             onPressed: () {
-              // Handle add button click
-              print('Add button clicked');
               Get.to(
                 const AddPatientFormScreen(),
-                //AddCustomerFormScreen(),
                 fullscreenDialog: true,
                 transition: Transition.rightToLeft,
               );
@@ -128,7 +125,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(15)),
               backgroundColor: ConstantColor.primaryColor,
               minimumSize: const Size(80, 40),
-              //padding: EdgeInsets.only(top: 5, bottom: 5),
             ),
             child: const Icon(
               Icons.person_add,
@@ -149,13 +145,19 @@ class _HomeScreenState extends State<HomeScreen> {
         case LoaderState.initial:
         case LoaderState.loading:
         case LoaderState.loaded:
+        final filteredPatients = controller.patients.value
+          .where((patient) =>
+              patient.name?.toLowerCase().startsWith(_searchQuery.toLowerCase()) ??
+              false)
+          .toList();
+
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            itemCount: controller.patients.value.length,
+            itemCount: filteredPatients.length,
             itemBuilder: (context, index) {
-              final patient = controller.patients.value[index];
+              final patient = filteredPatients[index];
               return GestureDetector(
                   onTap: () {},
                   child: Container(
@@ -174,7 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     child: ListTile(
-                      onTap: () => Get.toNamed("/update_patient"),
+                      onTap: () => 
+                      Get.toNamed("/update_patient", arguments: patient.id.toString()),
                       leading: CircleAvatar(
                         backgroundColor: ConstantColor.primaryColor,
                         child: const Icon(Icons.person, color: Colors.white),
@@ -189,34 +192,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
-
-  /*
-  Widget _buildCustomerTile(String name) {
-    return Container(
-      height: 80,
-      margin: const EdgeInsets.only(bottom: 20),
-      alignment: Alignment.centerLeft,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: ConstantColor.primaryColor,
-          child: const Icon(Icons.person, color: Colors.white),
-        ),
-        title: Text(name),
-        subtitle: const Text('XXXXXX-XX-XXXX'),
-      ),
-    );
-  }*/
 
   Widget _emptyWidget() {
     return const Center(

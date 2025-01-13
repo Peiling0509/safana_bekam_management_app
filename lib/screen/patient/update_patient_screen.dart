@@ -40,8 +40,11 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   @override
   void initState() {
     super.initState();
-    String patientId = 'your_patient_id'; // Pass the patient ID
-    patientController.loadPatientDetails(patientId);
+    // Get the ID from the arguments
+    String? patientId = Get.arguments as String?;
+    if (patientId != null) {
+      patientController.loadPatientDetails(patientId);
+    }
   }
 
 
@@ -291,7 +294,8 @@ Widget _buildFormA() {
         Obx(() {
           // Observe the patientDetails for changes
           // var patient = patientController.currentPatient.value;
-          var patient = patientController.patients.value.first;
+          //this is one of the dummy data
+          var patient = patientController.currentPatient.value;
           if (patient != null) {
             // Pre-fill the form fields when the data is available
             fullNameController.text = patient.name ?? '';
@@ -507,51 +511,6 @@ Widget _buildDropdown(
     );
   }
 
-  // Widget _buildNextButton() {
-  //   return Padding(
-  //     padding: EdgeInsets.only(top: 28.0),
-  //     child: ElevatedButton(
-  //         onPressed: () {
-  //            // Update Patient Info
-  //           /*patientController.updatePatientInfo(
-  //             name: fullNameController.text,
-  //             myKad: myKadController.text,
-  //             gender: isMale ? "Male" : "Female",
-  //             ethnicity: selectedRace == '--Pilih--' ? '' : selectedRace,
-  //             mobileNo: mobileNoController.text,
-  //             email: emailController.text,
-  //             postcode: postcodeController.text,
-  //             state: selectedState == '--Pilih--' ? '' : selectedState,
-  //             address: addressController.text,
-  //             occupation: occupationController.text,
-  //           );*/
-
-
-  //           /*Get.to(
-  //             //Go to B section
-  //             AddPatientFormScreen_B(),
-  //             //AddCustomerFormScreen(),
-  //             fullscreenDialog: true,
-  //             transition: Transition.noTransition,
-  //           );*/
-  //         },
-  //         style: ElevatedButton.styleFrom(
-  //           shape:
-  //               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-  //           backgroundColor: ConstantColor.primaryColor,
-  //           minimumSize: Size(Get.width, 48),
-  //         ),
-  //         child: const Text(
-  //           "Teruskan",
-  //           style: TextStyle(
-  //             fontSize: 18,
-  //             fontWeight: FontWeight.w500,
-  //             color: Colors.white,
-  //           ),
-  //         )),
-  //   );
-  // }
-
   //Here is buildFormB
   Widget _buildFormB() {
     return Column(
@@ -567,14 +526,9 @@ Widget _buildDropdown(
 
                 const SizedBox(height: 15),
 
-                // const Text(
-                //   "Tandakan ✔ jika berkenaan dan nyatakan pengambilan ubat atau pembedahan",
-                //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                // ),
-
-                // Custom Checkbox List
                 _buildCheckBoxListTile(),
-                _buildSubmitButton()
+                _buildSubmitButton(),
+                _buildDeleteButton()
               ],
             );
   }
@@ -670,5 +624,117 @@ Widget _buildDropdown(
           )),
     );
   }
+
+  Widget _buildDeleteButton() {
+    return Padding(
+      padding: EdgeInsets.only(top: 15.0),
+      child: ElevatedButton(
+          onPressed: () {
+            //show pop up
+            openDialog();
+            print("delete button clicked");
+          },
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            backgroundColor: Colors.red,
+            minimumSize: Size(Get.width, 48),
+          ),
+          child: const Text(
+            "Delete",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          )),
+    );
+  }
+
+  //This is for delete button
+  Future openDialog() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            content: Container(
+              width: Get.width,
+              height: 115,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 30,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "Confirm Delete?",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 13,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => {
+                          Navigator.pop(context),
+                        },
+                        child: Container(
+                          width: Get.width * 0.32,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: const Text(
+                            "Batal",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => {
+                          //delete patient by id
+                          patientController.deletePatient(patientController.currentPatient.value.id.toString()),
+                          Navigator.pop(context),
+                          //openSuccessDialog()
+                        },
+                        child: Container(
+                          width: Get.width * 0.32,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              //border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(15),
+                              color: ConstantColor.primaryColor),
+                          child: const Text(
+                            "Sahkan",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ));
 }
+
+
 
