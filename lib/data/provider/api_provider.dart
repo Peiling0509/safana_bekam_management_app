@@ -214,7 +214,7 @@ class APIProvider extends getx.GetxController {
     }
   }
 
-  // HTTP Method Implementations
+  // Json Method Implementations
   Future<Response> jsonPost(
     String url, {
     Map<String, dynamic> body = const {},
@@ -231,6 +231,7 @@ class APIProvider extends getx.GetxController {
           },
         ),
       );
+       print("✅ JSON POST Response: ${response.data}");
       return response;
     } on DioException catch (e) {
       print('JSON POST Error: ${e.message}');
@@ -238,6 +239,8 @@ class APIProvider extends getx.GetxController {
     }
   }
 
+
+  // FormData Method Implementations
   Future<Response> post(
     String url, {
     Map<String, dynamic> formData = const {},
