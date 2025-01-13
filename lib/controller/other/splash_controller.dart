@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> positionAnimation;
+
+  final authController = Get.find<AuthController>();
 
   @override
   void onInit() {
@@ -38,21 +41,9 @@ class SplashController extends GetxController
 
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        // Navigate only after animation is finished
-        Get.offAllNamed('/login');
+        authController.checkAuthenticationStatus();
       }
     });
-    // Future.delayed(
-    //   const Duration(seconds: 1),
-    //   () {
-    //     Get.offAllNamed('/login');
-    //     // if (auth.isLogin()) {
-    //     //   Get.offAllNamed("/home");
-    //     // } else {
-    //     //   Get.offAllNamed('/login');
-    //     // }
-    //   },
-    // );
   }
 
   @override

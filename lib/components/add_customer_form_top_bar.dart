@@ -5,7 +5,6 @@ import 'package:safana_bekam_management_app/constant/color.dart';
 class AddPatientFormTopBar extends StatelessWidget{
   final String title;
 
-
   const AddPatientFormTopBar({
     super.key,
     required this.title,

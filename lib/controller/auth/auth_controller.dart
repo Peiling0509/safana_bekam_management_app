@@ -43,7 +43,8 @@ class AuthController extends GetxController {
   Future<void> login(AuthModel data) async {
     await box.write("user_info", jsonEncode(data.user!.toJson()));
     await box.write("role", data.user?.role);
-    await box.write("last_login_date_time", DateFormat('dd-MM-yyyy h:m:s a').format(DateTime.now()));
+    await box.write("last_login_date_time",
+        DateFormat('dd-MM-yyyy h:m:s a').format(DateTime.now()));
     await box.save();
   }
 
@@ -53,5 +54,23 @@ class AuthController extends GetxController {
     await box.save();
     Get.offAllNamed("/login");
     state.value = LoaderState.loaded;
+  }
+
+  // Method to check authentication status
+  Future<void> checkAuthenticationStatus() async {
+    try {
+      // Check if authentication box has stored data
+      final storedCookies = box.read("cookies");
+      if (storedCookies != null && storedCookies.isNotEmpty) {
+        Get.offAllNamed('/home');
+      } else {
+        // Navigate to login if session is invalid
+        Get.offAllNamed('/login');
+      }
+    } catch (e) {
+      // Handle any errors during authentication check
+      print('Authentication Check Error: $e');
+      Get.offAllNamed('/login');
+    }
   }
 }

@@ -190,12 +190,12 @@ class PatientController extends GetxController {
   loadPatients() async {
     try {
       state.value = LoaderState.loading;
-      //final data = await repository.loadPatients();
-      // if (data.isEmpty || data == []) {
-      //   return state.value = LoaderState.empty;
-      // }
-      // patients.value = data;
-      patients.value = dummyPatients;
+      final data = await repository.loadPatients();
+      if (data.isEmpty || data == []) {
+        return state.value = LoaderState.empty;
+      }
+      patients.value = data;
+      //patients.value = dummyPatients;
       state.value = LoaderState.loaded;
     } catch (e) {
       print(e.toString());
@@ -259,7 +259,7 @@ class PatientController extends GetxController {
   }
 
   void addMedicalHistory(String condition, String medicine) {
-    currentPatient.value.medicalHistory.add(MedicalHistoryModel(
+    currentPatient.value.medicalHistory!.add(MedicalHistoryModel(
       condition: condition,
       medicine: medicine,
     ));
@@ -267,7 +267,7 @@ class PatientController extends GetxController {
   }
 
   void removeMedicalHistory(int index) {
-    currentPatient.value.medicalHistory.removeAt(index);
+    currentPatient.value.medicalHistory!.removeAt(index);
     currentPatient.refresh();
   }
 }

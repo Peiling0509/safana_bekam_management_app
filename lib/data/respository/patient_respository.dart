@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 
@@ -45,7 +44,7 @@ class PatientsRepository {
   }
 
   Future<void> submitPatient(PatientsModel patient) async {
-    List<String> serializedMedicalHistory = patient.medicalHistory
+    List<String> serializedMedicalHistory = patient.medicalHistory!
         .map((history) => "\${history.condition}, \${history.medicine}")
         .toList();
 
@@ -99,7 +98,7 @@ class PatientsRepository {
   // Helper method to create form data
   Map<String, dynamic> _createPatientFormData(PatientsModel patient) {
     // Convert medical history to the format expected by the API
-    List<Map<String, dynamic>> serializedMedicalHistory = patient.medicalHistory
+    List<Map<String, dynamic>> serializedMedicalHistory = patient.medicalHistory!
         .map((history) => history.toJson())
         .toList();
 

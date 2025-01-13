@@ -10,7 +10,7 @@ class PatientsModel {
   String? state;
   String? address;
   String? occupation;
-  List<MedicalHistoryModel> medicalHistory;
+  List<MedicalHistoryModel>? medicalHistory;
 
   PatientsModel({
     this.id,
@@ -24,7 +24,7 @@ class PatientsModel {
     this.state,
     this.address,
     this.occupation,
-    required this.medicalHistory
+    this.medicalHistory
   });
 
   factory PatientsModel.fromJson(Map<String, dynamic> json) {
@@ -59,7 +59,7 @@ class PatientsModel {
       "state": state,
       "address": address,
       "occupation": occupation,
-      "medical_history": medicalHistory.map((e) => e.toJson()).toList(),
+      "medical_history": medicalHistory!.map((e) => e.toJson()).toList(),
     };
   }
 }
