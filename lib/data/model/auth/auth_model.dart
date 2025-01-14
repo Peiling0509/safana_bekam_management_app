@@ -6,16 +6,13 @@ class AuthModel {
 
   factory AuthModel.fromJson(Map<String, dynamic> json) {
     return AuthModel(
-      status: json["id"] ?? "",
-      user: json["user"] != null
-          ? UserModel.fromJson(json["user"])
-          : null
-    );
+        status: json["id"] ?? "",
+        user: json["user"] != null ? UserModel.fromJson(json["user"]) : null);
   }
 }
 
 class UserModel {
-  final int id;
+  int? id;
   String? profilePicture;
   String? username;
   String? email;
@@ -24,13 +21,13 @@ class UserModel {
   List<dynamic>? role;
 
   UserModel(
-      {required this.id,
-      required this.profilePicture,
-      required this.username,
-      required this.email,
-      required this.mobileNo,
-      required this.address,
-      required this.role});
+      {this.id,
+      this.profilePicture,
+      this.username,
+      this.email,
+      this.mobileNo,
+      this.address,
+      this.role});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -43,7 +40,7 @@ class UserModel {
         role: json["role"] ?? []);
   }
 
-   Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       "id": id,
       "profile_picture": profilePicture,

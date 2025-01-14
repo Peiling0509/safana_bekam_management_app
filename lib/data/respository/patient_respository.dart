@@ -104,11 +104,11 @@ class PatientsRepository {
   } 
 
   Map<String, dynamic> _createPatientFormData(PatientsModel patient) {
-    List<String> serializedMedicalHistory = patient.medicalHistory
+    List<String?> serializedMedicalHistory = patient.medicalHistory
         .map((history) => history.condition)
         .toList();
 
-    List<String> serializedTreatmentHistory = patient.medicalHistory
+    List<String?> serializedTreatmentHistory = patient.medicalHistory
         .map((history) => history.medicine)
         .toList();
 

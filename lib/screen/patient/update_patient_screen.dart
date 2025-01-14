@@ -41,10 +41,13 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   void initState() {
     super.initState();
     // Get the ID from the arguments
-    String? patientId = Get.arguments as String?;
-    if (patientId != null) {
-      patientController.loadPatientDetails(patientId);
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      String? patientId = Get.arguments as String?;
+      if (patientId != null) {
+        patientController.loadPatientDetails(patientId);
+        print(patientController.currentPatient.value.medicalHistory);
+      }
+    });
   }
 
 

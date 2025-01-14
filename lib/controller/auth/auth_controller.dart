@@ -8,8 +8,8 @@ import 'package:safana_bekam_management_app/data/model/shared/loader_state_model
 
 class AuthController extends GetxController {
   final Rx<LoaderState> state = LoaderState.initial.obs;
+  final userForm = UserModel().obs;
   final box = GetStorage("Auth");
-
   String? role() => box.read("role");
   String? lastLoginDateTime() => box.read("last_login_date_time");
 
@@ -31,19 +31,19 @@ class AuthController extends GetxController {
     });
   }
 
-  UserModel? getUserInfo() {
+  setUserForm(){
     String? userInfoString = box.read("user_info");
     if (userInfoString != null) {
       Map<String, dynamic> userInfoJson = jsonDecode(userInfoString);
-      return UserModel.fromJson(userInfoJson);
+      userForm.value = UserModel.fromJson(userInfoJson);
     }
-    return null;
   }
 
   Future<void> login(AuthModel data) async {
     await box.write("user_info", jsonEncode(data.user!.toJson()));
     await box.write("role", data.user?.role);
-    await box.write("last_login_date_time", DateFormat('dd-MM-yyyy h:m:s a').format(DateTime.now()));
+    await box.write("last_login_date_time",
+        DateFormat('dd-MM-yyyy h:m:s a').format(DateTime.now()));
     await box.save();
   }
 
@@ -54,4 +54,39 @@ class AuthController extends GetxController {
     Get.offAllNamed("/login");
     state.value = LoaderState.loaded;
   }
+
+  // Method to check authentication status
+  Future<void> checkAuthenticationStatus() async {
+    try {
+      // Check if authentication box has stored data
+      final storedCookies = box.read("cookies");
+      if (storedCookies != null && storedCookies.isNotEmpty) {
+        Get.offAllNamed('/home');
+      } else {
+        // Navigate to login if session is invalid
+        Get.offAllNamed('/login');
+      }
+    } catch (e) {
+      // Handle any errors during authentication check
+      print('Authentication Check Error: $e');
+      Get.offAllNamed('/login');
+    }
+  }
+
+
+  // Getters  
+  get getId => userForm.value.id?? 0 ;  
+  get getProfilePicture => userForm.value.profilePicture ?? "null";
+  get getUsername => userForm.value.username ?? "null";  
+  get getEmail => userForm.value.email?? "null";  
+  get getMobileNo => userForm.value.mobileNo?? "null";  
+  get getAddress => userForm.value.address?? "null";  
+  get getRoleUser => userForm.value.role;
+
+  // Setters
+  set setProfilePicture(String? value) => userForm.value.profilePicture = value;
+  set setUsername(String? value) => userForm.value.username = value;
+  set setEmail(String? value) => userForm.value.email = value;
+  set setMobileNo(String? value) => userForm.value.mobileNo = value;  
+  set setAddress(String? value) => userForm.value.address = value;
 }

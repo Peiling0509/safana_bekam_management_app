@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
 import 'package:safana_bekam_management_app/components/toast.dart';
+import 'package:safana_bekam_management_app/data/model/patients/medical_history_model.dart';
 import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 import 'package:safana_bekam_management_app/data/respository/patient_respository.dart';
@@ -192,11 +194,11 @@ class PatientController extends GetxController {
   loadPatients() async {
     try {
       state.value = LoaderState.loading;
-      final data = await repository.loadPatients();
-       if (data.isEmpty || data == []) {
-         return state.value = LoaderState.empty;
-       }
-       patients.value = data;
+       final data = await repository.loadPatients();
+        if (data.isEmpty || data == []) {
+          return state.value = LoaderState.empty;
+        }
+        patients.value = data;
       //patients.value = dummyPatients;
       state.value = LoaderState.loaded;
     } catch (e) {
@@ -206,7 +208,7 @@ class PatientController extends GetxController {
   }
 
    // Method to fetch patient details from the database
-  void loadPatientDetails(String patientId) async {
+  Future<void> loadPatientDetails(String patientId) async {
     try {
       state.value = LoaderState.initial;
       // Replace with your actual API call to fetch patient details
@@ -234,6 +236,36 @@ class PatientController extends GetxController {
       state.value = LoaderState.failure;
     }
   }
+
+  //  // Method to fetch patient details from the database
+  // void loadPatientDetails(String patientId) async {
+  //   try {
+  //     state.value = LoaderState.initial;
+  //     // Replace with your actual API call to fetch patient details
+  //     //final data = await repository.loadPatientById(patientId); //Assume this function exists
+  //     final data = await repository.loadPatientById(patientId);
+  //     if (data == []) {
+  //       //return state.value = LoaderState.empty;
+  //     }
+  //     //patients.value = dummyPatients.sublist(0,0);
+  //     updatePatientInfo(
+  //       name: data.name,
+  //       myKad: data.myKad,
+  //       gender: data.gender,
+  //       ethnicity: data.ethnicity,
+  //       mobileNo: data.mobileNo,
+  //       email: data.email,
+  //       postcode: data.postcode,
+  //       state: data.state,
+  //       address: data.address,
+  //       occupation: data.occupation
+  //     );
+  //     state.value = LoaderState.loaded;
+  //   } catch (e) {
+  //     print(e.toString());
+  //     state.value = LoaderState.failure;
+  //   }
+  // }
 
 
   void updatePatientInfo({
@@ -308,7 +340,7 @@ class PatientController extends GetxController {
   }
 
   void addMedicalHistory(String condition, String medicine) {
-    currentPatient.value.medicalHistory.add(MedicalHistoryModel(
+    currentPatient.value.medicalHistory!.add(MedicalHistoryModel(
       condition: condition,
       medicine: medicine,
     ));
@@ -316,7 +348,7 @@ class PatientController extends GetxController {
   }
 
   void removeMedicalHistory(int index) {
-    currentPatient.value.medicalHistory.removeAt(index);
+    currentPatient.value.medicalHistory!.removeAt(index);
     currentPatient.refresh();
   }
 }

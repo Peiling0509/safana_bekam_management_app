@@ -4,6 +4,7 @@ import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 import 'package:safana_bekam_management_app/widget/custom_button.dart';
+import 'package:safana_bekam_management_app/widget/custome_textfield.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -13,10 +14,18 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  final controller = Get.find<AuthController>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.setUserForm();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final auth = Get.find<AuthController>();
-    final userInfo = auth.getUserInfo()!;
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -60,7 +69,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           CircleAvatar(
                             radius: 60,
                             backgroundImage:
-                                NetworkImage(userInfo.profilePicture ?? ""),
+                                NetworkImage(controller.getProfilePicture),
                             foregroundImage: AssetImage(AssetPath.imageNoFound),
                             onBackgroundImageError: (exception, stackTrace) =>
                                 throw NetworkImageLoadException,
@@ -70,14 +79,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             bottom: 5, // Slight padding from the bottom.
                             right: 5, // Slight padding from the right.
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors
                                     .red, // Background color for contrast.
                               ),
                               padding: const EdgeInsets.all(
                                   10), // Inner padding around the icon.
-                              child: Icon(
+                              child: const Icon(
                                 Icons.image,
                                 size: 20, // Icon size.
                                 color: Colors.white, // Icon color.
@@ -96,67 +105,54 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ],
                 ),
               ),
-              Container(
-                width: Get.width,
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTextField(
-                        labelText: "Username", inputText: userInfo.username),
-                    _buildTextField(
-                        labelText: "Email", inputText: userInfo.email),
-                    _buildTextField(
-                        labelText: "No Tel", inputText: userInfo.mobileNo),
-                    _buildTextField(
-                        labelText: "Alamat", inputText: userInfo.address),
-                    const SizedBox(height: 10),
-                    CustomButton(title: "SIMPAN", onPressed:(){},)
-                  ],
+              Expanded(
+                child: Container(
+                  width: Get.width,
+                  padding: const EdgeInsets.all(20),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Obx(
+                        () => CustomTextField(
+                            label: "Username",
+                            hintText: "Masukkan username",
+                            getter: controller.getUsername,
+                            setter: (value) => controller.setUsername = value),
+                      ),
+                      Obx(
+                        () => CustomTextField(
+                            label: "Email",
+                            hintText: "Masukkan email",
+                            getter: controller.getEmail,
+                            setter: (value) => controller.setEmail = value),
+                      ),
+                      Obx(
+                        () => CustomTextField(
+                            label: "No Tel",
+                            hintText: "Masukkan no tel",
+                            getter: controller.getMobileNo,
+                            setter: (value) => controller.setMobileNo = value),
+                      ),
+                      Obx(
+                        () => CustomTextField(
+                            maxLines: 5,
+                            label: "Alamat",
+                            hintText: "Masukkan alamat",
+                            getter: controller.getAddress,
+                            setter: (value) => controller.setAddress = value),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: CustomButton(
+                  title: "SIMPAN",
+                  onPressed: () {},
                 ),
               )
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(
-      {required String labelText, required String? inputText}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: TextFormField(
-          controller: TextEditingController(text: inputText ?? ""),
-          onChanged: (text) {
-            //controller.setUsername = text;
-          },
-          decoration: InputDecoration(
-            labelText: labelText,
-            floatingLabelStyle: TextStyle(color: ConstantColor.primaryColor),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                borderSide: BorderSide(color: ConstantColor.primaryColor)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide:
-                    BorderSide(color: ConstantColor.primaryColor, width: 2)),
-            filled: true,
-            fillColor: Colors.white,
-            errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Colors.red)),
           ),
         ),
       ),
