@@ -42,7 +42,7 @@ class PatientController extends GetxController {
       state: "Selangor",
       address: "123 Jalan Mawar, Shah Alam",
       occupation: "Engineer",
-      medicalHistory: [/*"Hypertension"*/],
+      medicalHistory: [/*{"condition":"Diabetes", "medicine":"Medicine A"}*/],
     ),
     PatientsModel(
       id: 2,
@@ -210,13 +210,21 @@ class PatientController extends GetxController {
    // Method to fetch patient details from the database
   Future<void> loadPatientDetails(String patientId) async {
     try {
-      state.value = LoaderState.initial;
-      // Replace with your actual API call to fetch patient details
-      //final data = await repository.loadPatientById(patientId); //Assume this function exists
-      final data = await repository.loadPatientById(patientId);
-      if (data == []) {
-        //return state.value = LoaderState.empty;
-      }
+      // state.value = LoaderState.initial;
+      // // Replace with your actual API call to fetch patient details
+      // //final data = await repository.loadPatientById(patientId); //Assume this function exists
+      // final data = await repository.loadPatientById(patientId);
+      // if (data == []) {
+      //   //return state.value = LoaderState.empty;
+      // }
+
+      state.value = LoaderState.loading;
+    
+      // Access the value of Rx list first, then use firstWhere
+      final data = patients.value.firstWhere(
+        (data) => data.id == int.parse(patientId),
+        orElse: () => throw Exception('Patient not found'),
+      );
       //patients.value = dummyPatients.sublist(0,0);
       updatePatientInfo(
         name: data.name,

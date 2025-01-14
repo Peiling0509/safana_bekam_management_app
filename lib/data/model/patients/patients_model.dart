@@ -67,7 +67,7 @@ class PatientsModel {
     return PatientsModel(
       id: json['id'],
       name: json['name'] ?? "",
-      myKad: json['myKad'] ?? "",
+      myKad: json['mykad'] ?? "",
       gender: json['gender'] ?? "",
       ethnicity: json['ethnicity'] ?? "",
       mobileNo: json['p_mobile_no'] ?? "",
@@ -91,7 +91,7 @@ class PatientsModel {
     return {
       "id": id,
       "name": name,
-      "myKad": myKad,
+      "mykad": myKad,
       "gender": gender,
       "ethnicity": ethnicity,
       "p_mobile_no": mobileNo,
@@ -100,7 +100,7 @@ class PatientsModel {
       "state": state,
       "address": address,
       "occupation": occupation,
-      "medical_history": medicalHistory!.map((e) => e.toJson()).toList(),
+      "medical_history": medicalHistory.map((e) => e.toJson()).toList(),
     };
   }
 }
