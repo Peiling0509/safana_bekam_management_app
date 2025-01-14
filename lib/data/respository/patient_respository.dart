@@ -42,9 +42,9 @@ class PatientsRepository {
   Future<void> submitPatient(PatientsModel patient) async {
     Map<String, dynamic> formData = _createPatientFormData(patient);
 
-    final res = await provider.post(
+    final res = await provider.jsonPost(
       API.REGISTER_PATIENT,
-      formData: formData,
+      body: formData,
     );
 
     // Check for non-200 status codes and only throw if necessary
@@ -123,8 +123,9 @@ class PatientsRepository {
       'state': patient.state,
       'address': patient.address,
       'occupation': patient.occupation,
-      'medical_history': serializedMedicalHistory,
-      'treatment_history': serializedTreatmentHistory,
+      'medical_history': patient.medicalHistory,
+      //'medical_history': serializedMedicalHistory,
+      //'treatment_history': serializedTreatmentHistory,
     };
   }
 }

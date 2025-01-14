@@ -334,7 +334,7 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
                   height: 13,
                 ),
                 GestureDetector(
-                  onTap: () => {Navigator.pop(context), Get.back(), Get.back()},
+                  onTap: () => {Navigator.pop(context), Get.back(), Get.back(), Get.back(), patientController.loadPatients()},
                   child: Container(
                     width: Get.width * 0.32,
                     height: 45,

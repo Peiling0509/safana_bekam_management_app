@@ -287,6 +287,8 @@ class PatientController extends GetxController {
     String? state,
     String? address,
     String? occupation,
+    List<MedicalHistoryModel>? medicalHistory,
+
   }) {
     currentPatient.update((patient) {
       if (patient != null) {
@@ -300,6 +302,7 @@ class PatientController extends GetxController {
         if (state != null) patient.state = state;
         if (address != null) patient.address = address;
         if (occupation != null) patient.occupation = occupation;
+        if (medicalHistory != null) patient.medicalHistory = medicalHistory;
       }
     });
   }
