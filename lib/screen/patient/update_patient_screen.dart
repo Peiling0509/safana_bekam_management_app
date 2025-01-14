@@ -4,6 +4,8 @@ import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 import 'package:safana_bekam_management_app/components/custom_check_box.dart';
+import 'package:safana_bekam_management_app/data/model/patients/medical_history_model.dart';
+import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/checkbox_type.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 
@@ -35,20 +37,6 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   bool isMale = true;
   String selectedRace = '--Pilih--';
   String selectedState = '--Pilih--';
-
-  // This function will be called to prefill the data when the screen is loaded
-  @override
-  void initState() {
-    super.initState();
-    // Get the ID from the arguments
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      String? patientId = Get.arguments as String?;
-      if (patientId != null) {
-        patientController.loadPatientDetails(patientId);
-        print(patientController.currentPatient.value.medicalHistory);
-      }
-    });
-  }
 
 
   bool isDropdownOpen = false;
@@ -98,9 +86,26 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
 
   final Map<String, TextEditingController> _controllers = {};
 
+  // This function will be called to prefill the data when the screen is loaded
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      String? patientId = Get.arguments as String?;
+      if (patientId != null) {
+        patientController.loadPatientDetails(patientId);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _overlayEntry?.remove();
+
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+
     super.dispose();
   }
 
@@ -154,6 +159,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(15),
                 color: ConstantColor.backgroundColor,
+                
               ),
               //Scrollable within the drop down list
               child: ClipRRect(
@@ -209,6 +215,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         body: SafeArea(
             child: Container(
@@ -246,6 +253,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
             ],
           )),
     ),
+    
           Expanded(child: _content())
         ]),
       ),
@@ -516,24 +524,40 @@ Widget _buildDropdown(
 
   //Here is buildFormB
   Widget _buildFormB() {
-    return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "B. LatarBelakang Kesihatan",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+    return Obx(() {
+      //initialise the checkbox
+      _checkboxStates.forEach((key, value) {
+        _checkboxStates[key] = false;
+        _controllers[key]?.clear();
+      });
 
-                const SizedBox(height: 15),
+      final patient = patientController.currentPatient.value;
+      for (var history in patient.medicalHistory) {
+        if (_checkboxStates.containsKey(history.condition)) {
+          _checkboxStates[history.condition!] = true;
+           _controllers[history.condition!] = TextEditingController(text: history.medicine ?? "");
+        }
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "B. LatarBelakang Kesihatan",
+            style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.w500,
+            ),
+          ),
 
-                _buildCheckBoxListTile(),
-                _buildSubmitButton(),
-                _buildDeleteButton()
+          const SizedBox(height: 15),     
+
+          _buildCheckBoxListTile(),
+          _buildSubmitButton(),
+          _buildDeleteButton()
+
               ],
             );
+    });
   }
 
   Widget _buildCheckBoxListTile() {
@@ -555,6 +579,11 @@ Widget _buildDropdown(
                     onChanged: (bool value) {
                       setState(() {
                         _checkboxStates[key] = value;
+
+                        // Clear the text field if unchecked
+                        if (!value) {
+                          _controllers[key]?.clear();
+                        }
                       });
                     },
                     size: 30,

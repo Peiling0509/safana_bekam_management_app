@@ -47,13 +47,19 @@ class _RecordPatientScreenState extends State<RecordPatientScreen> {
                       case LoaderState.initial:
                       case LoaderState.loading:
                       case LoaderState.loaded:
+                      final filteredPatients = controller.patients.value
+                        .where((patient) =>
+                            patient.name?.toLowerCase().startsWith(_searchQuery.toLowerCase()) ??
+                            false)
+                        .toList();
+
                         return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          itemCount: controller.patients.value.length,
+                          itemCount: filteredPatients.length,
                           itemBuilder: (context, index) {
-                            final patient = controller.patients.value[index];
+                            final patient = filteredPatients[index];
                             return GestureDetector(
                                 onTap: () {},
                                 child: Container(
@@ -119,7 +125,7 @@ class _RecordPatientScreenState extends State<RecordPatientScreen> {
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1), // Light shadow
@@ -142,6 +148,8 @@ class _RecordPatientScreenState extends State<RecordPatientScreen> {
               prefixIcon: const Icon(Icons.search),
               filled: true,
               fillColor: Colors.white,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide.none,
