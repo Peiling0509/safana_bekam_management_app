@@ -1,16 +1,16 @@
-class PatientRecordModel {
+class PatientTreatmentsModel {
   String? patientId;
   List<PatientRecord>? records;
   String? status;
 
-  PatientRecordModel({
+  PatientTreatmentsModel({
     this.patientId,
     this.records,
     this.status,
   });
 
-  factory PatientRecordModel.fromJson(Map<String, dynamic> json) {
-    return PatientRecordModel(
+  factory PatientTreatmentsModel.fromJson(Map<String, dynamic> json) {
+    return PatientTreatmentsModel(
       patientId: json['patient_id']?.toString(),
       records: json['records'] != null
           ? (json['records'] as List)

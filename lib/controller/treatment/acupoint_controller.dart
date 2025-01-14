@@ -27,6 +27,7 @@ class AcupointController extends GetxController {
     bodyBack = AcupointModel(bodyPart: bodyPart[1], acupoint: []).obs;
     face = AcupointModel(bodyPart: bodyPart[2], acupoint: []).obs;
 
+    //dummy data
     // bodyFront.value.acupoint = [
     //     Acupoint(
     //       point: Offset(-43.0, -184.9),
@@ -82,8 +83,31 @@ class AcupointController extends GetxController {
     //   ];
   }
 
-  void simpan(){
-    treatmentController.setRemarks = [bodyFront.value, bodyBack.value, face.value];
+  loadAccupoints() {
+    if (treatmentController.getRemarks.isEmpty) return;
+    treatmentController.getRemarks.map((e) {
+      switch (e.bodyPart) {
+        case "Depan":
+          bodyFront.value.acupoint = e.acupoint;
+          break;
+        case "Belakang":
+          bodyBack.value.acupoint = e.acupoint;
+          break;
+        case "Muka":
+          face.value.acupoint = e.acupoint;
+          break;
+        default:
+          throw ArgumentError('Invalid body part: ${e.bodyPart}');
+      }
+    }).toList();
+  }
+
+  void simpan() {
+    treatmentController.setRemarks = [
+      bodyFront.value,
+      bodyBack.value,
+      face.value
+    ];
     Navigator.pop(Get.context!);
   }
 

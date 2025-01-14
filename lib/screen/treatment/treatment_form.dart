@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
-import 'package:safana_bekam_management_app/data/model/treatment/treatment_model.dart';
+import 'package:safana_bekam_management_app/widget/confirm_dialog.dart';
 import 'package:safana_bekam_management_app/widget/custom_button.dart';
 import 'package:safana_bekam_management_app/widget/custom_datetime_picker_field.dart';
 import 'package:safana_bekam_management_app/widget/custom_dropdown_field.dart';
@@ -16,6 +16,17 @@ class TreatmentForm extends StatefulWidget {
 
 class _TreatmentFormState extends State<TreatmentForm> {
   final controller = Get.find<TreatmentController>();
+
+  @override
+  void initState() {
+    super.initState();
+    //if in edited mode
+    if (controller.getRecordId.isNotEmpty || controller.getRecordId != "") {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.loadTreatmentDetails();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +85,7 @@ class _TreatmentFormState extends State<TreatmentForm> {
                     Obx(
                       () => CustomDropdownField(
                         label: "Pakej",
-                        items: TreatmentModel().pakej,
+                        items: controller.package,
                         initialValue: controller.getPackage != ""
                             ? controller.getPackage
                             : '--Pilih--',
@@ -105,7 +116,7 @@ class _TreatmentFormState extends State<TreatmentForm> {
                         ),
                       ],
                     ),
-                    CustomTextField(
+                    Obx(() => CustomTextField(
                         onTap: () => controller.navigateToRemark(),
                         readOnly: true,
                         label: "Catatan",
@@ -114,7 +125,7 @@ class _TreatmentFormState extends State<TreatmentForm> {
                             .where((e) => e.acupoint!.isNotEmpty)
                             .map((e) => e.bodyPart)
                             .join(', '),
-                        setter: null),
+                        setter: null)),
                     Obx(() => CustomTextField(
                         label: "Masalah Kesihatan",
                         maxLines: 5,
@@ -122,17 +133,15 @@ class _TreatmentFormState extends State<TreatmentForm> {
                         setter: (e) => controller.setHealthComplications = e)),
                     Obx(() => CustomDropdownField(
                         label: "Juruterapi",
-                        items: TreatmentModel()
-                            .juruterapi
+                        items: controller.juruterapi
                             .map((e) => e['name'] as String)
                             .toList(),
-                        initialValue: TreatmentModel().juruterapi.firstWhere(
+                        initialValue: controller.juruterapi.firstWhere(
                             (element) =>
                                 element['id'] == controller.getTherapistId,
                             orElse: () => {'name': '--Pilih--'})['name']!,
                         onChanged: (String value) {
-                          final selectedTherapist = TreatmentModel()
-                              .juruterapi
+                          final selectedTherapist = controller.juruterapi
                               .firstWhere(
                                   (element) => element['name'] == value);
                           controller.setTherapistId = selectedTherapist['id']!;
@@ -147,16 +156,48 @@ class _TreatmentFormState extends State<TreatmentForm> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: CustomButton(
-                title: 'Simpan',
-                onPressed: ()  {
-                 Get.back(); 
-                  //controller.submit();
-                    
-                },
-              ),
+            CustomButton(
+              title: 'Simpan',
+              onPressed: () {
+                Get.dialog(
+                  ConfirmDialog(
+                    title: 'Rawatan Baru',
+                    content: 'Adakah anda pastikan simpan rawatan baru ?',
+                    onConfirm: () async {
+                      await controller.submit().then((value) {
+                        //close the confirm dialog
+                        Get.back();
+                        //close the treatment form
+                        Get.back();
+                        controller.loadTreatments();
+                      });
+                      //Get.back();
+                    },
+                  ),
+                );
+                //controller.submit();
+              },
+            ),
+            CustomButton(
+              backgroundColor: Colors.red,
+              title: 'Tutup',
+              onPressed: () {
+                Get.dialog(
+                  ConfirmDialog(
+                    title: 'Tutup',
+                    content:
+                        'Adakah anda pastikan tutup, data yang tidak disimpan akan hilang.',
+                    onConfirm: () async {
+                      controller.resetTreatment();
+                      //close confirm dialog
+                      Get.back();
+                      //close treatment form
+                      Get.back();
+                    },
+                  ),
+                );
+                //controller.submit();
+              },
             ),
           ],
         ),

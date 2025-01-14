@@ -19,23 +19,7 @@ class TreatmentResponseModel {
 }  
 
 class TreatmentModel {
-  List<String> pakej = [
-    "--Pilih--",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-  ];
-
-  List<Map<String, String>> juruterapi = [
-    {"id": "1", "name": "Orang 1"},
-    {"id": "2", "name": "Orang 2"},
-    {"id": "3", "name": "Orang 3"},
-    {"id": "4", "name": "Orang 4"},
-    {"id": "5", "name": "Orang 5"},
-  ];
-
+  String? recordId;
   String? patientId;
   String? therapistId;
   String? frequency;
@@ -48,6 +32,7 @@ class TreatmentModel {
   List<AcupointModel>? remarks;
 
   TreatmentModel({
+    this.recordId,
     this.patientId,
     this.therapistId,
     this.frequency,

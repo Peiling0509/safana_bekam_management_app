@@ -3,20 +3,34 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:safana_bekam_management_app/constant/api.dart';
+import 'package:safana_bekam_management_app/data/model/treatment/patient_treatments_model.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/treatment_model.dart';
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
 class TreatmentRepository {
   final APIProvider provider = Get.find<APIProvider>();
 
-  Future<TreatmentResponseModel> loadTreatment(
+  Future<PatientTreatmentsModel> loadTreatments(String patientId) async {
+    Map<String, dynamic> formData = {
+      "patient_id": patientId,
+    };
+
+    final res = await provider.post(API.EXPORT_TREATMENTS, formData: formData);
+
+    if (res.statusCode != 200 && res.statusCode != 201) throw res;
+
+    return PatientTreatmentsModel.fromJson(res.data);  
+  }
+
+
+  Future<TreatmentResponseModel> loadTreatmentDetails(
       String patientId, String recordId) async {
     Map<String, dynamic> formData = {
       "patient_id": patientId,
       "record_id": recordId,
     };
 
-    final res = await provider.post(API.EXPORT_TREATMENT, formData: formData);
+    final res = await provider.post(API.EXPORT_TREATMENT_DETAILS, formData: formData);
 
     if (res.statusCode != 200 && res.statusCode != 201) throw res;
 
@@ -27,7 +41,7 @@ class TreatmentRepository {
     Map<String, dynamic> body = {
       "patient_id": treatment.patientId,
       "therapist_id": treatment.therapistId,
-      "frequency": treatment.frequency ?? "1",
+      "frequency": treatment.frequency,
       "created_date": DateFormat('yyyy-MM-dd').format(DateTime.now()),
       "blood_pressure_before": treatment.bloodPressureBefore,
       "blood_pressure_after": treatment.bloodPressureAfter,

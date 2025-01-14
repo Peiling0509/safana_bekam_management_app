@@ -7,10 +7,10 @@ class API {
 
   //PATIENTS
   static String EXPORT_PATIENTS = "$DOMAIN_URL/export-patients";
-  static String EXPORT_PATIENT_RECORDS = "$DOMAIN_URL/export-patient-simplify";
 
   //TREATMENT
-  static String EXPORT_TREATMENT = "$DOMAIN_URL/export-patient-record-visit";
+  static String EXPORT_TREATMENTS= "$DOMAIN_URL/export-patient-simplify";
+  static String EXPORT_TREATMENT_DETAILS = "$DOMAIN_URL/export-patient-record-visit";
   static String SUBMIT_TREATMENT = "$DOMAIN_URL/submit-treatment";
   
   static String REGISTER_PATIENT = "$DOMAIN_URL/register-patient";

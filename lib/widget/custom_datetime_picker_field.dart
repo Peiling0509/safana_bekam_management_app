@@ -20,7 +20,7 @@ class CustomDateTimePickerField extends StatefulWidget {
 
 class _CustomDateTimePickerFieldState extends State<CustomDateTimePickerField> {
   DateTime? selectedDate;
-  late final TextEditingController _controller;
+  final TextEditingController _controller = TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -31,28 +31,20 @@ class _CustomDateTimePickerFieldState extends State<CustomDateTimePickerField> {
     );
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
-      
-        _controller.text =
-            '${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}';
-    
+
+      _controller.text =
+          '${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}';
+
       widget.setter(_controller.text);
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-    _controller =
-        TextEditingController(text: widget.getter != "" ? widget.getter : "");
-    //widget.setter(_controller.text);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // if (widget.getter.isNotEmpty) {
-    //   _controller.text = widget.getter;
-    //   widget.setter(widget.getter);
-    // }
+     if (widget.getter.isNotEmpty) {
+      _controller.text = widget.getter;
+      widget.setter(widget.getter);
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -67,7 +59,7 @@ class _CustomDateTimePickerFieldState extends State<CustomDateTimePickerField> {
           ),
           const SizedBox(height: 8),
           TextFormField(
-            onChanged: widget.setter,
+            //onChanged: widget.setter,
             controller: _controller,
             readOnly: true,
             onTap: () => _selectDate(context),

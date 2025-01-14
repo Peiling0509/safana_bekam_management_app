@@ -168,7 +168,7 @@ class APIProvider extends getx.GetxController {
 
     if (cookies != null) {
       options.headers['Cookie'] = cookies;
-      //print("✅ Attached Cookies: $cookies");
+      print("✅ Attached Cookies: $cookies");
     }
 
     handler.next(options);
