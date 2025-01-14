@@ -199,6 +199,7 @@ class PatientController extends GetxController {
           return state.value = LoaderState.empty;
         }
         patients.value = data;
+        //print(patients.value.last.medicalHistory.first.condition);
       //patients.value = dummyPatients;
       state.value = LoaderState.loaded;
     } catch (e) {
@@ -236,7 +237,8 @@ class PatientController extends GetxController {
         postcode: data.postcode,
         state: data.state,
         address: data.address,
-        occupation: data.occupation
+        occupation: data.occupation,
+        medicalHistory: data.medicalHistory
       );
       state.value = LoaderState.loaded;
     } catch (e) {
