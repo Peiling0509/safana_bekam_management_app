@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/controller/treatment/acupoint_controller.dart';
+import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/acupoint_model.dart';
 import 'package:safana_bekam_management_app/screen/treatment/acupoint_details_dialog.dart';
 import 'package:safana_bekam_management_app/widget/custom_button.dart';
@@ -20,6 +21,7 @@ class _RemarkScreenState extends State<RemarkScreen> {
   int _currentPageIndex = 0;
 
   final controller = Get.find<AcupointController>();
+  final treatmentController = Get.find<TreatmentController>();
 
   @override
   void initState() {
@@ -101,6 +103,11 @@ class _RemarkScreenState extends State<RemarkScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //if in edited mode
+    if (treatmentController.getRemarks.isNotEmpty ||
+        treatmentController.getRemarks != []) {
+      controller.loadAccupoints();
+    }
     return Scaffold(
       appBar: AppBar(title: const Text("Catatan")),
       body: SafeArea(
@@ -257,7 +264,7 @@ class _RemarkScreenState extends State<RemarkScreen> {
                           final position = _photoController.position;
                           return Stack(
                             children: acupoints.map((acupoint) {
-                              print("Scale : $scale");
+                              //print("Scale : $scale");
                               final dx = (acupoint.point!.dx * scale) +
                                   position.dx +
                                   constraints.maxWidth / 2;

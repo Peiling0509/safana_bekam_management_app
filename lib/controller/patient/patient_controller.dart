@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
 import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/data/model/patients/medical_history_model.dart';
@@ -42,7 +41,11 @@ class PatientController extends GetxController {
       state: "Selangor",
       address: "123 Jalan Mawar, Shah Alam",
       occupation: "Engineer",
-      medicalHistory: [/*{"condition":"Diabetes", "medicine":"Medicine A"}*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
+
     ),
     PatientsModel(
       id: 2,
@@ -56,7 +59,10 @@ class PatientController extends GetxController {
       state: "Penang",
       address: "45 Jalan Teratai, George Town",
       occupation: "Teacher",
-      medicalHistory: [/*"Asthma"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 3,
@@ -70,7 +76,10 @@ class PatientController extends GetxController {
       state: "Johor",
       address: "67 Jalan Cempaka, Johor Bahru",
       occupation: "Doctor",
-      medicalHistory: [/*"Diabetes"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 4,
@@ -84,7 +93,10 @@ class PatientController extends GetxController {
       state: "Kuala Lumpur",
       address: "12 Jalan Anggerik, KL",
       occupation: "Singer",
-      medicalHistory: [/*"None"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 5,
@@ -98,7 +110,10 @@ class PatientController extends GetxController {
       state: "Malacca",
       address: "88 Jalan Dahlia, Melaka",
       occupation: "Chef",
-      medicalHistory: [/*"Allergy to nuts"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 6,
@@ -112,7 +127,10 @@ class PatientController extends GetxController {
       state: "Perak",
       address: "34 Jalan Melur, Ipoh",
       occupation: "IT Consultant",
-      medicalHistory: [/*"Migraine"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 7,
@@ -126,7 +144,10 @@ class PatientController extends GetxController {
       state: "Sabah",
       address: "56 Jalan Kenanga, Kota Kinabalu",
       occupation: "Accountant",
-      medicalHistory: [/*"Anemia"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 8,
@@ -140,7 +161,10 @@ class PatientController extends GetxController {
       state: "Sarawak",
       address: "78 Jalan Orchid, Kuching",
       occupation: "Lawyer",
-      medicalHistory: [/*"None"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 9,
@@ -154,7 +178,10 @@ class PatientController extends GetxController {
       state: "Kelantan",
       address: "90 Jalan Lavender, Kota Bharu",
       occupation: "Mechanic",
-      medicalHistory: [/*"High cholesterol"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
     PatientsModel(
       id: 10,
@@ -168,7 +195,10 @@ class PatientController extends GetxController {
       state: "Pahang",
       address: "101 Jalan Tulip, Kuantan",
       occupation: "Architect",
-      medicalHistory: [/*"None"*/],
+      medicalHistory: [
+        MedicalHistoryModel(condition: "Diabetes", medicine: "Metformin"),
+        MedicalHistoryModel(condition: "Hypertension", medicine: "Lisinopril")
+      ],
     ),
   ];
 
@@ -183,7 +213,7 @@ class PatientController extends GetxController {
           break;
         case LoaderState.empty:
         case LoaderState.loaded:
-        case LoaderState.failure: 
+        case LoaderState.failure:
           LoadingDialog.hide();
           break;
       }
@@ -208,7 +238,7 @@ class PatientController extends GetxController {
     }
   }
 
-   // Method to fetch patient details from the database
+  // Method to fetch patient details from the database
   Future<void> loadPatientDetails(String patientId) async {
     try {
       state.value = LoaderState.loading;
@@ -277,7 +307,6 @@ class PatientController extends GetxController {
   //   }
   // }
 
-
   void updatePatientInfo({
     int? id,
     String? name,
@@ -336,6 +365,8 @@ class PatientController extends GetxController {
     } catch (e) {
       toast("Failed to add patient");
       print("This is the ADD PATIENT ERROR: " + e.toString());
+      print("Condition: ${currentPatient.value.medicalHistory.first.condition}");
+      print("Medicine: ${currentPatient.value.medicalHistory.first.medicine}");
       state.value = LoaderState.failure;
     }
   }
@@ -375,8 +406,8 @@ class PatientController extends GetxController {
     try {
       state.value = LoaderState.loading;
       await repository.deletePatientById(patientId);
-      
-      toast("Sucessful delete Patient$patientId");
+
+      toast("Sucessful delete Patient${currentPatient.value.name}");
       state.value = LoaderState.loaded;
     } catch (e) {
       toast("Failed to delete patient");
@@ -386,7 +417,7 @@ class PatientController extends GetxController {
   }
 
   void addMedicalHistory(String condition, String medicine) {
-    currentPatient.value.medicalHistory!.add(MedicalHistoryModel(
+    currentPatient.value.medicalHistory.add(MedicalHistoryModel(
       condition: condition,
       medicine: medicine,
     ));

@@ -46,6 +46,8 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   final LayerLink _layerlinkStates = LayerLink();
   OverlayEntry? _overlayEntry;
 
+  bool hasUserModifiedFields = false;
+
   //This is the list for kaum, add more as needed
   final List<String> races = [
     '--Pilih--',
@@ -165,6 +167,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
       } else if (type == 'state') {
         selectedState = value;
       }
+      hasUserModifiedFields = true;
     });
     _hideDropdown();
   }
@@ -351,9 +354,16 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
             addressController.text = patient.address ?? '';
             postcodeController.text = patient.postcode ?? '';
             occupationController.text = patient.occupation ?? '';
-            selectedRace = patient.ethnicity ?? '--Pilih--';
-            selectedState = patient.state ?? '--Pilih--';
-            isMale = patient.gender == 'Male';
+            //selectedRace = patient.ethnicity ?? '--Pilih--';
+            //selectedState = patient.state ?? '--Pilih--';
+            //isMale = patient.gender == 'Male';
+
+            // Set the values only if they haven't been modified by user
+            if (!hasUserModifiedFields) {
+              selectedRace = patient.ethnicity ?? '--Pilih--';
+              selectedState = patient.state ?? '--Pilih--';
+              isMale = patient.gender == 'Male';
+            }
           }
           return Column(
             children: [
@@ -491,6 +501,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                 onTap: () {
                   setState(() {
                     isMale = true;
+                    hasUserModifiedFields = true;
                   });
                 }),
             _buildGenderButton(
@@ -499,6 +510,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                 onTap: () {
                   setState(() {
                     isMale = false;
+                    hasUserModifiedFields = true;
                   });
                 })
           ],
@@ -697,11 +709,15 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
 
             print("---------------------------------------------------------------------------------------------This is a test: ${patientController.currentPatient.value.medicalHistory.length}");
 
+            
             //submit patient data
             patientController.updatePatient(patientId);
 
             // Clear the cached patient data
             patientController.clearCurrentPatient();
+
+            // Reset the modification flag
+            hasUserModifiedFields = false;
 
             Get.back();
             Get.back();
@@ -812,10 +828,12 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                           
                           //delete patient by id
                           patientController.deletePatient(patientController.currentPatient.value.id.toString()),
+                          //patientController.loadPatients(),
                           Get.back(),
                           Get.back(),
                           Get.back(),
                           patientController.loadPatients(),
+                          //patientController.currentPatient.refresh()
                           //Navigator.pop(context),
                           //openSuccessDialog()
                         },

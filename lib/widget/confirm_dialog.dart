@@ -3,20 +3,20 @@ import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 
 class ConfirmDialog extends StatelessWidget {
-  final String? title;
-  final String? content;
+  final String title;
+  final String content;
   final String? confirmText;
   final String? cancelText;
-  final Function()? onConfirm;
+  final Function() onConfirm;
   final Function? onCancel;
 
   const ConfirmDialog({
     super.key,
-    this.title,
-    this.content,
+    required this.title,
+    required this.content,
     this.confirmText,
     this.cancelText,
-    this.onConfirm,
+    required this.onConfirm,
     this.onCancel,
   });
 
@@ -30,7 +30,7 @@ class ConfirmDialog extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(
@@ -41,14 +41,17 @@ class ConfirmDialog extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  title!,
+                  title,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 10),
                 Text(
-                  content!,
+                  content,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w400,

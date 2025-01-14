@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/api.dart';
-import 'package:safana_bekam_management_app/data/model/patients/patient_records_model.dart';
+import 'package:safana_bekam_management_app/data/model/treatment/patient_treatments_model.dart';
 import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
@@ -19,18 +19,7 @@ class PatientsRepository {
         .toList();
   }
 
-  Future<PatientRecordModel> loadPatientRecords(String patientId) async {
-    Map<String, dynamic> formData = {
-      "patient_id": patientId,
-    };
-
-    final res = await provider.post(API.EXPORT_PATIENT_RECORDS, formData: formData);
-
-    if (res.statusCode != 200 && res.statusCode != 201) throw res;
-
-    return PatientRecordModel.fromJson(res.data);  
-  }
-
+  
   Future<PatientsModel> loadPatientById(String patientId) async {
     Map<String, dynamic> formData = {
       "patient_id": patientId,

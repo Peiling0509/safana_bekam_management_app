@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:safana_bekam_management_app/constant/color.dart';
-
-import 'package:flutter/material.dart';
 
 class CustomDropdownField extends StatefulWidget {
   final String label;
@@ -25,13 +22,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
   final LayerLink layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
   bool isDropdownOpen = false;
-  late String _selected;
-
-  @override
-  void initState() {
-    super.initState();
-    _selected = widget.initialValue;
-  }
+  String _selected = "--Pilih--";
 
   @override
   void dispose() {
@@ -41,6 +32,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
 
   @override
   Widget build(BuildContext context) {
+     _selected = widget.initialValue;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: CompositedTransformTarget(

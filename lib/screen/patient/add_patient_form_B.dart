@@ -264,6 +264,8 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
                       ),
                       GestureDetector(
                         onTap: () => {
+                          //clear existing history
+                          patientController.clearMedicalHistory(),
                           //collect health background data
                           _checkboxStates.forEach((condition, isChecked) {
                             if (isChecked) {
@@ -276,6 +278,9 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
 
                           //submit patient data
                           patientController.submitPatient(),
+                          
+                          // Clear the cached patient data
+                          patientController.clearCurrentPatient(),
 
                           Navigator.pop(context), 
                           openSuccessDialog()
