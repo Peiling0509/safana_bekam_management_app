@@ -211,23 +211,23 @@ class PatientController extends GetxController {
    // Method to fetch patient details from the database
   Future<void> loadPatientDetails(String patientId) async {
     try {
+      state.value = LoaderState.loading;
       // state.value = LoaderState.initial;
       // // Replace with your actual API call to fetch patient details
-      // //final data = await repository.loadPatientById(patientId); //Assume this function exists
+      final data = await repository.loadPatientById(patientId); //Assume this function exists
       // final data = await repository.loadPatientById(patientId);
-      // if (data == []) {
-      //   //return state.value = LoaderState.empty;
-      // }
-
-      state.value = LoaderState.loading;
+      if (data == []) {
+        state.value = LoaderState.empty;
+      }
     
       // Access the value of Rx list first, then use firstWhere
-      final data = patients.value.firstWhere(
-        (data) => data.id == int.parse(patientId),
-        orElse: () => throw Exception('Patient not found'),
-      );
+      // final data = patients.value.firstWhere(
+      //   (data) => data.id == int.parse(patientId),
+      //   orElse: () => throw Exception('Patient not found'),
+      // );
       //patients.value = dummyPatients.sublist(0,0);
       updatePatientInfo(
+        id: int.parse(patientId),
         name: data.name,
         myKad: data.myKad,
         gender: data.gender,
@@ -279,6 +279,7 @@ class PatientController extends GetxController {
 
 
   void updatePatientInfo({
+    int? id,
     String? name,
     String? myKad,
     String? gender,
@@ -294,6 +295,7 @@ class PatientController extends GetxController {
   }) {
     currentPatient.update((patient) {
       if (patient != null) {
+        if (id != null) patient.id = id;
         if (name != null) patient.name = name;
         if (myKad != null) patient.myKad = myKad;
         if (gender != null) patient.gender = gender;
@@ -338,6 +340,37 @@ class PatientController extends GetxController {
     }
   }
 
+  void updatePatient(String? patientId) async {
+    try {
+      state.value = LoaderState.loading;
+      currentPatient.value.id = int.parse(patientId!);
+      await repository.updatePatient(currentPatient.value);
+      toast("Patient updated");
+
+      state.value = LoaderState.loaded;
+
+      // Reset the currentPatient after successful submission
+      currentPatient.value = PatientsModel(
+        id: null,
+        name: '',
+        myKad: '',
+        gender: '',
+        ethnicity: '',
+        mobileNo: '',
+        email: '',
+        postcode: '',
+        state: '',
+        address: '',
+        occupation: '',
+        medicalHistory: [],
+      );
+    } catch (e) {
+      toast("Failed to update patient");
+      print("This is the UPDATE PATIENT ERROR: " + e.toString());
+      state.value = LoaderState.failure;
+    }
+  }
+
   void deletePatient(String patientId) async {
     try {
       state.value = LoaderState.loading;
@@ -364,4 +397,24 @@ class PatientController extends GetxController {
     currentPatient.value.medicalHistory!.removeAt(index);
     currentPatient.refresh();
   }
+
+  void clearMedicalHistory() {
+    currentPatient.value.medicalHistory = [];
+  }
+
+  void clearCurrentPatient() {
+    currentPatient.value.id = null;
+    currentPatient.value.name = '';
+    currentPatient.value.myKad = '';
+    currentPatient.value.gender = '';
+    currentPatient.value.ethnicity = '';
+    currentPatient.value.mobileNo = '';
+    currentPatient.value.email = '';
+    currentPatient.value.postcode = '';
+    currentPatient.value.state = '';
+    currentPatient.value.address = '';
+    currentPatient.value.occupation = '';
+    currentPatient.value.medicalHistory = [];
+  }
 }
+

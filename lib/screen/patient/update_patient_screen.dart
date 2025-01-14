@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
@@ -37,7 +40,6 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   bool isMale = true;
   String selectedRace = '--Pilih--';
   String selectedState = '--Pilih--';
-
 
   bool isDropdownOpen = false;
   final LayerLink _layerLinkRaces = LayerLink();
@@ -86,32 +88,61 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
 
   final Map<String, TextEditingController> _controllers = {};
 
+  
+
   // This function will be called to prefill the data when the screen is loaded
   @override
   void initState() {
     super.initState();
+    // Initialize controllers for all checkboxes
+    for (var key in _checkboxStates.keys) {
+      _controllers[key] = TextEditingController();
+    }
+
+    // Load patient data after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      String? patientId = Get.arguments as String?;
-      if (patientId != null) {
-        patientController.loadPatientDetails(patientId);
+      final dynamic arguments = Get.arguments;
+      if (arguments is String && arguments.isNotEmpty) {
+        patientController.loadPatientDetails(arguments).then((_) {
+          _loadMedicalHistory();
+        });
       }
     });
   }
 
+  void _loadMedicalHistory() {
+    final patient = patientController.currentPatient.value;
+    if (patient != null && patient.medicalHistory != null) {
+      setState(() {
+        // Reset all checkboxes first
+        _checkboxStates.updateAll((key, value) => false);
+        
+        // Update checkboxes and controllers based on medical history
+        for (var history in patient.medicalHistory) {
+          if (history.condition != null && _checkboxStates.containsKey(history.condition)) {
+            _checkboxStates[history.condition!] = true;
+            if (_controllers.containsKey(history.condition)) {
+              _controllers[history.condition]!.text = history.medicine ?? '';
+            }
+          }
+        }
+      });
+    }
+  }
+
   @override
   void dispose() {
-    _overlayEntry?.remove();
-
+    // Dispose of all controllers
     for (var controller in _controllers.values) {
       controller.dispose();
     }
-
+    _overlayEntry?.remove();
     super.dispose();
   }
 
   void _showDropdown(List<String> list, LayerLink layerlink, String type) {
     final overlay = Overlay.of(context);
-  
+
     _overlayEntry = _createOverlayEntry(list, layerlink, type);
     overlay.insert(_overlayEntry!);
     setState(() {
@@ -159,7 +190,6 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                 border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(15),
                 color: ConstantColor.backgroundColor,
-                
               ),
               //Scrollable within the drop down list
               child: ClipRRect(
@@ -211,10 +241,17 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
       ),
     );
   }
-  
-  
+
   @override
   Widget build(BuildContext context) {
+
+    // Clear all checkboxes and text controllers
+    // _checkboxStates.updateAll((key, value) => false);
+    // for (var controller in _controllers.values) {
+    //   controller.dispose();
+    // }
+    // _controllers.clear();
+
 
     return Scaffold(
         body: SafeArea(
@@ -223,37 +260,36 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
       child: Center(
         child: Column(children: [
           Container(
-      color: ConstantColor.primaryColor,
-      child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                  onTap: (){ 
-                    Get.back();
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                    size: 28,
-                  )),
-              Center(
-                child: Text(
-                  "Maklumat Pelangan",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 28),
-              )
-            ],
-          )),
-    ),
-    
+            color: ConstantColor.primaryColor,
+            child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                          size: 28,
+                        )),
+                    Center(
+                      child: Text(
+                        "Maklumat Pelangan",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 28),
+                    )
+                  ],
+                )),
+          ),
           Expanded(child: _content())
         ]),
       ),
@@ -261,36 +297,35 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   }
 
   Widget _content() {
-  return SingleChildScrollView(
-    child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildFormA(),
-              const SizedBox(height: 20,),
-
-              Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Divider(
-                    thickness: 3,
-                    color: Colors.black.withOpacity(0.1),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildFormA(),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-
-              _buildFormB(),
-            ],
-          ) 
-        )
-      ],
-    ),
-  );
-}
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Divider(
+                      thickness: 3,
+                      color: Colors.black.withOpacity(0.1),
+                    ),
+                  ),
+                  _buildFormB(),
+                ],
+              ))
+        ],
+      ),
+    );
+  }
 
 //Here is buildFormA
-Widget _buildFormA() {
+  Widget _buildFormA() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -356,7 +391,8 @@ Widget _buildFormA() {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildDropdown(races, _layerLinkRaces, selectedRace, 'race'),
+                        _buildDropdown(
+                            races, _layerLinkRaces, selectedRace, 'race'),
                       ],
                     ),
                   ),
@@ -364,11 +400,14 @@ Widget _buildFormA() {
               ),
               const SizedBox(height: 16),
               _buildTextField("Emel", controller: emailController),
-              _buildTextField("Alamat", controller: addressController, maxLines: 3),
+              _buildTextField("Alamat",
+                  controller: addressController, maxLines: 3),
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Expanded(child: _buildTextField("Poskod", controller: postcodeController)),
+                  Expanded(
+                      child: _buildTextField("Poskod",
+                          controller: postcodeController)),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
@@ -382,7 +421,8 @@ Widget _buildFormA() {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildDropdown(states, _layerlinkStates, selectedState, 'state'),
+                        _buildDropdown(
+                            states, _layerlinkStates, selectedState, 'state'),
                       ],
                     ),
                   ),
@@ -398,7 +438,7 @@ Widget _buildFormA() {
     );
   }
 
-Widget _buildDropdown(
+  Widget _buildDropdown(
       List<String> list, LayerLink layerlink, String selected, String type) {
     return CompositedTransformTarget(
       link: layerlink,
@@ -523,40 +563,29 @@ Widget _buildDropdown(
   }
 
   //Here is buildFormB
-  Widget _buildFormB() {
+   Widget _buildFormB() {
     return Obx(() {
-      //initialise the checkbox
-      _checkboxStates.forEach((key, value) {
-        _checkboxStates[key] = false;
-        _controllers[key]?.clear();
-      });
-
       final patient = patientController.currentPatient.value;
-      for (var history in patient.medicalHistory) {
-        if (_checkboxStates.containsKey(history.condition)) {
-          _checkboxStates[history.condition!] = true;
-           _controllers[history.condition!] = TextEditingController(text: history.medicine ?? "");
-        }
+      if (patient == null) {
+        return const Center(child: CircularProgressIndicator());
       }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             "B. LatarBelakang Kesihatan",
             style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
             ),
           ),
-
-          const SizedBox(height: 15),     
-
+          const SizedBox(height: 15),
           _buildCheckBoxListTile(),
           _buildSubmitButton(),
           _buildDeleteButton()
-
-              ],
-            );
+        ],
+      );
     });
   }
 
@@ -638,6 +667,46 @@ Widget _buildDropdown(
           onPressed: () {
             //show pop up
             //openDialog();
+            String? patientId = Get.arguments as String?;
+            //handle form A
+            patientController.updatePatientInfo(
+              name: fullNameController.text,
+              myKad: myKadController.text,
+              gender: isMale ? "Male" : "Female",
+              ethnicity: selectedRace == '--Pilih--' ? '' : selectedRace,
+              mobileNo: mobileNoController.text,
+              email: emailController.text,
+              postcode: postcodeController.text,
+              state: selectedState == '--Pilih--' ? '' : selectedState,
+              address: addressController.text,
+              occupation: occupationController.text,
+            );
+
+            //clear existing history
+            patientController.clearMedicalHistory();
+
+            //handle form B
+            _checkboxStates.forEach((condition, isChecked) {
+              if (isChecked) {
+                patientController.addMedicalHistory(
+                  condition,
+                  _controllers[condition]?.text ?? "",
+                );
+              }
+            });
+
+            print("---------------------------------------------------------------------------------------------This is a test: ${patientController.currentPatient.value.medicalHistory.length}");
+
+            //submit patient data
+            patientController.updatePatient(patientId);
+
+            // Clear the cached patient data
+            patientController.clearCurrentPatient();
+
+            Get.back();
+            Get.back();
+            patientController.loadPatients();
+
             print("submit button clicked");
           },
           style: ElevatedButton.styleFrom(
@@ -736,11 +805,18 @@ Widget _buildDropdown(
                           ),
                         ),
                       ),
+                      
                       GestureDetector(
+                        
                         onTap: () => {
+                          
                           //delete patient by id
                           patientController.deletePatient(patientController.currentPatient.value.id.toString()),
-                          Navigator.pop(context),
+                          Get.back(),
+                          Get.back(),
+                          Get.back(),
+                          patientController.loadPatients(),
+                          //Navigator.pop(context),
                           //openSuccessDialog()
                         },
                         child: Container(
@@ -750,9 +826,9 @@ Widget _buildDropdown(
                           decoration: BoxDecoration(
                               //border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(15),
-                              color: ConstantColor.primaryColor),
+                              color: Colors.red),
                           child: const Text(
-                            "Sahkan",
+                            "Delete",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -767,6 +843,3 @@ Widget _buildDropdown(
             ),
           ));
 }
-
-
-

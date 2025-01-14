@@ -32,11 +32,15 @@ class PatientsRepository {
   }
 
   Future<PatientsModel> loadPatientById(String patientId) async {
-    final res = await provider.get('${API.EXPORT_PATIENTS}/$patientId');
+    Map<String, dynamic> formData = {
+      "patient_id": patientId,
+    };
 
-    if (res.statusCode != 200) throw res;
+    final res = await provider.post(API.EXPORT_PATIENTS, formData: formData);
 
-    return PatientsModel.fromJson(res.data as Map<String, dynamic>);
+    if (res.statusCode != 200 && res.statusCode != 201) throw res;
+
+    return PatientsModel.fromJson(res.data);
   }
 
   Future<void> submitPatient(PatientsModel patient) async {
@@ -57,27 +61,27 @@ class PatientsRepository {
 }
 
   Future<void> updatePatient(PatientsModel patient) async {
-    try {
-      if (patient.id == null) {
-        throw Exception('Patient ID is required for update');
-      }
-
-      Map<String, dynamic> formData = _createPatientFormData(patient);
-      formData['id'] = patient.id;
-
-      final res = await http.put(
-        Uri.parse('${API.REGISTER_PATIENT}/${patient.id}'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(formData),
-      );
-
-      if (res.statusCode != 200) throw res;
-    } catch (e) {
-      print('Error updating patient: $e');
-      throw e;
+    
+    if (patient.id == null) {
+      throw Exception('Patient ID is required for update');
     }
+
+    Map<String, dynamic> formData = _createPatientFormData(patient);
+    formData['patient_id'] = patient.id;
+
+    final res = await provider.jsonPost(
+      API.UPDATE_PATIENT,
+      body: formData
+    );
+
+    // Check for non-200 status codes and only throw if necessary
+    if (res.statusCode != 200 && res.statusCode != 201) {
+      throw Exception('Failed to update patient: ${res}');
+    }
+
+    // Optional: Log response for debugging
+    print("Response received: ${res}");
+
   }
 
   Future<void> deletePatientById(String patientId) async {
@@ -104,13 +108,13 @@ class PatientsRepository {
   } 
 
   Map<String, dynamic> _createPatientFormData(PatientsModel patient) {
-    List<String?> serializedMedicalHistory = patient.medicalHistory
-        .map((history) => history.condition)
-        .toList();
+    // List<String?> serializedMedicalHistory = patient.medicalHistory
+    //     .map((history) => history.condition)
+    //     .toList();
 
-    List<String?> serializedTreatmentHistory = patient.medicalHistory
-        .map((history) => history.medicine)
-        .toList();
+    // List<String?> serializedTreatmentHistory = patient.medicalHistory
+    //     .map((history) => history.medicine)
+    //     .toList();
 
     return {
       'name': patient.name,
