@@ -31,7 +31,7 @@ class AuthController extends GetxController {
     });
   }
 
-  setUserForm(){
+  setUserForm() {
     String? userInfoString = box.read("user_info");
     if (userInfoString != null) {
       Map<String, dynamic> userInfoJson = jsonDecode(userInfoString);
@@ -43,7 +43,7 @@ class AuthController extends GetxController {
     await box.write("user_info", jsonEncode(data.user!.toJson()));
     await box.write("role", data.user?.role);
     await box.write("last_login_date_time",
-        DateFormat('dd-MM-yyyy h:m:s a').format(DateTime.now()));
+        DateFormat("dd-MM-yyyy h:mm a").format(DateTime.now()));
     await box.save();
   }
 
@@ -73,20 +73,19 @@ class AuthController extends GetxController {
     }
   }
 
-
-  // Getters  
-  get getId => userForm.value.id?? 0 ;  
+  // Getters
+  get getId => userForm.value.id ?? 0;
   get getProfilePicture => userForm.value.profilePicture ?? "null";
-  get getUsername => userForm.value.username ?? "null";  
-  get getEmail => userForm.value.email?? "null";  
-  get getMobileNo => userForm.value.mobileNo?? "null";  
-  get getAddress => userForm.value.address?? "null";  
+  get getUsername => userForm.value.username ?? "null";
+  get getEmail => userForm.value.email ?? "null";
+  get getMobileNo => userForm.value.mobileNo ?? "null";
+  get getAddress => userForm.value.address ?? "null";
   get getRoleUser => userForm.value.role;
 
   // Setters
   set setProfilePicture(String? value) => userForm.value.profilePicture = value;
   set setUsername(String? value) => userForm.value.username = value;
   set setEmail(String? value) => userForm.value.email = value;
-  set setMobileNo(String? value) => userForm.value.mobileNo = value;  
+  set setMobileNo(String? value) => userForm.value.mobileNo = value;
   set setAddress(String? value) => userForm.value.address = value;
 }
