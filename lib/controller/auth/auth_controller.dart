@@ -5,12 +5,19 @@ import 'package:get_storage/get_storage.dart';
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
 import 'package:safana_bekam_management_app/data/model/auth/auth_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
+import 'package:safana_bekam_management_app/data/model/user/user_roles_model.dart';
 
 class AuthController extends GetxController {
   final Rx<LoaderState> state = LoaderState.initial.obs;
   final userForm = UserModel().obs;
   final box = GetStorage("Auth");
-  String? role() => box.read("role");
+
+  List<dynamic>? userRoles() {
+    var roles = box.read("role");
+    print("Retrieved roles: $roles");
+    return roles;
+  }
+
   String? lastLoginDateTime() => box.read("last_login_date_time");
 
   @override
@@ -71,6 +78,30 @@ class AuthController extends GetxController {
       print('Authentication Check Error: $e');
       Get.offAllNamed('/login');
     }
+  }
+
+  bool canPerformAction({required String action}) {
+    // Check each role's permissions to see if the action is allowed
+    final roles = userRoles() ??
+        [userRolesModel.admin]; // Default to admin if no roles found
+    for (var role in roles.map((r) => r.toString()).toList()) {
+      // Ensure we treat as strings
+      print("Checking role: $role"); // Debug print for the current role
+      // Ensure the role exists in the permissions map
+      if (userRolesModel.rolePermissions.containsKey(role)) {
+        if (userRolesModel.rolePermissions[role]?.contains(action) == true) {
+          print("$action : able"); // Debug print for action permission
+          return true; // User has permission for the action
+        } else {
+          print(
+              "$action : unable in role $role"); // Debug print for action denial
+        }
+      } else {
+        print(
+            "Role $role not found in permissions map."); // Additional debug output
+      }
+    }
+    return false; // No permission found for the action
   }
 
   // Getters

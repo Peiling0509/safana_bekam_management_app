@@ -1,16 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
-import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
+import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 import 'package:safana_bekam_management_app/components/custom_check_box.dart';
-import 'package:safana_bekam_management_app/data/model/patients/medical_history_model.dart';
-import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/checkbox_type.dart';
-import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
+import 'package:safana_bekam_management_app/data/model/user/user_roles_model.dart';
 
 class UpdatePatientScreen extends StatefulWidget {
   //final String customerId;
@@ -26,6 +21,7 @@ class UpdatePatientScreen extends StatefulWidget {
 
 class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   final PatientController patientController = Get.put(PatientController());
+  final authController = Get.find<AuthController>();
 
   //Form A
   final fullNameController = TextEditingController();
@@ -90,8 +86,6 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
 
   final Map<String, TextEditingController> _controllers = {};
 
-  
-
   // This function will be called to prefill the data when the screen is loaded
   @override
   void initState() {
@@ -118,10 +112,11 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
       setState(() {
         // Reset all checkboxes first
         _checkboxStates.updateAll((key, value) => false);
-        
+
         // Update checkboxes and controllers based on medical history
         for (var history in patient.medicalHistory) {
-          if (history.condition != null && _checkboxStates.containsKey(history.condition)) {
+          if (history.condition != null &&
+              _checkboxStates.containsKey(history.condition)) {
             _checkboxStates[history.condition!] = true;
             if (_controllers.containsKey(history.condition)) {
               _controllers[history.condition]!.text = history.medicine ?? '';
@@ -247,14 +242,12 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     // Clear all checkboxes and text controllers
     // _checkboxStates.updateAll((key, value) => false);
     // for (var controller in _controllers.values) {
     //   controller.dispose();
     // }
     // _controllers.clear();
-
 
     return Scaffold(
         body: SafeArea(
@@ -575,7 +568,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
   }
 
   //Here is buildFormB
-   Widget _buildFormB() {
+  Widget _buildFormB() {
     return Obx(() {
       final patient = patientController.currentPatient.value;
       if (patient == null) {
@@ -594,8 +587,12 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
           ),
           const SizedBox(height: 15),
           _buildCheckBoxListTile(),
-          _buildSubmitButton(),
-          _buildDeleteButton()
+          if (authController.canPerformAction(
+              action: userAction.editInfoPatient))
+            _buildSubmitButton(),
+          if (authController.canPerformAction(
+              action: userAction.editInfoPatient))
+            _buildDeleteButton()
         ],
       );
     });
@@ -707,9 +704,9 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
               }
             });
 
-            print("---------------------------------------------------------------------------------------------This is a test: ${patientController.currentPatient.value.medicalHistory.length}");
+            print(
+                "---------------------------------------------------------------------------------------------This is a test: ${patientController.currentPatient.value.medicalHistory.length}");
 
-            
             //submit patient data
             patientController.updatePatient(patientId);
 
@@ -821,13 +818,12 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                           ),
                         ),
                       ),
-                      
                       GestureDetector(
-                        
                         onTap: () => {
-                          
                           //delete patient by id
-                          patientController.deletePatient(patientController.currentPatient.value.id.toString()),
+                          patientController.deletePatient(patientController
+                              .currentPatient.value.id
+                              .toString()),
                           //patientController.loadPatients(),
                           Get.back(),
                           Get.back(),

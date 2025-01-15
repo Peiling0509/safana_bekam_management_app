@@ -5,12 +5,14 @@ class CustomDateTimePickerField extends StatefulWidget {
   final String label;
   final String getter;
   final Function(String) setter;
+  final bool readOnly;
 
   const CustomDateTimePickerField(
       {super.key,
       required this.label,
       required this.getter,
-      required this.setter});
+      required this.setter,
+      this.readOnly = false});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -41,7 +43,7 @@ class _CustomDateTimePickerFieldState extends State<CustomDateTimePickerField> {
 
   @override
   Widget build(BuildContext context) {
-     if (widget.getter.isNotEmpty) {
+    if (widget.getter.isNotEmpty) {
       _controller.text = widget.getter;
       widget.setter(widget.getter);
     }
@@ -62,7 +64,11 @@ class _CustomDateTimePickerFieldState extends State<CustomDateTimePickerField> {
             //onChanged: widget.setter,
             controller: _controller,
             readOnly: true,
-            onTap: () => _selectDate(context),
+            onTap: () {
+              if (!widget.readOnly) {
+                _selectDate(context);
+              }
+            },
             decoration: InputDecoration(
               hintText: '//',
               suffixIcon: Icon(

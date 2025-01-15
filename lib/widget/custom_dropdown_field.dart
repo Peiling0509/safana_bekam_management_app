@@ -5,14 +5,15 @@ class CustomDropdownField extends StatefulWidget {
   final List<String> items;
   final String initialValue;
   final Function(String) onChanged;
+  final bool readOnly;
 
-  const CustomDropdownField({
-    super.key,
-    required this.label,
-    required this.items,
-    required this.onChanged,
-    this.initialValue = '--Pilih--',
-  });
+  const CustomDropdownField(
+      {super.key,
+      required this.label,
+      required this.items,
+      required this.onChanged,
+      this.initialValue = '--Pilih--',
+      this.readOnly = false});
 
   @override
   State<CustomDropdownField> createState() => _CustomDropdownFieldState();
@@ -32,17 +33,19 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
 
   @override
   Widget build(BuildContext context) {
-     _selected = widget.initialValue;
+    _selected = widget.initialValue;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: CompositedTransformTarget(
         link: layerLink,
         child: InkWell(
           onTap: () {
-            if (isDropdownOpen) {
-              _hideDropdown();
-            } else {
-              _showDropdown();
+            if (!widget.readOnly) {
+              if (isDropdownOpen) {
+                _hideDropdown();
+              } else {
+                _showDropdown();
+              }
             }
           },
           child: Column(

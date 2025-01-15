@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/patient_treatments_model.dart';
+import 'package:safana_bekam_management_app/data/model/user/user_roles_model.dart';
 import 'package:safana_bekam_management_app/screen/treatment/treatment_form.dart';
 
 class RecordTreatmentScreen extends StatefulWidget {
@@ -16,7 +18,7 @@ class RecordTreatmentScreen extends StatefulWidget {
   static void openAddTreatmentBottomSheet(BuildContext context) {
     showModalBottomSheet(
       enableDrag: false,
-      isDismissible : false,
+      isDismissible: false,
       context: context,
       useSafeArea: true,
       shape: const RoundedRectangleBorder(
@@ -43,6 +45,7 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
   }
 
   final controller = Get.find<TreatmentController>();
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +69,8 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
                 return _buildRecord();
             }
           }),
-          _buildAddButton(),
+          if (authController.canPerformAction(action: userAction.addTreatment))
+            _buildAddButton(),
         ],
       )),
     );
@@ -140,26 +144,28 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
                                       const TextStyle(color: Colors.blueGrey)),
                             ],
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                          if (authController.canPerformAction(
+                              action: userAction.printReport))
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                backgroundColor:
+                                    ConstantColor.primaryColor, // Button color
+                                minimumSize: const Size(80, 50),
                               ),
-                              backgroundColor:
-                                  ConstantColor.primaryColor, // Button color
-                              minimumSize: const Size(80, 50),
+                              onPressed: () {
+                                controller.setRecordId =
+                                    record.recordId.toString();
+                                controller.generateReport();
+                              },
+                              child: const Icon(
+                                Icons.print, // Use desired icon
+                                color: Colors.white, // Icon color
+                                size: 24.0, // Icon size
+                              ),
                             ),
-                            onPressed: () {
-                              controller.setRecordId =
-                                  record.recordId.toString();
-                              controller.generateReport();
-                            },
-                            child: const Icon(
-                              Icons.print, // Use desired icon
-                              color: Colors.white, // Icon color
-                              size: 24.0, // Icon size
-                            ),
-                          ),
                         ],
                       ),
                     ),

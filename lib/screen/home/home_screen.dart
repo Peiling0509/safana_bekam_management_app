@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/top_bar.dart';
+import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
+import 'package:safana_bekam_management_app/data/model/user/user_roles_model.dart';
 import 'package:safana_bekam_management_app/screen/patient/add_patient_form_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _searchQuery = '';
   final controller = Get.find<PatientController>();
+  final authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -112,25 +115,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.grey[600],
                 ),
               )),
-          ElevatedButton(
-            onPressed: () {
-              Get.to(
-                const AddPatientFormScreen(),
-                fullscreenDialog: true,
-                transition: Transition.rightToLeft,
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              backgroundColor: ConstantColor.primaryColor,
-              minimumSize: const Size(80, 40),
+          if (authController.canPerformAction(action: userAction.addNewPatient))
+            ElevatedButton(
+              onPressed: () {
+                Get.to(
+                  const AddPatientFormScreen(),
+                  fullscreenDialog: true,
+                  transition: Transition.rightToLeft,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                backgroundColor: ConstantColor.primaryColor,
+                minimumSize: const Size(80, 40),
+              ),
+              child: const Icon(
+                Icons.person_add,
+                color: Colors.white,
+              ),
             ),
-            child: const Icon(
-              Icons.person_add,
-              color: Colors.white,
-            ),
-          ),
         ],
       ),
     );
@@ -145,11 +149,13 @@ class _HomeScreenState extends State<HomeScreen> {
         case LoaderState.initial:
         case LoaderState.loading:
         case LoaderState.loaded:
-        final filteredPatients = controller.patients.value
-          .where((patient) =>
-              patient.name?.toLowerCase().startsWith(_searchQuery.toLowerCase()) ??
-              false)
-          .toList();
+          final filteredPatients = controller.patients.value
+              .where((patient) =>
+                  patient.name
+                      ?.toLowerCase()
+                      .startsWith(_searchQuery.toLowerCase()) ??
+                  false)
+              .toList();
 
           return ListView.builder(
             shrinkWrap: true,
@@ -176,8 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     child: ListTile(
-                      onTap: () => 
-                      Get.toNamed("/update_patient", arguments: patient.id.toString()),
+                      onTap: () => Get.toNamed("/update_patient",
+                          arguments: patient.id.toString()),
                       leading: CircleAvatar(
                         backgroundColor: ConstantColor.primaryColor,
                         child: const Icon(Icons.person, color: Colors.white),

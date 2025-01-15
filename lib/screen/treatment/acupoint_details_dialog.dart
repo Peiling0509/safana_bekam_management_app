@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
+import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 import 'package:safana_bekam_management_app/controller/treatment/acupoint_controller.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/acupoint_model.dart';
+import 'package:safana_bekam_management_app/data/model/user/user_roles_model.dart';
 import 'package:safana_bekam_management_app/widget/custom_button.dart';
 
 class AcupointDetailsDialog extends StatefulWidget {
@@ -20,6 +22,7 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
   late int _selectedBloodQuantityIndex; // To track selected blood quantity
 
   final controller = Get.find<AcupointController>();
+  final authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -208,9 +211,10 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                             child: Text(
                               "${index + 1}",
                               style: TextStyle(
-                                  color: _selectedBloodQuantityIndex == index + 1
-                                      ? ConstantColor.primaryColor
-                                      : Colors.grey),
+                                  color:
+                                      _selectedBloodQuantityIndex == index + 1
+                                          ? ConstantColor.primaryColor
+                                          : Colors.grey),
                             )),
                       )
                     ],
@@ -218,17 +222,22 @@ class _AcupointDetailsDialogState extends State<AcupointDetailsDialog> {
                 }),
               ),
               const SizedBox(height: 20),
-              CustomButton(
-                onPressed: () =>
-                    widget.acupoint?.point != null ? _kemaskini() : _simpan(),
-                title: widget.acupoint?.point != null ? 'Kemaskini' : 'Simpan',
-              ),
-              if (widget.acupoint?.point != null)
+              if (authController.canPerformAction(
+                  action: userAction.editTreatment))
                 CustomButton(
-                  backgroundColor: Colors.red,
-                  onPressed: () => _padam(),
-                  title: 'Padam',
+                  onPressed: () =>
+                      widget.acupoint?.point != null ? _kemaskini() : _simpan(),
+                  title:
+                      widget.acupoint?.point != null ? 'Kemas Kini' : 'Simpan',
                 ),
+              if (authController.canPerformAction(
+                  action: userAction.editTreatment))
+                if (widget.acupoint?.point != null)
+                  CustomButton(
+                    backgroundColor: Colors.red,
+                    onPressed: () => _padam(),
+                    title: 'Padam',
+                  ),
               TextButton(
                 onPressed: () => _viewDetails(),
                 child: Text(

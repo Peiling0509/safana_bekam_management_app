@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
+import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart';
 import 'package:safana_bekam_management_app/controller/treatment/acupoint_controller.dart';
 import 'package:safana_bekam_management_app/controller/treatment/treatment_controller.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/acupoint_model.dart';
+import 'package:safana_bekam_management_app/data/model/user/user_roles_model.dart';
 import 'package:safana_bekam_management_app/screen/treatment/acupoint_details_dialog.dart';
 import 'package:safana_bekam_management_app/widget/custom_button.dart';
 
@@ -22,6 +24,7 @@ class _RemarkScreenState extends State<RemarkScreen> {
 
   final controller = Get.find<AcupointController>();
   final treatmentController = Get.find<TreatmentController>();
+  final authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -185,27 +188,33 @@ class _RemarkScreenState extends State<RemarkScreen> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                controller.bodyPart.length,
-                (index) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color:
-                        _currentPageIndex == index ? Colors.black : Colors.grey,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  controller.bodyPart.length,
+                  (index) => Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentPageIndex == index
+                          ? Colors.black
+                          : Colors.grey,
+                    ),
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: CustomButton(
-                  title: "Simpan", onPressed: () => controller.simpan()),
-            ),
+            if (authController.canPerformAction(
+                action: userAction.editTreatment))
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: CustomButton(
+                    title: "Simpan", onPressed: () => controller.simpan()),
+              ),
           ],
         ),
       ),
@@ -234,15 +243,23 @@ class _RemarkScreenState extends State<RemarkScreen> {
                 fit: StackFit.expand,
                 children: [
                   GestureDetector(
-                    onTap: () => Get.snackbar(
-                      "Amaran !",
-                      "Sila tekan lama untuk menambah acupoint penanda",
-                      backgroundColor: Colors.red,
-                      colorText: Colors.white,
-                    ),
+                    onTap: () {
+                      if (authController.canPerformAction(
+                          action: userAction.editTreatment)) {
+                        Get.snackbar(
+                          "Amaran !",
+                          "Sila tekan lama untuk menambah acupoint penanda",
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                      }
+                    },
                     onLongPressStart: (details) {
-                      _handleLongPress(
-                          photoViewKey: photoViewKey, details: details);
+                      if (authController.canPerformAction(
+                          action: userAction.editTreatment)) {
+                        _handleLongPress(
+                            photoViewKey: photoViewKey, details: details);
+                      }
                     },
                     child: PhotoView(
                       key: photoViewKey,
