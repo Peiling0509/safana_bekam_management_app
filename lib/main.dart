@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
@@ -7,9 +8,14 @@ import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
 void main() async {
-  await GetStorage.init(); 
+  await GetStorage.init();
   await GetStorage.init("Login");
   await GetStorage.init("Auth");
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+     overlays: []
+  );
   runApp(const MainApp());
 }
 
@@ -19,10 +25,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       onInit: onInit,
       onDispose: onDispose,
-      title: 'Safana Bekam Management App',
+      title: 'Safana Bekam',
       color: ConstantColor.primaryColor,
       theme: ThemeData(
         primaryColor: ConstantColor.primaryColor,
@@ -30,7 +36,7 @@ class MainApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           backgroundColor: ConstantColor.primaryColor,
           centerTitle: true,
-            elevation: 0.0,
+          elevation: 0.0,
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           showSelectedLabels: false,
