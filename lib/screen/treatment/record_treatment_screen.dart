@@ -88,7 +88,7 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
             backgroundColor: Colors.white, // Button color
           ),
           onPressed: () {
-            controller.setRecordId = "";
+            controller.currentTreatmentId = "";
             RecordTreatmentScreen.openAddTreatmentBottomSheet(context);
           },
           child: Text(
@@ -112,8 +112,10 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
               return GestureDetector(
                 onTap: () {
                   //load record id first if want to view past record
-                  controller.setRecordId = record.recordId.toString();
+                  controller.currentTreatmentId = record.recordId.toString();
+
                   RecordTreatmentScreen.openAddTreatmentBottomSheet(context);
+                  controller.loadTreatmentDetails();
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
@@ -144,28 +146,55 @@ class _RecordTreatmentScreenState extends State<RecordTreatmentScreen> {
                                       const TextStyle(color: Colors.blueGrey)),
                             ],
                           ),
-                          if (authController.canPerformAction(
-                              action: userAction.printReport))
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // if (authController.canPerformAction(
+                              //     action: userAction.deleteTreatment))
+                              //   ElevatedButton(
+                              //     style: ElevatedButton.styleFrom(
+                              //       shape: RoundedRectangleBorder(
+                              //         borderRadius: BorderRadius.circular(20.0),
+                              //       ),
+                              //       backgroundColor: Colors.red, // Button color
+                              //       minimumSize: const Size(70, 50),
+                              //     ),
+                              //     onPressed: () {
+                              //       controller.currentTreatmentId =
+                              //           record.recordId.toString();
+                              //       controller.generateReport();
+                              //     },
+                              //     child: const Icon(
+                              //       Icons.delete, // Use desired icon
+                              //       color: Colors.white, // Icon color
+                              //       size: 24.0, // Icon size
+                              //     ),
+                              //   ),
+                              // const SizedBox(width: 10),
+                              if (authController.canPerformAction(
+                                  action: userAction.printReport))
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    backgroundColor: ConstantColor
+                                        .primaryColor, // Button color
+                                    minimumSize: const Size(70, 50),
+                                  ),
+                                  onPressed: () {
+                                    controller.currentTreatmentId =
+                                        record.recordId.toString();
+                                    controller.generateReport();
+                                  },
+                                  child: const Icon(
+                                    Icons.print, // Use desired icon
+                                    color: Colors.white, // Icon color
+                                    size: 24.0, // Icon size
+                                  ),
                                 ),
-                                backgroundColor:
-                                    ConstantColor.primaryColor, // Button color
-                                minimumSize: const Size(80, 50),
-                              ),
-                              onPressed: () {
-                                controller.setRecordId =
-                                    record.recordId.toString();
-                                controller.generateReport();
-                              },
-                              child: const Icon(
-                                Icons.print, // Use desired icon
-                                color: Colors.white, // Icon color
-                                size: 24.0, // Icon size
-                              ),
-                            ),
+                            ],
+                          )
                         ],
                       ),
                     ),

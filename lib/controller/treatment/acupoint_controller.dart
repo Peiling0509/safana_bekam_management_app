@@ -108,7 +108,7 @@ class AcupointController extends GetxController {
       bodyBack.value,
       face.value
     ];
-    Navigator.pop(Get.context!);
+    Get.back();
   }
 
   void addAcupoint({

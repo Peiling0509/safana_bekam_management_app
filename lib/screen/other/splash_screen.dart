@@ -15,21 +15,12 @@ class SplashScreen extends StatelessWidget {
       body: AnimatedBuilder(
         animation: controller.animationController,
         builder: (context, child) {
-          return Stack(
-            children: [
-              Positioned(
-                top: controller.positionAnimation.value, // Position animation
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Image.asset(
-                    AssetPath.logo,
-                    height: Get.height * 0.2,
-                    width: Get.width * 0.6,
-                  ),
-                ),
-              ),
-            ],
+          return Center(
+            child: Image.asset(
+              AssetPath.logo,
+              height: Get.height * 0.2,
+              width: Get.width * 0.6,
+            ),
           );
         },
       ),

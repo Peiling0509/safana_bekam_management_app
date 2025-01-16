@@ -16,7 +16,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final controller = Get.find<AuthController>();
 
-
   @override
   void initState() {
     super.initState();
@@ -24,7 +23,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       controller.setUserForm();
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +59,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         IconButton(
                             onPressed: () => Get.dialog(ConfirmDialog(
                                   title: "Log keluar",
-                                  content: "Adakah anda pasti mahu log keluar ?",
+                                  content:
+                                      "Adakah anda pasti mahu log keluar ?",
                                   onConfirm: () => controller.logout(),
                                 )),
                             icon: const Icon(
@@ -80,30 +79,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontSize: 25),
                     ),
                     const SizedBox(height: 10),
+                    // SizedBox(
+                    //   height: 120,
+                    //   width: 120,
+                    //   child: CircleAvatar(
+                    //     backgroundImage:
+                    //         NetworkImage(controller.getProfilePicture ?? ""),
+                    //     foregroundImage: AssetImage(AssetPath.imageNoFound),
+                    //     onBackgroundImageError: (exception, stackTrace) =>
+                    //         throw NetworkImageLoadException,
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 120,
                       width: 120,
                       child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(controller.getProfilePicture ?? ""),
-                        foregroundImage: AssetImage(AssetPath.imageNoFound),
-                        onBackgroundImageError: (exception, stackTrace) =>
-                            throw NetworkImageLoadException,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, size: 100, color: ConstantColor.primaryColor,),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      controller.getUsername,
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
-                    ),
+                    Obx(() => Text(
+                          controller.getUsername,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18),
+                        )),
                     const SizedBox(height: 5),
-                    Text(
-                      controller.getEmail,
-                      style: const TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300,
+                    Obx(
+                      () => Text(
+                        controller.getEmail,
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 25)
@@ -138,19 +148,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        _buildUserInfoTitle(
-                            title: "Perana",
-                            info: controller.getRoleUser != null
-                                ? controller.getRoleUser.join(", ")
-                                : "null"),
-                        _buildUserInfoTitle(
-                            title: "Name", info: controller.getUsername),
-                        _buildUserInfoTitle(
-                            title: "Email", info: controller.getEmail),
-                        _buildUserInfoTitle(
-                            title: "No Tel", info: controller.getMobileNo),
-                        _buildUserInfoTitle(
-                            title: "Alamat", info: controller.getAddress),
+                        Obx(
+                          () => _buildUserInfoTitle(
+                              title: "Perana",
+                              info: controller.getRoleUser != null
+                                  ? controller.getRoleUser.join(", ")
+                                  : "null"),
+                        ),
+                        Obx(
+                          () => _buildUserInfoTitle(
+                              title: "Name", info: controller.getUsername),
+                        ),
+                        Obx(
+                          () => _buildUserInfoTitle(
+                              title: "Email", info: controller.getEmail),
+                        ),
+                        Obx(
+                          () => _buildUserInfoTitle(
+                              title: "No Tel", info: controller.getMobileNo),
+                        ),
+                        Obx(
+                          () => _buildUserInfoTitle(
+                              title: "Alamat", info: controller.getAddress),
+                        ),
                       ],
                     ),
                   ),

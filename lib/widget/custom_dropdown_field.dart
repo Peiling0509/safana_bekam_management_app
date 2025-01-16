@@ -7,13 +7,14 @@ class CustomDropdownField extends StatefulWidget {
   final Function(String) onChanged;
   final bool readOnly;
 
-  const CustomDropdownField(
-      {super.key,
-      required this.label,
-      required this.items,
-      required this.onChanged,
-      this.initialValue = '--Pilih--',
-      this.readOnly = false});
+  const CustomDropdownField({
+    super.key,
+    required this.label,
+    required this.items,
+    required this.onChanged,
+    this.initialValue = '--Pilih--',
+    this.readOnly = false,
+  });
 
   @override
   State<CustomDropdownField> createState() => _CustomDropdownFieldState();
@@ -26,6 +27,28 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
   String _selected = "--Pilih--";
 
   @override
+  void initState() {
+    super.initState();
+    // Use the initial value or the first default option
+    _selected = widget.initialValue ?? '--Pilih--';
+
+    // // Ensure the initial value is in the list of items
+    // if (!widget.items.contains(_selected)) {
+    //   _selected = widget.items.first;
+    // }
+  }
+
+  @override
+  void didUpdateWidget(CustomDropdownField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      setState(() {
+        _selected = widget.initialValue;
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _overlayEntry?.remove();
     super.dispose();
@@ -33,7 +56,6 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
 
   @override
   Widget build(BuildContext context) {
-    _selected = widget.initialValue;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: CompositedTransformTarget(
@@ -101,7 +123,9 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
     final overlay = Overlay.of(context);
     _overlayEntry = _createOverlayEntry(size);
     overlay.insert(_overlayEntry!);
-    isDropdownOpen = true;
+    setState(() {
+      isDropdownOpen = true;
+    });
   }
 
   void _hideDropdown() {
@@ -113,7 +137,9 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
   }
 
   void _handleSelection(String item) {
-    _selected = item;
+    setState(() {
+      _selected = item;
+    });
     widget.onChanged(item);
     _hideDropdown();
   }

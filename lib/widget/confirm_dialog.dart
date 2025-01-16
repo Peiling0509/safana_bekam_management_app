@@ -1,16 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 
 class ConfirmDialog extends StatelessWidget {
-  final String title;
-  final String content;
-  final String? confirmText;
-  final String? cancelText;
-  final Function() onConfirm;
-  final Function? onCancel;
+  String title;
+  String content;
+  String? confirmText;
+  String? cancelText;
+  Function() onConfirm;
+  Function? onCancel;
 
-  const ConfirmDialog({
+  ConfirmDialog({
     super.key,
     required this.title,
     required this.content,

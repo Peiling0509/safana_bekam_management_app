@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:safana_bekam_management_app/constant/api.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/patient_treatments_model.dart';
 import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
@@ -19,7 +20,6 @@ class PatientsRepository {
         .toList();
   }
 
-  
   Future<PatientsModel> loadPatientById(String patientId) async {
     Map<String, dynamic> formData = {
       "patient_id": patientId,
@@ -47,10 +47,9 @@ class PatientsRepository {
 
     // Optional: Log response for debugging
     print("Response received: ${res}");
-}
+  }
 
   Future<void> updatePatient(PatientsModel patient) async {
-    
     if (patient.id == null) {
       throw Exception('Patient ID is required for update');
     }
@@ -58,10 +57,7 @@ class PatientsRepository {
     Map<String, dynamic> formData = _createPatientFormData(patient);
     formData['patient_id'] = patient.id;
 
-    final res = await provider.jsonPost(
-      API.UPDATE_PATIENT,
-      body: formData
-    );
+    final res = await provider.jsonPost(API.UPDATE_PATIENT, body: formData);
 
     // Check for non-200 status codes and only throw if necessary
     if (res.statusCode != 200 && res.statusCode != 201) {
@@ -70,7 +66,6 @@ class PatientsRepository {
 
     // Optional: Log response for debugging
     print("Response received: ${res}");
-
   }
 
   Future<void> deletePatientById(String patientId) async {
@@ -81,7 +76,7 @@ class PatientsRepository {
 
       final res = await provider.post(
         //'${API.DELETE_PATIENT}/$patientId',
-          API.DELETE_PATIENT,
+        API.DELETE_PATIENT,
         formData: formData,
       );
 
@@ -94,7 +89,7 @@ class PatientsRepository {
       print('Error deleting patient: $e');
       throw e;
     }
-  } 
+  }
 
   Map<String, dynamic> _createPatientFormData(PatientsModel patient) {
     // List<String?> serializedMedicalHistory = patient.medicalHistory
@@ -117,6 +112,7 @@ class PatientsRepository {
       'address': patient.address,
       'occupation': patient.occupation,
       'medical_history': patient.medicalHistory,
+      'created_date': DateFormat('yyyy-MM-dd').format(DateTime.now()),
       //'medical_history': serializedMedicalHistory,
       //'treatment_history': serializedTreatmentHistory,
     };

@@ -50,7 +50,7 @@ class TreatmentModel {
       patientId: json['patient_id'].toString(),
       therapistId: json['therapist_id'].toString(),
       frequency: json['frequency'].toString(),
-      createdData: json['created_data'],
+      createdData: json['created_date'],
       bloodPressureBefore: json['blood_pressure_before'],
       bloodPressureAfter: json['blood_pressure_after'],
       package: json['package'],

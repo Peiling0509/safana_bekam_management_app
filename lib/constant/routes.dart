@@ -4,7 +4,6 @@ import 'package:safana_bekam_management_app/binding/home/root_home_binding.dart'
 import 'package:safana_bekam_management_app/binding/login/login_binding.dart';
 import 'package:safana_bekam_management_app/binding/other/splash_binding.dart';
 import 'package:safana_bekam_management_app/binding/patient/patient_update_binding.dart';
-import 'package:safana_bekam_management_app/binding/profile/profile_binding.dart';
 import 'package:safana_bekam_management_app/binding/treatment/remark_binding.dart';
 import 'package:safana_bekam_management_app/binding/treatment/treatment_binding.dart';
 import 'package:safana_bekam_management_app/screen/home/notification_screen.dart';
@@ -39,8 +38,7 @@ List<GetPage> routes = [
   ),
   GetPage(
     name: '/edit_profile',
-    page: () => const EditProfileScreen(),
-    binding: ProfileBinding(),
+    page: () => const EditProfileScreen()//use authController
   ),
   GetPage(
     name: '/record_treatment',

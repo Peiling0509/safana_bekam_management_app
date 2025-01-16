@@ -64,41 +64,53 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     SizedBox(
                       height: 120,
                       width: 120,
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 60,
-                            backgroundImage:
-                                NetworkImage(controller.getProfilePicture),
-                            foregroundImage: AssetImage(AssetPath.imageNoFound),
-                            onBackgroundImageError: (exception, stackTrace) =>
-                                throw NetworkImageLoadException,
-                          ),
-                          // Edit Icon
-                          Positioned(
-                            bottom: 5, // Slight padding from the bottom.
-                            right: 5, // Slight padding from the right.
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors
-                                    .red, // Background color for contrast.
-                              ),
-                              padding: const EdgeInsets.all(
-                                  10), // Inner padding around the icon.
-                              child: const Icon(
-                                Icons.image,
-                                size: 20, // Icon size.
-                                color: Colors.white, // Icon color.
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 100,
+                          color: ConstantColor.primaryColor,
+                        ),
                       ),
                     ),
+                    // SizedBox(
+                    //   height: 120,
+                    //   width: 120,
+                    //   child: Stack(
+                    //     children: [
+                    //       CircleAvatar(
+                    //         radius: 60,
+                    //         backgroundImage:
+                    //             NetworkImage(controller.getProfilePicture),
+                    //         foregroundImage: AssetImage(AssetPath.imageNoFound),
+                    //         onBackgroundImageError: (exception, stackTrace) =>
+                    //             throw NetworkImageLoadException,
+                    //       ),
+                    //       // Edit Icon
+                    //       Positioned(
+                    //         bottom: 5, // Slight padding from the bottom.
+                    //         right: 5, // Slight padding from the right.
+                    //         child: Container(
+                    //           decoration: const BoxDecoration(
+                    //             shape: BoxShape.circle,
+                    //             color: Colors
+                    //                 .red, // Background color for contrast.
+                    //           ),
+                    //           padding: const EdgeInsets.all(
+                    //               10), // Inner padding around the icon.
+                    //           child: const Icon(
+                    //             Icons.image,
+                    //             size: 20, // Icon size.
+                    //             color: Colors.white, // Icon color.
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     const SizedBox(height: 10),
                     const Text(
-                      "Muat naik gambar profil anda",
+                      "Kemas kini profil anda",
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     const SizedBox(height: 20),
@@ -148,8 +160,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: CustomButton(
-                  title: "SIMPAN",
-                  onPressed: () {},
+                  title: "Kemas Kini",
+                  onPressed: () async {
+                    await controller.updateProfile().then((value) {
+                      Get.back();
+                      controller.setUserForm();
+                    });
+                  },
                 ),
               )
             ],

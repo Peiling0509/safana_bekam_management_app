@@ -11,7 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
 import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
-import 'package:safana_bekam_management_app/controller/treatment/acupoint_controller.dart';
 import 'package:safana_bekam_management_app/data/model/treatment/patient_treatments_model.dart';
 
 import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
@@ -30,13 +29,7 @@ class TreatmentController extends GetxController {
   Rx<TreatmentModel> treatment = TreatmentModel().obs;
   Rx<PatientsModel> patient = Rx<PatientsModel>(Get.arguments["patient"]);
 
-  final RxList<String> package = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5"
-  ].obs;
+  final RxList<String> package = ["1", "2", "3", "4", "5"].obs;
 
   final RxList<Map<String, String>> juruterapi = [
     {"id": "1", "name": "Orang 1"},
@@ -124,6 +117,8 @@ class TreatmentController extends GetxController {
     ),
   ];
 
+  String currentTreatmentId = "";
+
   @override
   void onInit() {
     super.onInit();
@@ -164,8 +159,9 @@ class TreatmentController extends GetxController {
   loadTreatmentDetails() async {
     try {
       state.value = LoaderState.loading;
+      if(currentTreatmentId == "") return state.value = LoaderState.failure;
       final data = await treatmentRepository.loadTreatmentDetails(
-          getPatientId, getRecordId);
+          getPatientId, currentTreatmentId);
       treatment.value = data.data!;
       state.value = LoaderState.loaded;
     } catch (e) {
@@ -175,7 +171,7 @@ class TreatmentController extends GetxController {
     }
   }
 
-  Future<void> submit() async {
+  Future<void> submitTreatment() async {
     try {
       state.value = LoaderState.loading;
       //Find current frequency
@@ -191,6 +187,36 @@ class TreatmentController extends GetxController {
     } catch (e) {
       state.value = LoaderState.failure;
       toast("Failed submission");
+      print(e.toString());
+    }
+  }
+
+  Future<void> updateTreatment() async {
+    try {
+      state.value = LoaderState.loading;
+
+      final res = await treatmentRepository.updateTreatment(treatment.value, currentTreatmentId);
+      toast(res.data["message"]);
+
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      state.value = LoaderState.failure;
+      toast("Failed update");
+      print(e.toString());
+    }
+  }
+
+  Future<void> deleteTreatment() async {
+    try {
+      state.value = LoaderState.loading;
+
+      final res = await treatmentRepository.deleteTreatment(currentTreatmentId);
+      toast(res.data["message"]);
+
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      state.value = LoaderState.failure;
+      toast("Failed update");
       print(e.toString());
     }
   }
@@ -680,15 +706,24 @@ class TreatmentController extends GetxController {
   }
 
   void navigateToRemark() {
+    
     //close bottom sheet first to refresh widget
-    Navigator.pop(Get.context!);
-    // if (!Get.isRegistered<AcupointController>()) {
-    //   Get.put(AcupointController());
-    // }
+    Get.back();
+
     Get.toNamed("/remark")?.then((_) {
       // Reopen bottom sheet after returning
       RecordTreatmentScreen.openAddTreatmentBottomSheet(Get.context!);
     });
+  }
+
+  //if record id exist was in edit mode
+  bool isEditMode() {
+    if (currentTreatmentId != "" || currentTreatmentId.isNotEmpty) {
+      return true;
+    }
+    print("current record id : " + currentTreatmentId);
+    return false;
+    
   }
 
   //FOR REPORT FIELDS
@@ -707,11 +742,9 @@ class TreatmentController extends GetxController {
       patient.value.occupation ?? "No Occupation Specified";
   List<dynamic> get getMedicalHistory => patient.value.medicalHistory ?? [];
 
-  
   String get getPatientId => patient.value.id.toString();
 
   // Getters for treatment
-  String get getRecordId => treatment.value.recordId ?? "";
   String get getTherapistId => treatment.value.therapistId ?? "";
   String get getFrequency => treatment.value.frequency ?? "";
   String get getCreatedData => treatment.value.createdData ?? "";
@@ -725,7 +758,6 @@ class TreatmentController extends GetxController {
   List<AcupointModel> get getRemarks => treatment.value.remarks ?? [];
 
   // Setters for treatment
-  set setRecordId(String value) => treatment.value.recordId = value;
   set setPatientId(String value) => treatment.value.patientId = value;
   set setTherapistId(String value) => treatment.value.therapistId = value;
   set setFrequency(String value) => treatment.value.frequency = value;

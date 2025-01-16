@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 
 class CustomDateTimePickerField extends StatefulWidget {
@@ -33,19 +34,48 @@ class _CustomDateTimePickerFieldState extends State<CustomDateTimePickerField> {
     );
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
-
       _controller.text =
-          '${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}';
-
+          '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
       widget.setter(_controller.text);
     }
+  }
+
+  String convertDateFormat(String inputDate) {
+    try {
+      // Parse the input date in DD/MM/YYYY format
+      final DateTime parsed = DateFormat('dd/MM/yyyy').parse(inputDate);
+      // Format it to YYYY-MM-DD
+      return DateFormat('yyyy-MM-dd').format(parsed);
+    } catch (e) {
+      print('Error converting date format: $e');
+      return inputDate;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.getter.isNotEmpty) {
-      _controller.text = widget.getter;
-      widget.setter(widget.getter);
+      // Convert the date format if it's in DD/MM/YYYY format
+      _controller.text = convertDateFormat(widget.getter);
+      widget.setter(_controller.text);
+      try {
+        selectedDate = DateTime.parse(_controller.text);
+      } catch (e) {
+        print('Error parsing initial date: $e');
+      }
+    } else {
+      print("Date was empty");
     }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -61,7 +91,7 @@ class _CustomDateTimePickerFieldState extends State<CustomDateTimePickerField> {
           ),
           const SizedBox(height: 8),
           TextFormField(
-            //onChanged: widget.setter,
+            //onChanged:(value) => widget.getter,
             controller: _controller,
             readOnly: true,
             onTap: () {

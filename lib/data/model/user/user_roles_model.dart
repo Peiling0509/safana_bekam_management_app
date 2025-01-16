@@ -12,7 +12,8 @@ class userRolesModel {
     ],
     userRolesModel.therapists: [
       userAction.addTreatment,
-      userAction.editTreatment
+      userAction.editTreatment,
+      userAction.deleteTreatment,
     ],
   };
 }
@@ -26,4 +27,5 @@ class userAction {
   //therapists
   static const String addTreatment = 'addTreatment';
   static const String editTreatment = 'editTreatment';
+  static const String deleteTreatment = 'deleteTreatment';
 }

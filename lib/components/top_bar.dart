@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/routes/default_transitions.dart';
 import 'package:safana_bekam_management_app/constant/asset_path.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:get/get.dart';
@@ -7,15 +6,27 @@ import 'package:safana_bekam_management_app/controller/auth/auth_controller.dart
 import 'package:safana_bekam_management_app/screen/home/notification_screen.dart';
 import 'package:safana_bekam_management_app/widget/confirm_dialog.dart';
 
-class TopBar extends StatelessWidget {
+class TopBar extends StatefulWidget {
   const TopBar({
     super.key,
   });
 
   @override
+  State<TopBar> createState() => _TopBarState();
+}
+
+class _TopBarState extends State<TopBar> {
+  final controller = Get.find<AuthController>();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.setUserForm();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AuthController>();
-    controller.setUserForm();
     return Stack(
       children: [
         Container(
@@ -66,15 +77,17 @@ class TopBar extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30, left: 30),
-                child: Text(
-                  "Hai, ${controller.getUsername}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1,
+              Obx(
+                () => Padding(
+                  padding: const EdgeInsets.only(top: 30, left: 30),
+                  child: Text(
+                    "Hai, ${controller.getUsername}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ),
               ),

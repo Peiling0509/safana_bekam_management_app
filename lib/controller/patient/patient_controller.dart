@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';

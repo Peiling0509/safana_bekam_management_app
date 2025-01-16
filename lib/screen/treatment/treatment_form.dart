@@ -19,22 +19,23 @@ class TreatmentForm extends StatefulWidget {
 class _TreatmentFormState extends State<TreatmentForm> {
   final controller = Get.find<TreatmentController>();
   final authController = Get.find<AuthController>();
+  late bool isReadOnly;
 
   @override
   void initState() {
     super.initState();
     //if in edited mode
-    if (controller.getRecordId.isNotEmpty || controller.getRecordId != "") {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        controller.loadTreatmentDetails();
-      });
-    }
+    // if (controller.isEditMode()) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     controller.loadTreatmentDetails();
+    //   });
+    // }
+    isReadOnly =
+        !authController.canPerformAction(action: userAction.editTreatment);
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isReadOnly =
-        !authController.canPerformAction(action: userAction.editTreatment);
     return Scaffold(
       backgroundColor: Colors.transparent,
       // Use resizeToAvoidBottomInset to handle keyboard
@@ -60,9 +61,11 @@ class _TreatmentFormState extends State<TreatmentForm> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Rawatan Baru',
-                  style: TextStyle(
+                Text(
+                  controller.isEditMode()
+                      ? "Kemas Kini Rawatan"
+                      : 'Rawatan Baru',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -89,7 +92,6 @@ class _TreatmentFormState extends State<TreatmentForm> {
                         setter: (e) => controller.setCreatedData = e)),
                     Obx(
                       () => CustomDropdownField(
-                        readOnly: isReadOnly,
                         label: "Pakej",
                         items: controller.package,
                         initialValue: controller.getPackage != ""
@@ -125,7 +127,9 @@ class _TreatmentFormState extends State<TreatmentForm> {
                       ],
                     ),
                     Obx(() => CustomTextField(
-                        onTap: () => controller.navigateToRemark(),
+                        onTap: () {
+                          controller.navigateToRemark();
+                        },
                         readOnly: true,
                         label: "Catatan",
                         hintText: "--Pilih--",
@@ -140,56 +144,83 @@ class _TreatmentFormState extends State<TreatmentForm> {
                         maxLines: 5,
                         getter: controller.getHealthComplications,
                         setter: (e) => controller.setHealthComplications = e)),
-                    Obx(() => CustomDropdownField(
-                        readOnly: isReadOnly,
-                        label: "Juruterapi",
-                        items: controller.juruterapi
-                            .map((e) => e['name'] as String)
-                            .toList(),
-                        initialValue: controller.juruterapi.firstWhere(
-                            (element) =>
-                                element['id'] == controller.getTherapistId,
-                            orElse: () => {'name': '--Pilih--'})['name']!,
-                        onChanged: (String value) {
-                          final selectedTherapist = controller.juruterapi
-                              .firstWhere(
-                                  (element) => element['name'] == value);
-                          controller.setTherapistId = selectedTherapist['id']!;
-                        })),
+                    // Obx(() => CustomDropdownField(
+                    //     label: "Juruterapi",
+                    //     items: controller.juruterapi
+                    //         .map((e) => e['name'] as String)
+                    //         .toList(),
+                    //     initialValue: controller.juruterapi.firstWhere(
+                    //         (element) =>
+                    //             element['id'] == controller.getTherapistId,
+                    //         orElse: () => {'name': '--Pilih--'})['name']!,
+                    //     onChanged: (String value) {
+                    //       final selectedTherapist = controller.juruterapi
+                    //           .firstWhere(
+                    //               (element) => element['name'] == value);
+                    //       controller.setTherapistId = selectedTherapist['id']!;
+                    //     })),
                     Obx(() => CustomTextField(
                         readOnly: isReadOnly,
                         label: "Komen",
                         maxLines: 5,
                         getter: controller.getComments,
                         setter: (e) => controller.setComments = e)),
-                    // Add extra padding at the bottom to ensure last fields are visible
+                    
                   ],
                 ),
               ),
             ),
             if (authController.canPerformAction(
+                action: userAction.addTreatment))
+              Visibility(
+                visible: !controller.isEditMode(),
+                child: CustomButton(
+                  title: 'Simpan',
+                  onPressed: () {
+                    Get.dialog(
+                      ConfirmDialog(
+                        title: "Simpan Rawatan",
+                        content: 'Adakah anda pastikan simpan rawatan baru ?',
+                        onConfirm: () async {
+                          await controller.submitTreatment().then((value) {
+                            //close the confirm dialog
+                            Get.back();
+                            //close the treatment form
+                            Get.back();
+                            controller.loadTreatments();
+                          });
+                          //Get.back();
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            if (authController.canPerformAction(
                 action: userAction.editTreatment))
-              CustomButton(
-                title: controller.getRecordId != "" ? "Kemas Kini" : 'Simpan',
-                onPressed: () {
-                  Get.dialog(
-                    ConfirmDialog(
-                      title: 'Rawatan Baru',
-                      content: 'Adakah anda pastikan simpan rawatan baru ?',
-                      onConfirm: () async {
-                        await controller.submit().then((value) {
-                          //close the confirm dialog
-                          Get.back();
-                          //close the treatment form
-                          Get.back();
-                          controller.loadTreatments();
-                        });
-                        //Get.back();
-                      },
-                    ),
-                  );
-                  //controller.submit();
-                },
+              Visibility(
+                visible: controller.isEditMode(),
+                child: CustomButton(
+                  title: 'Kemas kini',
+                  onPressed: () {
+                    Get.dialog(
+                      ConfirmDialog(
+                        title: "Kemas Kini Rawatan",
+                        content:
+                            'Adakah anda pastikan kemas kini rawatan ini ?',
+                        onConfirm: () async {
+                          await controller.updateTreatment().then((value) {
+                            //close the confirm dialog
+                            Get.back();
+                            //close the treatment form
+                            Get.back();
+                            controller.loadTreatments();
+                          });
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             CustomButton(
               backgroundColor: Colors.red,
@@ -214,7 +245,6 @@ class _TreatmentFormState extends State<TreatmentForm> {
                 } else {
                   Get.back();
                 }
-                //controller.submit();
               },
             ),
           ],

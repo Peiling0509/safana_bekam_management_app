@@ -3,9 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
+import 'package:safana_bekam_management_app/components/toast.dart';
 import 'package:safana_bekam_management_app/data/model/auth/auth_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 import 'package:safana_bekam_management_app/data/model/user/user_roles_model.dart';
+import 'package:safana_bekam_management_app/data/respository/user_repository.dart';
 
 class AuthController extends GetxController {
   final Rx<LoaderState> state = LoaderState.initial.obs;
@@ -19,6 +21,8 @@ class AuthController extends GetxController {
   }
 
   String? lastLoginDateTime() => box.read("last_login_date_time");
+
+  final repository = UserRepository();
 
   @override
   void onInit() {
@@ -36,13 +40,21 @@ class AuthController extends GetxController {
           break;
       }
     });
+    checkAuthenticationStatus();
   }
 
   setUserForm() {
-    String? userInfoString = box.read("user_info");
-    if (userInfoString != null) {
-      Map<String, dynamic> userInfoJson = jsonDecode(userInfoString);
-      userForm.value = UserModel.fromJson(userInfoJson);
+    try {
+      state.value = LoaderState.loading;
+      String? userInfoString = box.read("user_info");
+      if (userInfoString != null) {
+        Map<String, dynamic> userInfoJson = jsonDecode(userInfoString);
+        userForm.value = UserModel.fromJson(userInfoJson);
+      }
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      state.value = LoaderState.failure;
+      print(e.toString());
     }
   }
 
@@ -52,6 +64,7 @@ class AuthController extends GetxController {
     await box.write("last_login_date_time",
         DateFormat("dd-MM-yyyy h:mm a").format(DateTime.now()));
     await box.save();
+    setUserForm();
   }
 
   Future<void> logout() async {
@@ -60,6 +73,23 @@ class AuthController extends GetxController {
     await box.save();
     Get.offAllNamed("/login");
     state.value = LoaderState.loaded;
+  }
+
+  Future<void> updateProfile() async {
+    try {
+      state.value = LoaderState.loading;
+      final res = await repository.updateUser(userForm.value);
+      toast(res.data["message"]);
+      // Update user info in GetStorage
+      await box.write("user_info",
+          jsonEncode(userForm.value.toJson())); // Save updated user info
+      await box.save();
+      state.value = LoaderState.loaded;
+    } catch (e) {
+      state.value = LoaderState.failure;
+      toast("Failed update profile");
+      print(e.toString());
+    }
   }
 
   // Method to check authentication status
@@ -86,26 +116,24 @@ class AuthController extends GetxController {
         [userRolesModel.admin]; // Default to admin if no roles found
     for (var role in roles.map((r) => r.toString()).toList()) {
       // Ensure we treat as strings
-      print("Checking role: $role"); // Debug print for the current role
+      //print("Checking role: $role"); // Debug print for the current role
       // Ensure the role exists in the permissions map
       if (userRolesModel.rolePermissions.containsKey(role)) {
         if (userRolesModel.rolePermissions[role]?.contains(action) == true) {
-          print("$action : able"); // Debug print for action permission
+          //print("$action : able"); // Debug print for action permission
           return true; // User has permission for the action
         } else {
-          print(
-              "$action : unable in role $role"); // Debug print for action denial
+          //print("$action : unable in role $role"); // Debug print for action denial
         }
       } else {
-        print(
-            "Role $role not found in permissions map."); // Additional debug output
+        //print("Role $role not found in permissions map."); // Additional debug output
       }
     }
     return false; // No permission found for the action
   }
 
   // Getters
-  get getId => userForm.value.id ?? 0;
+  get getId => userForm.value.id;
   get getProfilePicture => userForm.value.profilePicture ?? "null";
   get getUsername => userForm.value.username ?? "null";
   get getEmail => userForm.value.email ?? "null";
