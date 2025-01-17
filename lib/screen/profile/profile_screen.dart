@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Obx(
                           () => _buildUserInfoTitle(
-                              title: "Perana",
+                              title: "Peranan",
                               info: controller.getRoleUser != null
                                   ? controller.getRoleUser.join(", ")
                                   : "null"),
