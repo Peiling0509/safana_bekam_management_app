@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
-import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
-import 'package:safana_bekam_management_app/constant/color.dart';
-import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 import 'package:safana_bekam_management_app/screen/patient/add_patient_form_B.dart';
-import 'package:safana_bekam_management_app/widget/custome_textfield.dart';
 
 class AddPatientFormScreen extends StatefulWidget {
   const AddPatientFormScreen({super.key});

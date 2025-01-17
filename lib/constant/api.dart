@@ -26,5 +26,8 @@ class API {
   static String SUBMIT_TREATMENT = "$DOMAIN_URL/submit-treatment";
   static String UPDATE_TREATMENT = "$DOMAIN_URL/update-treatment-record";
   static String DELETE_TREATMENT = "$DOMAIN_URL/delete-record";
+
+  //NOTIFICATIONS
+  static String EXPORT_NOTIFICATIONS = "$DOMAIN_URL/notifications";
   
 }
