@@ -755,7 +755,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
             minimumSize: Size(Get.width, 48),
           ),
           child: const Text(
-            "Delete",
+            "Padam",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -786,7 +786,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                     height: 5,
                   ),
                   Text(
-                    "Confirm Delete?",
+                    "Padam ?",
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w400,
@@ -842,7 +842,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                               borderRadius: BorderRadius.circular(15),
                               color: Colors.red),
                           child: const Text(
-                            "Delete",
+                            "Padam",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
