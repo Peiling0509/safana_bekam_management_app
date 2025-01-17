@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:safana_bekam_management_app/data/model/patients/medical_history_model.dart';
 
 class PatientsModel {
@@ -84,9 +82,6 @@ class PatientsModel {
 
 
   Map<String, dynamic> toJson() {
-    // Separate medical conditions and treatments
-    List<String> medicalConditions = medicalHistory.map((history) => history.condition ?? "").toList();
-    List<String> treatments = medicalHistory.map((history) => history.medicine ?? "").toList();
 
     return {
       "id": id,

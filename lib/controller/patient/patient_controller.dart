@@ -271,7 +271,7 @@ class PatientController extends GetxController {
       );
       state.value = LoaderState.loaded;
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       state.value = LoaderState.failure;
     }
   }
@@ -363,9 +363,9 @@ class PatientController extends GetxController {
       );
     } catch (e) {
       toast("Failed to add patient");
-      print("This is the ADD PATIENT ERROR: " + e.toString());
-      print("Condition: ${currentPatient.value.medicalHistory.first.condition}");
-      print("Medicine: ${currentPatient.value.medicalHistory.first.medicine}");
+      //print("This is the ADD PATIENT ERROR: " + e.toString());
+      //print("Condition: ${currentPatient.value.medicalHistory.first.condition}");
+      //print("Medicine: ${currentPatient.value.medicalHistory.first.medicine}");
       state.value = LoaderState.failure;
     }
   }
@@ -396,7 +396,7 @@ class PatientController extends GetxController {
       );
     } catch (e) {
       toast("Failed to update patient");
-      print("This is the UPDATE PATIENT ERROR: " + e.toString());
+      //print("This is the UPDATE PATIENT ERROR: " + e.toString());
       state.value = LoaderState.failure;
     }
   }
@@ -410,7 +410,7 @@ class PatientController extends GetxController {
       state.value = LoaderState.loaded;
     } catch (e) {
       toast("Failed to delete patient");
-      print("This is the DELETE ERROR: " + e.toString());
+      //print("This is the DELETE ERROR: " + e.toString());
       state.value = LoaderState.failure;
     }
   }
@@ -424,7 +424,7 @@ class PatientController extends GetxController {
   }
 
   void removeMedicalHistory(int index) {
-    currentPatient.value.medicalHistory!.removeAt(index);
+    currentPatient.value.medicalHistory.removeAt(index);
     currentPatient.refresh();
   }
 

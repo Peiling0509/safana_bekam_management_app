@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/add_customer_form_top_bar.dart';
 import 'package:safana_bekam_management_app/components/custom_check_box.dart';
-import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/constant/color.dart';
 import 'package:safana_bekam_management_app/data/model/shared/checkbox_type.dart';
-import 'package:safana_bekam_management_app/screen/home/home_screen.dart';
-import 'package:safana_bekam_management_app/screen/login/login_screen.dart';
 import 'package:safana_bekam_management_app/controller/patient/patient_controller.dart';
 
 class AddPatientFormScreen_B extends StatefulWidget {

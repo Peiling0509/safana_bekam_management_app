@@ -1,9 +1,6 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:safana_bekam_management_app/constant/api.dart';
-import 'package:safana_bekam_management_app/data/model/treatment/patient_treatments_model.dart';
 import 'package:safana_bekam_management_app/data/model/patients/patients_model.dart';
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
