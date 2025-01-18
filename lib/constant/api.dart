@@ -13,6 +13,7 @@ class API {
   static String EXPORT_PATIENTS_MONTHLY = "$DOMAIN_URL/check-patients-monthly";
   static String EXPORT_TOTAL_PATIENTS = "$DOMAIN_URL/total-patients";
   static String EXPORT_TREATMENT_DAILY = "$DOMAIN_URL/treatment-records-daily";
+  static String EXPORT_PATIENTS_MONTHLY_SORTED = "$DOMAIN_URL/check-patients-monthly-sorted?year=";
 
   //PATIENTS
   static String EXPORT_PATIENTS = "$DOMAIN_URL/export-patients";

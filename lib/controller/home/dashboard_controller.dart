@@ -1,5 +1,7 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/loading_dialog.dart';
+import 'package:safana_bekam_management_app/data/model/dashboard/patients_montht_sorted_model.dart';
 import 'package:safana_bekam_management_app/data/model/shared/loader_state_model.dart';
 import 'package:safana_bekam_management_app/data/respository/dashboard_repository.dart';
 
@@ -12,6 +14,9 @@ class DashboardController extends GetxController {
   Rx<String> newPatientDailyCount = "null".obs;
   Rx<String> newPatientMonthlyCount = "null".obs;
   Rx<String> newTreatmentDailyCount = "null".obs;
+
+  RxList<FlSpot> spotsPelangganHarini = <FlSpot>[].obs;
+  RxList<FlSpot> spotsPelangganBaharu = <FlSpot>[].obs;
 
   @override
   void onInit() {
@@ -38,6 +43,22 @@ class DashboardController extends GetxController {
       newPatientDailyCount.value = await repository.loadPatientsDaily();
       newPatientMonthlyCount.value = await repository.loadPatientsMonthly();
       newTreatmentDailyCount.value = await repository.loadTreatmentsDaily();
+
+      //load the spots on line char bar
+      PatientMonthlySortedModel spotsData =
+          await repository.loadPatientsMonthlySorted();
+
+      // Convert the data to FlSpot format
+      spotsPelangganHarini.value = spotsData.data!.asMap().entries.map((entry) {
+        return FlSpot(
+            entry.key.toDouble(), entry.value.newTreatmentRecords.toDouble());
+      }).toList();
+
+      spotsPelangganBaharu.value = spotsData.data!.asMap().entries.map((entry) {
+        return FlSpot(
+            entry.key.toDouble(), entry.value.newPatientsRegistered.toDouble());
+      }).toList();
+
       state.value = LoaderState.loaded;
     } catch (e) {
       print('Error loading dashboard: ${e.toString()}');

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/constant/api.dart';
+import 'package:safana_bekam_management_app/data/model/dashboard/patients_montht_sorted_model.dart';
 import 'package:safana_bekam_management_app/data/provider/api_provider.dart';
 
 class DashboardRepository{
@@ -39,5 +40,14 @@ class DashboardRepository{
     if (res.data["status"] != "success") throw res;
 
     return res.data["count"].toString();
+  }
+
+   Future<PatientMonthlySortedModel> loadPatientsMonthlySorted() async {
+   
+    final res = await provider.get("${API.EXPORT_PATIENTS_MONTHLY_SORTED}${DateTime.now().year}");//get current year
+
+    if (res.statusCode != 200 && res.statusCode != 201) throw res;
+
+    return PatientMonthlySortedModel.fromJson(res.data);
   }
 }

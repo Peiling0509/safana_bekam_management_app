@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:safana_bekam_management_app/components/custom_scaffold.dart';
 import 'package:safana_bekam_management_app/components/top_bar.dart';
@@ -225,7 +226,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-          child:  Padding(
+          child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,8 +238,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Expanded(
                         child: Text(
                       controller.newTreatmentDailyCount.value,
-                      style:
-                          const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ))
                   ],
                 ),
@@ -287,8 +288,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Expanded(
                         child: Text(
                       controller.newPatientDailyCount.value,
-                      style:
-                          const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ))
                   ],
                 ),
@@ -370,15 +371,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     lineBarsData: [
                       //pelangan harini
                       LineChartBarData(
-                        spots: [
-                          FlSpot(0, 0),
-                          FlSpot(1, 1),
-                          FlSpot(2, 3),
-                          FlSpot(3, 8),
-                          FlSpot(4, 4),
-                          FlSpot(5, 5),
-                          FlSpot(6, 6),
-                        ],
+                        spots: controller.spotsPelangganHarini,
                         color: ConstantColor.primaryColor,
                         barWidth: 2,
                         isStrokeCapRound: true,
@@ -386,15 +379,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       //pelangan baharu
                       LineChartBarData(
-                        spots: [
-                          FlSpot(0, 0),
-                          FlSpot(1, 3),
-                          FlSpot(2, 1),
-                          FlSpot(3, 2),
-                          FlSpot(4, 6),
-                          FlSpot(5, 7),
-                          FlSpot(6, 8),
-                        ],
+                        spots: controller.spotsPelangganBaharu,
                         color: Colors.blue,
                         barWidth: 2,
                         isStrokeCapRound: true,
@@ -477,11 +462,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _emptyWidget() {
-    return const Expanded(
+    return Expanded(
       child: Center(
-        child: Text(
-          "Somethings wrong, please try again...",
-          style: TextStyle(color: Colors.white, fontSize: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Somethings wrong, please try again...",
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
+            GestureDetector(
+                child: const Icon(Icons.refresh, color: Colors.blue, size: 40),
+                onTap: () => controller.load())
+          ],
         ),
       ),
     );
