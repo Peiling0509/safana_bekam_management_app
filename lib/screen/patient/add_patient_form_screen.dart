@@ -38,6 +38,7 @@ class _AddPatientFormScreenState extends State<AddPatientFormScreen> {
     'Malay',
     'Cina',
     'Bidayuh',
+    'India',
     'Lain-lain',
   ];
 
@@ -46,8 +47,15 @@ class _AddPatientFormScreenState extends State<AddPatientFormScreen> {
     'Sarawak',
     'Sabah',
     'Selangor',
-    'Penang',
+    'Kelantan',
+    'Kedah',
+    'Melaka',
+    'Terengganu',
     'Johor',
+    'Pulau Pinang',
+    'Pahang',
+    'Perak',
+    'Perlis',
     'Lain-lain',
   ];
 

@@ -29,12 +29,14 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
     'Takut Darah': false,
     'Migrain': false,
     'Kolestrol': false,
+    'Gastrik': false,
     'Gout': false,
     'Masalah Hati': false,
     'Masalah buah pinggang': false,
     'Masalah Tulang belakang & Saraf': false,
     'Masalah Pendarahan': false,
     'Pembedahan': false,
+    'Lain-lain': false,
   };
 
   final Map<String, TextEditingController> _controllers = {};
@@ -159,8 +161,12 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                   child: TextField(
                     controller: _controllers[key],
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                      hintText: 'Pengambilan Ubat',
+                      hintText: key == 'Lain-lain' 
+                      ? 'Latarbelakang Kesihatan Lain'
+                      : 'Pengambilan Ubat',
                       hintStyle:
                           TextStyle(color: Colors.black.withOpacity(0.3)),
                       border: OutlineInputBorder(
@@ -168,7 +174,7 @@ class _AddPatientFormScreen_B_State extends State<AddPatientFormScreen_B> {
                       ),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey)),
+                          borderSide: const BorderSide(color: Colors.grey)),
                       filled: true,
                       fillColor: ConstantColor.backgroundColor,
                     ),

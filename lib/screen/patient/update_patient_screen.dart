@@ -50,6 +50,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
     'Malay',
     'Cina',
     'Bidayuh',
+    'India',
     'Lain-lain',
   ];
 
@@ -58,8 +59,15 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
     'Sarawak',
     'Sabah',
     'Selangor',
-    'Penang',
+    'Kelantan',
+    'Kedah',
+    'Melaka',
+    'Terengganu',
     'Johor',
+    'Pulau Pinang',
+    'Pahang',
+    'Perak',
+    'Perlis',
     'Lain-lain',
   ];
 
@@ -76,12 +84,14 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
     'Takut Darah': false,
     'Migrain': false,
     'Kolestrol': false,
+    'Gastrik': false,
     'Gout': false,
     'Masalah Hati': false,
     'Masalah buah pinggang': false,
     'Masalah Tulang belakang & Saraf': false,
     'Masalah Pendarahan': false,
     'Pembedahan': false,
+    'Lain-lain': false,
   };
 
   final Map<String, TextEditingController> _controllers = {};
@@ -647,8 +657,12 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                   child: TextField(
                     controller: _controllers[key],
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                      hintText: 'Pengambilan Ubat',
+                      hintText: key == 'Lain-lain' 
+                      ? 'Latarbelakang Kesihatan Lain'
+                      : 'Pengambilan Ubat',
                       hintStyle:
                           TextStyle(color: Colors.black.withOpacity(0.3)),
                       border: OutlineInputBorder(
@@ -656,7 +670,7 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
                       ),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey)),
+                          borderSide: const BorderSide(color: Colors.grey)),
                       filled: true,
                       fillColor: ConstantColor.backgroundColor,
                     ),
@@ -704,8 +718,8 @@ class _UpdatePatientScreenState extends State<UpdatePatientScreen> {
               }
             });
 
-            print(
-                "---------------------------------------------------------------------------------------------This is a test: ${patientController.currentPatient.value.medicalHistory.length}");
+            //print(
+            //    "---------------------------------------------------------------------------------------------This is a test: ${patientController.currentPatient.value.medicalHistory.length}");
 
             //submit patient data
             patientController.updatePatient(patientId);
