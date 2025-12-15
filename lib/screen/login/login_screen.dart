@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               ),
-              _buildButton('LOG MASUK', () => controller.submit()),
+              _buildButton('LOGIN', () => controller.submit()),
             ],
           ),
         ),
