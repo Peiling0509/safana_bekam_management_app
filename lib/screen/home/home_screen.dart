@@ -217,4 +217,17 @@ class _HomeScreenState extends State<HomeScreen> {
   //    child: const Icon(Icons.newPatient)
   //  )
   //}
+
+  //This is a simulation of smcm (Add medical-notes-preview below the patient records)
+  // Widget _addPreview{
+  //  return const Center(
+  //    child: const Text(
+  //      "This is the most recent medical review",
+  //      style: TextStyle( 
+  //        fontSize: 16,
+  //       fontWeight: FontWeight.w400,
+  //      )
+  //    )
+  //  )
+  //}
 }

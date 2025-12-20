@@ -4,4 +4,6 @@ class ConstantColor{
     //static dynamic primaryColor = Colors.blue[900];
     static dynamic backgroundColor = const Color(0xffe9f3fd);
     
+    // This is a simulation of smcm (Add font color)
+    // static dynamic previewFontColor = const Color.fromARGB(255, 0, 0, 150);
 }
