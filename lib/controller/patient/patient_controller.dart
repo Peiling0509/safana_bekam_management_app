@@ -342,6 +342,15 @@ class PatientController extends GetxController {
   void submitPatient() async {
     try {
       state.value = LoaderState.loading;
+
+      // NEW CODE (Fixed)
+      // Updated regex to allow 011 (digit 1)
+      // if (!RegExp(r'^01[0-9]-[0-9]{7,8}$').hasMatch(phone)) {
+      //   Get.snackbar("Error", "Invalid phone number format");
+      //   return;
+      // }
+
+
       await repository.submitPatient(currentPatient.value);
       toast("Patient added");
 
