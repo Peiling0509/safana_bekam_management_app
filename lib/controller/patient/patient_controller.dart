@@ -460,5 +460,13 @@ class PatientController extends GetxController {
   //void addFeature() {
   //  addCategoryLabel();
   //}
+
+  //This is a simulation for smcm project (get medical notes preview)
+  //void getMedicalNotesPreview() {
+  //  currentPatient.value.medicalNote = repository.load(medicalNote);
+  //  
+  //
+  //
+  //}
 }
 
