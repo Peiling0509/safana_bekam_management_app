@@ -455,5 +455,10 @@ class PatientController extends GetxController {
     currentPatient.value.occupation = '';
     currentPatient.value.medicalHistory = [];
   }
+
+  //This is a simulation for SMCM project (check label status)
+  //void addFeature() {
+  //  addCategoryLabel();
+  //}
 }
 

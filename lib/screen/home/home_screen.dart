@@ -210,4 +210,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  //This is a simulation of smcm (Add UI for the label)
+  // Widget _addLabel() {
+  //  return const Center(
+  //    child: const Icon(Icons.newPatient)
+  //  )
+  //}
 }
