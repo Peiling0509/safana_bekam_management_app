@@ -11,8 +11,8 @@ class AssetPath{
   static String bodyBack = "$bodyPath/body_back.png";
   static String face = "$bodyPath/face.png";
 
-  //this is a simulation of smcm project (Add asset path)
-  //static String logo_newPatient = "$imagePath/logo_newPatient.png"
-  //static String logo_followUp = "$imagePath/logo_followUp.png"
-  //static String logo_longTermCare = "$imagePath/logo_longTermCare.png"
+  //this is a simulation of smcm project (Add asset path for medical notes preview)
+  //static String notes_newPatient = "$imagePath/notes_newPatient.png"
+  //static String notes_followUp = "$imagePath/notes_followUp.png"
+  //static String notes_longTermCare = "$imagePath/notes_longTermCare.png"
 }
