@@ -117,3 +117,13 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
             ),
           ]);
 }
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
