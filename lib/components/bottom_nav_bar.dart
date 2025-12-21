@@ -54,3 +54,13 @@ class CustomBottomNavigationBar extends GetView<RootHomeController> {
     );
   }
 }
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
