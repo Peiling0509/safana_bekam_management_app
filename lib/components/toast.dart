@@ -11,3 +11,14 @@ Future<bool?> toast(String message) {
       textColor: Colors.white,
       fontSize: 15.0);
 }
+
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
+// MajorPatch
