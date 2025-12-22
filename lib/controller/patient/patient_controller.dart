@@ -468,5 +468,17 @@ class PatientController extends GetxController {
   //
   //
   //}
+  //NEW CODE (New Feature) void filterPatients(DateTime? visitDate, bool? active) {
+//filteredPatients = allPatients.where((patient){
+//final matchesDate = visitDate == null ||
+//patient.lastVisitDate.isAfter(visitDate);
+//final matchesStatus = activeStatus == null ||
+//patient.name.isActive == activeStatus;
+//
+//return matchesDate && matchesStatus;
+//}).toList();
+//}
+//}
+
 }
 
